@@ -19,7 +19,7 @@ Anyways you get the picture ...
 
 ## Introduction
 
-All the scripts here are written in **Perl** (some including bash wrappers).
+All the scripts here are written in **Perl** (some include bash wrappers).
 
 A majority of the scripts have a seperate 'README.md' in ones folder for more information. However, all of the Perl scripts include additionally a usage/help text or a comprehensive POD by calling the script either without arguments/options or option **-h**.
 
@@ -27,11 +27,15 @@ The scripts are only tested under UNIX, some won't run in a Windows environment 
 
 ## Installation recommendations
 
+To download the repository, use either the 'Download zip' button on the right hand site or clone the repository with '*git*':
+
+    git clone https://github.com/aleimba/bac-genomics-scripts.git
+
 To install the scripts, copy them to your '*/bin*' folder and make them executable
 
     $ chmod u+x script.pl
 
-the scripts are then in your '*$PATH*' and can be run everywhere on your system. Of course you can just call them directly by prefexing '*perl*' to the command or a '*./*' for bash wrappers:
+the scripts are then in your '*$PATH*' and can be run everywhere on your system. Of course you can just call them directly by prefexing '*perl*' to the command or a './' for bash wrappers:
 
     $ perl /path/to/script/script.pl <options>
 
