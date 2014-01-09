@@ -13,7 +13,7 @@ or
 
 ## Description
 
-This script is intended to identify RODs between a nucleotide query and a nucleotide subject/reference sequence. In order to do so, a *blastn* (http://blast.ncbi.nlm.nih.gov/Blast.cgi) needs to be performed beforehand with the query and the subject sequences (see also *blast_rod_finder_legacy.sh* below). *blast_rod_finder.pl* is mainly designed to work with bacterial genomes, while a query genome can be blasted against several subject sequences to detect RODs over a number of references. Although the results are optimized towards a complete query genome, both the reference(s) as well as the query can be used in draft form. To create artificial genomes use *cat_seq.pl* or the EMBOSS application union (http://emboss.sourceforge.net/).
+This script is intended to identify RODs between a nucleotide query and a nucleotide subject/reference sequence. In order to do so, a *blastn* (http://blast.ncbi.nlm.nih.gov/Blast.cgi) needs to be performed beforehand with the query and the subject sequences (see also *blast_rod_finder_legacy.sh* below). *blast_rod_finder.pl* is mainly designed to work with bacterial genomes, while a query genome can be blasted against several subject sequences to detect RODs over a number of references. Although the results are optimized towards a complete query genome, both the reference(s) as well as the query can be used in draft form. To create artificial genomes via concatenation use *cat_seq.pl* or the EMBOSS application union (http://emboss.sourceforge.net/).
 
 The *blastn* report file, the query sequence file (preferably in RichSeq format, see below) and a minimum size for ROD detection have to be provided. Subsequently, RODs are summarized in a tab-separated summary file, a gff3 (usable e.g. in Artemis/DNAPlotter, http://www.sanger.ac.uk/resources/software/artemis/) and a BRIG (BLAST Ring Image Generator, http://brig.sourceforge.net/) output file. Nucleotide sequences of each ROD are written to a multi-fasta file.
 
@@ -104,7 +104,7 @@ Only present if query is in RichSeq format. Each identified ROD is written to an
 
 The Perl script runs under Windows and UNIX flavors, the bash-shell script of course only under UNIX.
 
-## Dependencies
+## Dependencies (not in the core Perl modules)
 
 * Legacy blast (tested version blastall 2.2.18)
 * BioPerl (tested with version 1.006901)
@@ -117,6 +117,15 @@ David Studholme (original code; D[dot]J[dot]Studholme[at]exeter[dot]ac[dot]uk; U
 
 ## Changelog
 
+* v0.4 (13.02.2013)
+    - included a POD
+    - options with Getopt::Long
+    - results directory for output files
+    - include accession number column for multi-sequence files in 'rod_summary.txt'
+    - include locus_tags (or alternatively gene, product, note ...) in 'rod_summary.txt'
+    - feature positions according to leading or lagging strand
+    - indicate if a primary feature overlaps ROD boundaries
+    - output each ROD in the query RichSeq format with BioPerl's Bio::SeqUtils
 * v0.3 (23.11.2011)
     - status messages with autoflush
     - BRIG output file
