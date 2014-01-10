@@ -30,7 +30,7 @@ Run *blastn* and the script *blast_rod_finder.pl* consecutively manually or use 
     formatdb -p F -i subject.fasta -n blast_db
     blastall -p blastn -d blast_db -i query.fasta -o blastn.out -e 2e-11 -F F
 
-#### 1.2.)* blast_rod_finder.pl*
+#### 1.2.) *blast_rod_finder.pl*
 
     perl blast_rod_finder.pl -q query.[embl|gbk|fasta] -r blastn.out -m 5000
 
