@@ -67,11 +67,11 @@ Include full ID header for downstream *blast_prot_finder.pl* analysis (all IDs i
 
 ## Output
 
-* *_cds_aa.fasta
+* *\_cds\_aa.fasta
 
 Multi-fasta file of CDS protein sequences
 
-* *_cds_nucl.fasta 
+* *\_cds\_nucl.fasta 
 
 Multi-fasta file of CDS DNA sequences
 
