@@ -1,7 +1,7 @@
 cat_seq
 =======
 
-A script to merge multi-sequence RichSeq files into one single-entry 'artifical' sequence.
+A script to merge multi-sequence RichSeq files into one single-entry 'artificial' sequence file.
 
 ## Synopsis
 
@@ -27,6 +27,13 @@ Optionally, a different output file format can be specified (fasta/embl/genbank)
 
     for i in *.[embl|fasta|gbk]; do perl cat_seq.pl $i [embl|fasta|genbank]; done
 
+### Concatenate multi-sequence fasta files faster with UNIXs *grep*
+If you're working only with fasta files UNIXs *grep* is a faster choice to concatenate sequences.
+
+    grep -v ">" seq.fasta > seq_artificial.fasta
+
+Subsequently add as a first line a fasta ID (starting with '>') with an editor.
+
 ## Output
 
 * *\_artificial.[embl|fasta|genbank]
@@ -40,6 +47,10 @@ The Perl script runs under Windows and UNIX flavors.
 ## Dependencies (not in the core Perl modules)
 
 * BioPerl (tested with version 1.006901)
+
+## Alternative software
+
+The EMBOSS (The European Molecular Biology Open Software Suite) application ***union*** can also be used for this task (http://emboss.sourceforge.net/apps/release/6.6/emboss/apps/union.html).
 
 ## Author/contact
 
