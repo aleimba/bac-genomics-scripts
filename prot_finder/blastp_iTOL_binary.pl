@@ -11,10 +11,10 @@ my $usage = "\n".
    "\t# However, the organism names have to have the same names   #\n".
    "\t# as in the tree file, thus manual copying might be needed. #\n".
    "\t# Option 'c' results in a collective file for all query     #\n".
-   "\t# proteins, 's' in seperate files for each query protein.   #\n".
+   "\t# proteins, 's' in separate files for each query protein.   #\n".
    "\t# 'c' is the default if none is given.                      #\n".
    "\t#                                                           #\n".
-   "\t# version 0.1                              Andreas Leimbach #\n".
+   "\t# version 0.2 updated: 21.12.2012          Andreas Leimbach #\n".
    "\t# 25.10.2012                          aleimba[at]gmx[dot]de #\n".
    "\t#############################################################\n\n";
 
@@ -32,55 +32,60 @@ if (!defined $blast_hits) {
 
 ### Parse the input 'blast_hits.txt' file
 my @queries; # store all query proteins
-my $query = ''; # 'blast_hits.txt' ordered by query proteins; each query only once in @queries
+my $query = ''; # each query only once in @queries
 my %hits; # hash to associate organism with query hit
 open (BLAST, "<$blast_hits") or die "Can't open file \'$blast_hits\': $!\n";
 my $header = <BLAST>; # skip header of 'blast_hits.txt'
 while (<BLAST>) {
     my @line = split (/\t/, $_);
     $hits{$line[0]}{$line[3]} = 1; # $line[0] = organism, [3] = query protein
-    if ($query ne $line[3]) { # push each query only once in @queries
-    push (@queries, $line[3]);
-    }
     $query = $line[3];
+    foreach (@queries) { # control if the query already exists
+        if ($_ eq $query) {
+            $query = '';
+        }
+    }
+    if ($query ne '') { # push each query only once in @queries
+        push (@queries, $query);
+    }
 }
 close BLAST;
 
 
-### Print binary data to a collective or seperate (for each query; as needed by iTOL) file(s)
+### Print binary data to a collective or separate (for each query; as needed by iTOL) file(s)
 if ($option eq 'c') { # collective binary file
     open (BINARY, ">binary_iTOL.txt") or die "Can't create file 'binary_iTOL.txt': $!\n";
     ### Print header
     print BINARY "Organism";
     foreach my $query (sort @queries) {
-    print BINARY ",$query";
+        print BINARY ",$query";
     }
     print BINARY "\n";
     ### Print data in file
     foreach my $organism (sort keys %hits) {
-    print BINARY "$organism";
-    foreach my $query (sort @queries) {
-        if (defined $hits{$organism}->{$query}) {
-        print BINARY ",$hits{$organism}->{$query}";
-        } else {
-        print BINARY ",0";
+        print BINARY "$organism";
+        foreach my $query (sort @queries) {
+            if (defined $hits{$organism}->{$query}) {
+                print BINARY ",$hits{$organism}->{$query}";
+            } else {
+                print BINARY ",0";
+            }
         }
-    }
-    print BINARY "\n";
+        print BINARY "\n";
     }
     close BINARY;
 } elsif ($option eq 's') { # separate binary files
     foreach my $query (sort @queries) {
-    open (BINARY, ">$query\_binary\_iTOL.txt") or die "Can't create file '$query\_binary\_iTOL.txt': $!\n";
-    foreach my $organism (sort keys %hits) {
-        print BINARY "$organism";
-        if (defined $hits{$organism}->{$query}) {
-        print BINARY ",$hits{$organism}->{$query}\n";
-        } else {
-        print BINARY ",0\n";
+        open (BINARY, ">$query\_binary\_iTOL.txt") or die "Can't create file '$query\_binary\_iTOL.txt': $!\n";
+        foreach my $organism (sort keys %hits) {
+            print BINARY "$organism";
+            if (defined $hits{$organism}->{$query}) {
+                print BINARY ",$hits{$organism}->{$query}\n";
+            } else {
+                print BINARY ",0\n";
+            }
         }
-    }
-    close BINARY;
+        close BINARY;
     }
 }
 
