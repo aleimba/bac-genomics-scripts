@@ -27,7 +27,7 @@ Depending on the amount of data to download, the whole process can take quite a 
 
 If you're new to the NCBI FTP site you should read an excellent overview for microbial RefSeq genomes on NCBI's FTP site on Torsten Seemann's blog: http://thegenomefactory.blogspot.de/2012/07/navigating-microbial-genomes-on-ncbi.html.
 
-I also included a PDF of a talk I gave for NCBI FTP newbies ('2012-10-18_NCBI_ftp-server_microbial_genomes_intro.pdf'). It might be a good idea to read the blog post and have a look in the PDF to have a general idea what's going on, but of course you can just run the scripts and work with the genome files.
+You can also access an introductory talk for the microbial NCBI FTP resources at figshare (http://figshare.com/articles/Introduction_to_NCBI_s_FTP_server_for_bacterial_genomes/972893). It might be a good idea to read the blog post and have a look in the PDF to have a general idea what's going on, but of course you can just run the scripts and work with the genome files.
 
 ## Usage
 
