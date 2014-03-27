@@ -1,7 +1,7 @@
 bac-genomics-scripts
 ====================
 
-A collection of scripts intended for bacterial genomics (some might be useful also for eukaryotes ;-)).
+A collection of scripts intended for bacterial genomics (some might also be useful for eukaryotes ;-)).
 
 Here is a short summary of the tools (if not here yet will be uploaded soon):
 
