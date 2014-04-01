@@ -11,7 +11,7 @@ A script to extract amino acid or nucleotide sequences from coding sequence (CDS
 
 This script extracts protein or DNA sequences of CDS features from a (multi)-RichSeq file (e.g. embl, genbank) and writes them to a multi-fasta file. The fasta headers for each CDS include either the locus tag, if that's not available, protein id, gene, or an internal CDS counter as identifier (in this order). The organism info includes also possible plasmid names. Pseudogenes (tagged by '**/pseudo**') are not included (except in the CDS counter).
 
-In addition to the identifier, fasta headers include gene (**g=**), product (**p=**), organism (**o=**), and EC numbers (**ec=**), if these are present for a CDS. Individual EC numbers are separated by **semicolons**. The location/position (**l=**start..stop) of a CDS will always be included. If gene is used as fasta header identifier '**g=**gene' will only be included with option **-f**.
+In addition to the identifier, fasta headers include gene (**g=**), product (**p=**), organism (**o=**), and EC numbers (**ec=**), if these are present for a CDS. Individual EC numbers are separated by **semicolons**. The location/position (**l=** start..stop) of a CDS will always be included. If gene is used as fasta header identifier '**g=** gene' will only be included with option **-f**.
 
 Fuzzy locations in the feature table of a sequence file are not taken into consideration for '**l=**'. If you set options **-u** and/or **-d** and the feature location overlaps a **circular** replicon boundary, positions are marked with '<' or '>' in the direction of the exceeded boundary. Features with overlapping locations in **linear** sequences (e.g. contigs) will be skipped and are **not** included in the output! A CDS feature is on the lagging strand if start > stop in the location. In the special case of overlapping circular sequence boundaries this is reversed.
 
@@ -71,7 +71,7 @@ List of locus tags to extract only those (each locus tag on a new line)
 
 * -f, -full_header
 
-If gene is used as identifier include additionally '**g=**gene' in fasta headers, so downstream analyses can recognize the gene tag (e.g. `prot_finder.pl`).
+If gene is used as identifier include additionally '**g=** gene' in fasta headers, so downstream analyses can recognize the gene tag (e.g. `prot_finder.pl`).
 
 * -v, -version
 

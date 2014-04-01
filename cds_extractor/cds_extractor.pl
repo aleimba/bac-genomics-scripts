@@ -200,8 +200,8 @@ use autodie;
 use Getopt::Long;
 use Pod::Usage;
 use Bio::SeqIO; # bioperl module to handle sequence input/output
-# use Bio::Seq; # bioperl module to play with the sequence and its features####### needed?
-# use Bio::SeqFeatureI; # bioperl module to handle features in a sequence####### needed?
+# use Bio::Seq; # bioperl module to play with the sequence and its features ### apparently not needed, methods inherited
+# use Bio::SeqFeatureI; # bioperl module to handle features in a sequence ### apparently not needed, methods inherited
 
 
 
