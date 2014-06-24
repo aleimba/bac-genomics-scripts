@@ -1,0 +1,10 @@
+seq_id	start	stop	primary_tag	locus_tag	EC_number	EC_number	EC_number	EC_number	gene	inference	inference	note	product	protein_id	pseudo	rpt_family	score	spreadsheet_locus_tag	position	distance	gene_number	contig_order
+c	191	310	misc_RNA	EPE_c00010						COORDINATES:profile:Infernal:1.1			Thr_leader					EPE_c00010	191	26	1	1
+c	336	2798	CDS	EPE_c00020	1.1.1.3	2.7.2.4			thrA	ab initio prediction:Prodigal:2.60	similar to AA sequence:K-12_MG1655:NP_414543.1		bifunctional aspartokinase/homoserine dehydrogenase 1	gnl|SmithUCSD|EPE_c00020				EPE_c00020	336	370	2	1
+c	3168	4697	rRNA	EPE_c00030					rrsH	COORDINATES:profile:RNAmmer:1.2			16S ribosomal RNA					EPE_c00030	3168	74	3	1
+c	4771	4847	tRNA	EPE_c00040						COORDINATES:profile:Aragorn:1.2			tRNA-Pseudo-xxx		T			EPE_c00040	4771	163	4	1
+c	7154	5010	CDS	EPE_c00050	1.1.1.35	4.2.1.17	5.1.2.3	5.3.3.8	fadJ	ab initio prediction:Prodigal:2.60	similar to AA sequence:K-12_MG1655:NP_416843.1		fused enoyl-CoA hydratase and epimerase and isomerase/3-hydroxyacyl-CoA dehydrogenase	gnl|SmithUCSD|EPE_c00050				EPE_c00050	5010	-86	5	1
+c	7068	7430	tmRNA	EPE_c00060					ssrA	COORDINATES:profile:Aragorn:1.2			"transfer-messenger RNA, SsrA"					EPE_c00060	7068	83	6	1
+c	7513	8883	repeat_region													CRISPR	23		7513	96	7	1
+c	8979	9275	CDS	EPE_c00080						ab initio prediction:Prodigal:2.60	similar to AA sequence:K-12_MG1655:NP_414546.1	DUF2502 family putative periplasmic protein	hypothetical protein	gnl|SmithUCSD|EPE_00070				EPE_c00080	8979	-9214	8	1
+89p	61	369	pseudo	EPE_89p00010					ydhA				hypothetical protein fragment					EPE_89p00010	61	-369	1	2

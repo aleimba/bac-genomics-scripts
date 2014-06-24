@@ -1,0 +1,64 @@
+>Feature EPE_c
+191	310	gene
+			locus_tag	EPE_c00010
+191	310	misc_RNA
+			inference	COORDINATES:profile:Infernal:1.1
+			product	Thr_leader
+336	2798	gene
+			locus_tag	EPE_c00020
+			gene	thrA
+336	2798	CDS
+			protein_id	gnl|goetting|EPE_c00020
+			EC_number	1.1.1.3
+			EC_number	2.7.2.4
+			inference	ab initio prediction:Prodigal:2.60
+			inference	similar to AA sequence:K-12_MG1655:NP_414543.1
+			product	bifunctional aspartokinase/homoserine dehydrogenase 1
+3168	4697	gene
+			locus_tag	EPE_c00030
+			gene	rrsH
+3168	4697	rRNA
+			inference	COORDINATES:profile:RNAmmer:1.2
+			product	16S ribosomal RNA
+4771	4847	gene
+			locus_tag	EPE_c00040
+			pseudo
+4771	4847	tRNA
+			inference	COORDINATES:profile:Aragorn:1.2
+			product	tRNA-Pseudo-xxx
+			pseudo
+7154	5010	gene
+			locus_tag	EPE_c00050
+			gene	fadJ
+7154	5010	CDS
+			protein_id	gnl|goetting|EPE_c00050
+			EC_number	1.1.1.35
+			EC_number	4.2.1.17
+			EC_number	5.1.2.3
+			EC_number	5.3.3.8
+			inference	ab initio prediction:Prodigal:2.60
+			inference	similar to AA sequence:K-12_MG1655:NP_416843.1
+			product	fused enoyl-CoA hydratase and epimerase and isomerase/3-hydroxyacyl-CoA dehydrogenase
+7068	7430	gene
+			locus_tag	EPE_c00060
+			gene	ssrA
+7068	7430	tmRNA
+			inference	COORDINATES:profile:Aragorn:1.2
+			product	transfer-messenger RNA, SsrA
+7513	8883	repeat_region
+			rpt_family	CRISPR
+			score	23
+8979	9275	gene
+			locus_tag	EPE_c00080
+8979	9275	CDS
+			protein_id	gnl|goetting|EPE_c00080
+			inference	ab initio prediction:Prodigal:2.60
+			inference	similar to AA sequence:K-12_MG1655:NP_414546.1
+			note	DUF2502 family putative periplasmic protein
+			product	hypothetical protein
+>Feature EPE_89p
+61	369	gene
+			pseudo
+			locus_tag	EPE_89p00010
+			gene	ydhA
+			gene_desc	hypothetical protein fragment
