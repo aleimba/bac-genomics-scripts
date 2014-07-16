@@ -87,7 +87,7 @@ Include formulas for spreadsheet editing
 
 Syntax language of the spreadsheet formulas, either 'English' or 'German' [default = 'e']
 
-#### Mode *tbl2tab*
+#### Mode *tab2tbl*
 
 * -l, -locus_prefix
 

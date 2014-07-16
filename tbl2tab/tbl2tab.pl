@@ -168,7 +168,7 @@ Only in combination with option B<-g>, include '/gene' and
 '/locus_tag' tags additionally in primary tag, not only in accessory
 'gene' primary tag
 
-=item B<-p>=I<"str">, B<-protein_id_prefix>=I<"str">
+=item B<-p>=I<str>, B<-protein_id_prefix>=I<str>
 
 Prefix for '/protein_id' tags; don't forget the double quotes for
 the string, otherwise the shell will intepret as pipe [default =
