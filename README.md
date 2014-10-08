@@ -3,7 +3,17 @@ bac-genomics-scripts
 
 A collection of scripts intended for bacterial genomics (some might also be useful for eukaryotes ;-)).
 
-Here is a short summary of the tools (if not here yet will be uploaded soon):
+* [Summary](#summary)
+* [Introduction](#introduction)
+* [Installation recommendations](#installation-recommendations)
+* [Dependencies](#dependencies)
+* [UNIX loops](#unix-loops)
+* [Windows - UNIX linebreak problems](#windows---unix-linebreak-problems)
+* [License](#license)
+
+## Summary
+
+(If a tool is not here yet it will be uploaded soon or write me a quick [mail](#license).)
 
 * Protein search with *blastp* plus concise hit summary and optional alignment: `prot_finder`
 * Regions of difference (rod) detection: `rod_finder`
@@ -13,7 +23,8 @@ Here is a short summary of the tools (if not here yet will be uploaded soon):
 * Batch downloading of sequences from NCBI's FTP server: `ncbi_ftp_download` and `ncbi_e-utilities`
 * NGS paired-end library insert size estimation from BAM/SAM: `sam_insert-size`
 * Count all annotated primary features from RichSeq (e.g. embl or genbank) files: `get_genome_features`
-* And an assortment of smaller scripts for tasks like: concatenation of RichSeq sequence files, sequence/alignment format converters, dnadiff, GC% calculation etc.
+* Concatenate multi-sequence (RichSeq or fasta) files to a single artificial file: `cat_seq`
+* And an assortment of smaller scripts for tasks like: sequence/alignment format converters, dnadiff, GC% calculation etc.
 
 Anyways you get the picture ...
 
@@ -43,6 +54,8 @@ or
 
     $ ./script.sh <arguments>
 
+**Single** scripts can be downloaded as well. For this purpose click on the folder you're interested in and then on the link of the script. There click on the **Raw** button and save this page to a file (without **Raw** you'll get an unusable html file). This is also true for other files (e.g. PDFs etc.).
+
 ## Dependencies
 
 Most of the Perl scripts include modules from **BioPerl**, which as a consequence has to be installed on your system. For BioPerl installation instructions see: http://www.bioperl.org
@@ -55,7 +68,7 @@ A very handy tip, if you want to run a script on all files in the current workin
 
     $ for i in *.fasta; do perl script.pl -i $i; done
 
-## Windows UNIX linebreak problems
+## Windows - UNIX linebreak problems
 
 At last, some of the scripts don't like Windows formatted line breaks, you might consider running these input files through a nifty UNIX utility called **dos2unix**:
 
