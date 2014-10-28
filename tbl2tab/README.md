@@ -13,25 +13,27 @@ or
 
 ## Description
 
-NCBI's feature table (tbl) format is needed for the submission of genomic data to GenBank with the NCBI tools Sequin (http://www.ncbi.nlm.nih.gov/Sequin/) or tbl2asn (http://www.ncbi.nlm.nih.gov/genbank/tbl2asn2). tbl files can be created with automatic annotation systems like Prokka (http://www.vicbioinformatics.com/software.prokka.shtml). `tbl2tab.pl` can convert a tbl file to a tab-separated format (tab) and back to the tbl format. The tab-delimited format is useful to manipulate the data more comfortably in a spreadsheet software (e.g. LibreOffice or MS Excel). For a conversion back to tbl format save the file in the spreadsheet software as a tab-delimited text file. The script is intended for microbial genomes, but might also be useful for eukaryotes.
+NCBI's feature table (**tbl**) format is needed for the submission of genomic data to GenBank with the NCBI tools [Sequin](http://www.ncbi.nlm.nih.gov/Sequin/) or [tbl2asn](http://www.ncbi.nlm.nih.gov/genbank/tbl2asn2). tbl files can be created with automatic annotation systems like [Prokka](http://www.vicbioinformatics.com/software.prokka.shtml). `tbl2tab.pl` can convert a tbl file to a tab-separated format (tab) and back to the tbl format. The tab-delimited format is useful to manipulate the data more comfortably in a spreadsheet software (e.g. LibreOffice or MS Excel). For a conversion back to tbl format save the file in the spreadsheet software as a tab-delimited text file. The script is intended for microbial genomes, but might also be useful for eukaryotes.
 
 Regular expressions are applied in mode '**tbl2tab**' to correct gene names and words in '/product' values  to lowercase initials (with the exception of 'Rossman' and 'Willebrand'). The resulting tab file can then be used to check for possible errors.
 
 The first four header columns of the **tab** format are mandatory, 'seq_id' for the SeqID, and for each primary tag/feature (e.g. CDS, RNAs, repeat_region etc.), 'start', 'stop', and 'primary_tag'. These mandatory columns have to be filled in every row in the tab file. All the following columns will be included as tags/qualifiers (e.g. '/locus_tag', '/product', '/EC_number', '/note' etc.) in the conversion to the tbl file if a value is present.
 
-There are three special cases: First, '/pseudo' will be included as a tag if *any* value (the script uses 'T' for true) is present in the **tab** format. If a primary tag is indicated as pseudo both the primary tag and the accessory 'gene' primary tag (for CDS/RNA features with option '**-g**') will include a '/pseudo' qualifier in the resulting **tbl** file. *Pseudo-genes* are indicated by 'pseudo' in the 'primary_tag' column, thus the 'pseudo' column is ignored in these cases.
+There are three special cases:
+
+First, '/pseudo' will be included as a tag if *any* value (the script uses 'T' for true) is present in the **tab** format. If a primary tag is indicated as pseudo both the primary tag and the accessory 'gene' primary tag (for CDS/RNA features with option '**-g**') will include a '/pseudo' qualifier in the resulting **tbl** file. *Pseudo-genes* are indicated by 'pseudo' in the 'primary_tag' column, thus the 'pseudo' column is ignored in these cases.
 
 Second, tag '/gene_desc' is reserved for the 'product' values of pseudo-genes, thus a 'gene_desc' column in a tab file will be ignored in the conversion to tbl.
 
 Third, column 'protein_id' in a tab file will also be ignored in the conversion. '/protein_id' values are created from option '**-p**' and the locus_tag for each CDS primary feature.
 
-Furthermore, with option '**-s**' G2L-style spreadsheet formulas (Goettingen Genomics Laboratory, http://appmibio.uni-goettingen.de/) can be included with additional columns, 'spreadsheet_locus_tag', 'position', 'distance', 'gene_number', and 'contig_order'. These columns will not be included in a conversion to the tbl format. Thus, if you want to include e.g. the locus_tags from the formula in column 'spreadsheet_locus_tag' in the resulting tbl file copy the *values* to the column 'locus_tag'!
+Furthermore, with option '**-s**' G2L-style spreadsheet formulas ([Goettingen Genomics Laboratory](http://appmibio.uni-goettingen.de/)) can be included with additional columns, 'spreadsheet_locus_tag', 'position', 'distance', 'gene_number', and 'contig_order'. These columns will not be included in a conversion to the tbl format. Thus, if you want to include e.g. the locus_tags from the formula in column 'spreadsheet_locus_tag' in the resulting tbl file copy the *values* to the column 'locus_tag'!
 
 To illustrate the process two example files are included in the repository, 'example.tbl' and 'example2.tab', which are interconvertible (see "[USAGE](#usage)" below).
 
 **Warning**, be aware of possible errors introduced by automatic format conversions using a spreadsheet software like MS Excel, see e.g. Zeeberg *et al.* 2004 (http://www.ncbi.nlm.nih.gov/pubmed/15214961).
 
-For more information regarding the feature table and the submission process see NCBI's prokaryotic annotation guide, http://www.ncbi.nlm.nih.gov/genbank/genomesubmit, and the bacterial genome submission guide, http://www.ncbi.nlm.nih.gov/genbank/genomesubmit_annotation.
+For more information regarding the feature table and the submission process see NCBI's [prokaryotic annotation guide](http://www.ncbi.nlm.nih.gov/genbank/genomesubmit) and the [bacterial genome submission guide](http://www.ncbi.nlm.nih.gov/genbank/genomesubmit_annotation).
 
 ## Usage
 

@@ -21,12 +21,12 @@ C<perl tbl2tab.pl -m tab2tbl -i feature_table.tab -g -l locus_prefix
 
 =head1 DESCRIPTION
 
-NCBI's feature table (tbl) format is needed for the submission of
-genomic data to GenBank with the NCBI tools B<Sequin>
-(L<http://www.ncbi.nlm.nih.gov/Sequin/>) or B<tbl2asn>
-(L<http://www.ncbi.nlm.nih.gov/genbank/tbl2asn2>). tbl files can be
-created with automatic annotation systems like B<Prokka>
-(L<http://www.vicbioinformatics.com/software.prokka.shtml>).
+NCBI's feature table (B<tbl>) format is needed for the submission of
+genomic data to GenBank with the NCBI tools
+L<Sequin|http://www.ncbi.nlm.nih.gov/Sequin/> or
+L<tbl2asn|http://www.ncbi.nlm.nih.gov/genbank/tbl2asn2>. tbl files
+can be created with automatic annotation systems like
+L<Prokka|http://www.vicbioinformatics.com/software.prokka.shtml>.
 C<tbl2tab.pl> can convert a tbl file to a tab-separated format (tab)
 and back to the tbl format. The tab-delimited format is useful to
 manipulate the data more comfortably in a spreadsheet software (e.g.
@@ -48,14 +48,15 @@ All the following columns will be included as tags/qualifiers (e.g.
 '/locus_tag', '/product', '/EC_number', '/note' etc.) in the
 conversion to the tbl file if a value is present.
 
-There are three special cases: First, '/pseudo' will be included as
-a tag if I<any> value (the script uses 'T' for true) is present in
-the B<tab> format. If a primary tag is indicated as pseudo both the
-primary tag and the accessory 'gene' primary tag (for CDS/RNA
-features with option B<-g>) will include a '/pseudo' qualifier in
-the resulting B<tbl> file. B<Pseudo-genes> are indicated by 'pseudo'
-in the 'primary_tag' column, thus the 'pseudo' column is ignored in
-these cases.
+There are three special cases:
+
+First, '/pseudo' will be included as a tag if I<any> value (the
+script uses 'T' for true) is present in the B<tab> format. If a
+primary tag is indicated as pseudo both the primary tag and the
+accessory 'gene' primary tag (for CDS/RNA features with option
+B<-g>) will include a '/pseudo' qualifier in the resulting B<tbl>
+file. B<Pseudo-genes> are indicated by 'pseudo' in the 'primary_tag'
+column, thus the 'pseudo' column is ignored in these cases.
 
 Second, tag '/gene_desc' is reserved for the 'product' values of
 pseudo-genes, thus a 'gene_desc' column in a tab file will be
@@ -66,8 +67,8 @@ conversion. '/protein_id' values are created from option B<-p> and
 the locus_tag for each CDS primary feature.
 
 Furthermore, with option B<-s> G2L-style spreadsheet formulas
-(Goettingen Genomics Laboratory,
-L<http://appmibio.uni-goettingen.de/>) can be included with
+(L<Goettingen Genomics
+Laboratory|http://appmibio.uni-goettingen.de/>) can be included with
 additional columns, 'spreadsheet_locus_tag', 'position', 'distance',
 'gene_number', and 'contig_order'. These columns will not be
 included in a conversion to the tbl format. Thus, if you want to
@@ -85,10 +86,10 @@ e.g. Zeeberg et al. 2004
 (L<http://www.ncbi.nlm.nih.gov/pubmed/15214961>).
 
 For more information regarding the feature table and the submission
-process see NCBI's prokaryotic annotation guide,
-L<http://www.ncbi.nlm.nih.gov/genbank/genomesubmit>, and the
-bacterial genome submission guide
-L<http://www.ncbi.nlm.nih.gov/genbank/genomesubmit_annotation>.
+process see NCBI's L<prokaryotic annotation
+guide|http://www.ncbi.nlm.nih.gov/genbank/genomesubmit> and the
+L<bacterial genome submission
+guide|http://www.ncbi.nlm.nih.gov/genbank/genomesubmit_annotation>.
 
 =head1 OPTIONS
 
