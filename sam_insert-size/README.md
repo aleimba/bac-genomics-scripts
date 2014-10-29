@@ -100,7 +100,7 @@ Help (perldoc POD)
 
 Create distribution histograms for the insert sizes and read lengths
 with [R](http://www.r-project.org/). The calculated median and mean
-(that are printed to stdout) are plotted as vertical lines into the
+(that are printed to *STDOUT*) are plotted as vertical lines into the
 histograms. Use it to control the correctness of the statistical
 calculations.
 
@@ -144,7 +144,7 @@ length** histogram. Default value is as in **-xlim_i**. Forces option
 
 - -v, -version
 
-Print version number to STDERR
+Print version number to *STDERR*
 
 ## Output
 

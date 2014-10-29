@@ -106,8 +106,8 @@ Help (perldoc POD)
 
 Create distribution histograms for the insert sizes and read lengths
 with L<R|http://www.r-project.org/>. The calculated median and mean
-(that are printed to stdout) are plotted as vertical lines into the
-histograms. Use it to control the correctness of the statistical
+(that are printed to C<STDOUT>) are plotted as vertical lines into
+the histograms. Use it to control the correctness of the statistical
 calculations.
 
 =item B<-f>, B<-frequencies>
@@ -150,7 +150,7 @@ B<-d>.
 
 =item B<-v>, B<-version>
 
-Print version number to STDERR
+Print version number to C<STDERR>
 
 =back
 
@@ -158,9 +158,9 @@ Print version number to STDERR
 
 =over 20
 
-=item F<STDOUT>
+=item C<STDOUT>
 
-Calculated stats are printed to STDOUT
+Calculated stats are printed to C<STDOUT>
 
 =item F<./results>
 
@@ -387,9 +387,9 @@ while (<$Sam_Fh>) {
     }
     next if ($fields[1] & 0x100); # skip secondary alignments
 
-    # status message to stderr with number of reads processed
+    # status message to STDERR with number of reads processed
     if ($Total_Reads/1000000 == $I) {
-        print STDERR "$I Mio reads processed ...\r"; # carriage return to overwrite messages and not clutter stderr
+        print STDERR "$I Mio reads processed ...\r"; # carriage return to overwrite messages and not clutter STDERR
         $I++;
     }
     last if ($Num_Read && ($Total_Reads == $Num_Read)); # skip rest of reads if $Num_Read is reached
@@ -649,7 +649,7 @@ sub r_histo {
 
     # execute R script with Rscript
     system("Rscript $tmp_r_script") == 0 or die "### Fatal error: Statistical programming language 'R' either not installed, not in \$PATH, or something wrong with '$tmp_r_script'! Install 'R' to create the histograms (required is 'Rscript')!\n";
-    warn "\t$histo_name\n"; # print to stderr which file has been created
+    warn "\t$histo_name\n"; # print to STDERR which file has been created
     unlink ($tmp_file, $tmp_r_script); # remove the tmp files
     return 1;
 }
