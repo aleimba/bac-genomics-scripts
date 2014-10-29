@@ -12,7 +12,7 @@ sam_insert-size
 * [Output](#output)
 * [Run environment](#run-environment)
 * [Dependencies](#dependencies)
-* [Author\/contact](#author/contact)
+* [Author/contact](#author\/contact)
 * [Acknowledgements](#acknowledgements)
 * [Changelog](#changelog)
 
