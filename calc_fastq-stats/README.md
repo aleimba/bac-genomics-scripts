@@ -92,7 +92,7 @@ Calculated stats are printed to *STDOUT*
 
 - (outfile)
 
-    Optional outfile for stats
+Optional outfile for stats
 
 ## Run environment
 
