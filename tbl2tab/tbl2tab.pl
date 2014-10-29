@@ -8,13 +8,13 @@
 
 =head1 NAME
 
-tbl2tab.pl - Convert tbl to tab-separated format and back
+C<tbl2tab.pl> - convert tbl to tab-separated format and back
 
 =head1 SYNOPSIS
 
 C<perl tbl2tab.pl -m tbl2tab -i feature_table.tbl -s -l locus_prefix>
 
-or
+B<or>
 
 C<perl tbl2tab.pl -m tab2tbl -i feature_table.tab -g -l locus_prefix
 -p "gnl|dbname|">
@@ -50,7 +50,7 @@ conversion to the tbl file if a value is present.
 
 There are three special cases:
 
-First, '/pseudo' will be included as a tag if I<any> value (the
+B<First>, '/pseudo' will be included as a tag if I<any> value (the
 script uses 'T' for true) is present in the B<tab> format. If a
 primary tag is indicated as pseudo both the primary tag and the
 accessory 'gene' primary tag (for CDS/RNA features with option
@@ -58,13 +58,13 @@ B<-g>) will include a '/pseudo' qualifier in the resulting B<tbl>
 file. B<Pseudo-genes> are indicated by 'pseudo' in the 'primary_tag'
 column, thus the 'pseudo' column is ignored in these cases.
 
-Second, tag '/gene_desc' is reserved for the 'product' values of
+B<Second>, tag '/gene_desc' is reserved for the 'product' values of
 pseudo-genes, thus a 'gene_desc' column in a tab file will be
 ignored in the conversion to tbl.
 
-Third, column 'protein_id' in a tab file will also be ignored in the
-conversion. '/protein_id' values are created from option B<-p> and
-the locus_tag for each CDS primary feature.
+B<Third>, column 'protein_id' in a tab file will also be ignored in
+the conversion. '/protein_id' values are created from option B<-p>
+and the locus_tag for each CDS primary feature.
 
 Furthermore, with option B<-s> G2L-style spreadsheet formulas
 (L<Goettingen Genomics
@@ -117,7 +117,7 @@ Help (perldoc POD)
 
 =item B<-v>, B<-version>
 
-Print version number to STDERR
+Print version number to C<STDERR>
 
 =back
 
@@ -146,7 +146,10 @@ Include formulas for spreadsheet editing
 =item B<-f>=I<e|g>, B<-formula_lang>=I<e|g>
 
 Syntax language of the spreadsheet formulas, either 'English' or
-'German' [default = 'e']
+'German'. If you're still encountering problems with the formulas
+set the decimal and thousands separator manually in the options of
+the spreadsheet software (instead of using the operating system
+separators). [default = 'e']
 
 =back
 
@@ -188,7 +191,7 @@ Result file in the opposite format
 =item (F<hypo_putative_genes.txt>)
 
 Created in mode 'tab2tbl', indicates if CDSs are annotated as
-'hypothetical/putative protein' but still have a gene name
+'hypothetical/putative/predicted protein' but still have a gene name
 
 =back
 
@@ -204,6 +207,7 @@ Created in mode 'tab2tbl', indicates if CDSs are annotated as
 
 =head1 VERSION
 
+ 0.2                                               update: 29-10-2014
  0.1                                                       24-06-2014
 
 =head1 AUTHOR
@@ -251,7 +255,7 @@ my $Formula_Lang_Spreadsheet = 'e'; # optionally, either German or English formu
 my $Opt_Gene; # optionally, include accessory gene primary tags (with '/gene' and '/locus_tag' [and '/pseudo'] tags) for CDS|RNA primary tags
 my $Opt_Tags_Full; # optionally, include '/gene' and '/locus_tag' additionally in primary tag not only accessory 'gene' primary tag
 my $Protein_Id_Prefix = 'gnl|goetting|'; # optionally give a different string to prefix the '/protein_id' tags
-my $VERSION = 0.1;
+my $VERSION = 0.2;
 my ($Opt_Version, $Opt_Help);
 GetOptions ('input=s' => \$Input_File,
             'mode=s' => \$Mode,
@@ -327,14 +331,14 @@ if ($Mode =~ /tbl2tab/i) {
 
 ### Message which file was created
 if ($Mode =~ /tbl2tab/i) {
-    print "Input tab file '$Input_File' was converted to tbl output file '$Out_File'!\n";
-} elsif ($Mode =~ /tab2tbl/i) {
     print "Input tbl file '$Input_File' was converted to tab output file '$Out_File'!\n";
+} elsif ($Mode =~ /tab2tbl/i) {
+    print "Input tab file '$Input_File' was converted to tbl output file '$Out_File'!\n";
 }
 
 if (-e $Error_File) {
     if (-s $Error_File >= 40) { # smaller than just the header, which should be 27 bytes
-        warn "\n### Warning: CDSs found that are annotated with 'hypothetical|putative protein' but still include a '/gene' tag, see file '$Error_File'!\n";
+        warn "\n### Warning: CDSs found that are annotated with 'hypothetical|putative|predicted protein' but still include a '/gene' tag, see file '$Error_File'!\n";
     } elsif (-s $Error_File < 40) {
         unlink $Error_File;
     }
@@ -494,7 +498,7 @@ sub read_tab_write_tbl {
 
             ### enforce mandatory tags for CDS primary tags
             if ($tags[$i] =~ /product/ && $cells[3] =~ /CDS/) {
-                if ($cells[$i] =~ /(hypothetical|putative) protein/) { # needed for $Error_File
+                if ($cells[$i] =~ /(hypothetical|putative|predicted) protein/) { # needed for $Error_File
                     $hypo_putative = $cells[$i];
                 } elsif ($cells[$i] =~ /^$/) { # CDSs mandatory need a value for '/product'
                     close $out_file_fh;

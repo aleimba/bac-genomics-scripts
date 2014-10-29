@@ -3,11 +3,22 @@ tbl2tab
 
 `tbl2tab.pl` is a script to convert tbl to tab-separated format and back.
 
+* [Synopsis](#synopsis)
+* [Description](#description)
+* [Usage](#usage)
+* [Options](#options)
+  * [Mandatory options](#mandatory-options)
+  * [Optional options](#optional-options)
+* [Output](#output)
+* [Run environment](#run-environment)
+* [Author - contact](#author---contact)
+* [Changelog](#changelog)
+
 ## Synopsis
 
     perl tbl2tab.pl -m tbl2tab -i feature_table.tbl -s -l locus_prefix
 
-or
+**or**
 
     perl tbl2tab.pl -m tab2tbl -i feature_table.tab -g -l locus_prefix -p "gnl|dbname|"
 
@@ -21,13 +32,13 @@ The first four header columns of the **tab** format are mandatory, 'seq_id' for 
 
 There are three special cases:
 
-First, '/pseudo' will be included as a tag if *any* value (the script uses 'T' for true) is present in the **tab** format. If a primary tag is indicated as pseudo both the primary tag and the accessory 'gene' primary tag (for CDS/RNA features with option '**-g**') will include a '/pseudo' qualifier in the resulting **tbl** file. *Pseudo-genes* are indicated by 'pseudo' in the 'primary_tag' column, thus the 'pseudo' column is ignored in these cases.
+**First**, '/pseudo' will be included as a tag if *any* value (the script uses 'T' for true) is present in the **tab** format. If a primary tag is indicated as pseudo both the primary tag and the accessory 'gene' primary tag (for CDS/RNA features with option **-g**) will include a '/pseudo' qualifier in the resulting **tbl** file. *Pseudo-genes* are indicated by 'pseudo' in the 'primary_tag' column, thus the 'pseudo' column is ignored in these cases.
 
-Second, tag '/gene_desc' is reserved for the 'product' values of pseudo-genes, thus a 'gene_desc' column in a tab file will be ignored in the conversion to tbl.
+**Second**, tag '/gene_desc' is reserved for the 'product' values of pseudo-genes, thus a 'gene_desc' column in a tab file will be ignored in the conversion to tbl.
 
-Third, column 'protein_id' in a tab file will also be ignored in the conversion. '/protein_id' values are created from option '**-p**' and the locus_tag for each CDS primary feature.
+**Third**, column 'protein_id' in a tab file will also be ignored in the conversion. '/protein_id' values are created from option **-p** and the locus_tag for each CDS primary feature.
 
-Furthermore, with option '**-s**' G2L-style spreadsheet formulas ([Goettingen Genomics Laboratory](http://appmibio.uni-goettingen.de/)) can be included with additional columns, 'spreadsheet_locus_tag', 'position', 'distance', 'gene_number', and 'contig_order'. These columns will not be included in a conversion to the tbl format. Thus, if you want to include e.g. the locus_tags from the formula in column 'spreadsheet_locus_tag' in the resulting tbl file copy the *values* to the column 'locus_tag'!
+Furthermore, with option **-s** G2L-style spreadsheet formulas ([Goettingen Genomics Laboratory](http://appmibio.uni-goettingen.de/)) can be included with additional columns, 'spreadsheet_locus_tag', 'position', 'distance', 'gene_number', and 'contig_order'. These columns will not be included in a conversion to the tbl format. Thus, if you want to include e.g. the locus_tags from the formula in column 'spreadsheet_locus_tag' in the resulting tbl file copy the *values* to the column 'locus_tag'!
 
 To illustrate the process two example files are included in the repository, 'example.tbl' and 'example2.tab', which are interconvertible (see "[USAGE](#usage)" below).
 
@@ -65,13 +76,13 @@ Help (perldoc POD)
 
 * -v, -version
 
-Print version number to STDERR
+Print version number to *STDERR*
 
 #### Mode *tbl2tab*
 
 * -l, -locus_prefix
 
-Only in combination with option '**-s**' and there mandatory to include the locus_tag prefix in the formula for column 'spreadsheet_locus_tag'
+Only in combination with option **-s** and there mandatory to include the locus_tag prefix in the formula for column 'spreadsheet_locus_tag'
 
 * -c, -concat
 
@@ -87,7 +98,7 @@ Include formulas for spreadsheet editing
 
 * -f, -formula_lang
 
-Syntax language of the spreadsheet formulas, either 'English' or 'German' [default = 'e']
+Syntax language of the spreadsheet formulas, either 'English' or 'German'. If you're still encountering problems with the formulas set the decimal and thousands separator manually in the options of the spreadsheet software (instead of using the operating system separators). [default = 'e']
 
 #### Mode *tab2tbl*
 
@@ -101,7 +112,7 @@ Include accessory 'gene' primary tags (with '/gene', '/locus_tag' and possibly '
 
 * -t, -tags_full
 
-Only in combination with option '**-g**', include '/gene' and '/locus_tag' tags additionally in primary tag, not only in accessory 'gene' primary tag
+Only in combination with option **-g**, include '/gene' and '/locus_tag' tags additionally in primary tag, not only in accessory 'gene' primary tag
 
 * -p, -protein_id_prefix
 
@@ -115,16 +126,21 @@ Result file in the opposite format
 
 * (hypo_putative_genes.txt)
 
-Created in mode **tab2tbl**, indicates if CDSs are annotated as 'hypothetical/putative protein' but still have a gene name
+Created in mode **tab2tbl**, indicates if CDSs are annotated as
+'hypothetical/putative/predicted protein' but still have a gene name
 
 ## Run environment
 
 The Perl script runs under Windows and UNIX flavors.
 
-## Author/contact
+## Author - contact
 
 Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute of Hygiene, University of Muenster)
 
 ## Changelog
 
+* v0.2 (29.10.2014)
+    * fixed bug: message which file was created was mixed up
+    * *hypo_putative_genes.txt* includes now also 'predicted protein' annotations
+    * additions and syntax changes to POD and README.md
 * v0.1 (24.06.2014)
