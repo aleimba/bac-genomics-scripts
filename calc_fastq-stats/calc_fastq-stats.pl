@@ -23,7 +23,7 @@ C<gzip -dc reads.fastq.gz | perl calc_fastq-stats.pl -i ->
 Calculates some simple statistics, like individual and total base
 counts, GC content, and basic stats for the read lengths, and
 read/base qualities in a FASTQ file. The GC content calculation does
-not include 'N's. Stats are printed to STDOUT and optionally to an
+not include 'N's. Stats are printed to C<STDOUT> and optionally to an
 output file.
 
 Because the quality of a read degrades over its length with all NGS
@@ -79,7 +79,7 @@ Print stats in addition to C<STDOUT> to the specified output file
 
 =item B<-v>, B<-version>
 
-Print version number to STDERR
+Print version number to C<STDERR>
 
 =back
 
@@ -89,7 +89,7 @@ Print version number to STDERR
 
 =item C<STDOUT>
 
-Calculated stats are printed to STDOUT
+Calculated stats are printed to C<STDOUT>
 
 =item F<(outfile)>
 
@@ -448,9 +448,9 @@ sub stats_full {
 
 
 
-### Subroutine to print to stdout and optionally to output file
+### Subroutine to print to STDOUT and optionally to output file
 sub print_out_std {
-    print "@_"; # print line to stdout
+    print "@_"; # print line to STDOUT
     print $Output_Fh "@_" if ($Output_File); # additionally, print to optional output file
     return 1;
 }

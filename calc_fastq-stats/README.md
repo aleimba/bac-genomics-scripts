@@ -28,7 +28,7 @@ calc_fastq-stats
 The script calculates some simple statistics, like individual and total base
 counts, GC content, and basic stats for the read lengths, and
 read/base qualities in a FASTQ file. The GC content calculation does
-not include 'N's. Stats are printed to STDOUT and optionally to an
+not include 'N's. Stats are printed to *STDOUT* and optionally to an
 output file.
 
 Because the quality of a read degrades over its length with all NGS
@@ -82,7 +82,7 @@ Print stats in addition to *STDOUT* to the specified output file
 
 - -v, -version
 
-Print version number to STDERR
+Print version number to *STDERR*
 
 ## Output
 
