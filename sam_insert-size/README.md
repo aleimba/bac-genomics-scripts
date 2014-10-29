@@ -12,7 +12,7 @@ sam_insert-size
 * [Output](#output)
 * [Run environment](#run-environment)
 * [Dependencies](#dependencies)
-* [Author/contact](#author\/contact)
+* [Author - contact](#author---contact)
 * [Acknowledgements](#acknowledgements)
 * [Changelog](#changelog)
 
@@ -188,7 +188,7 @@ already get it from [CPAN](http://www.cpan.org/)
 
 `Rscript` is needed to plot the histograms with option **-d**
 
-## Author/contact
+## Author - contact
 
 Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute of Hygiene, University of Muenster)
 
