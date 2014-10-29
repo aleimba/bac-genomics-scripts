@@ -8,7 +8,7 @@
 
 =head1 NAME
 
-C<calc_fastq-stats> - basic statistics for bases and reads in a FASTQ file
+C<calc_fastq-stats.pl> - basic statistics for bases and reads in a FASTQ file
 
 =head1 SYNOPSIS
 
