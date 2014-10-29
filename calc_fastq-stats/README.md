@@ -3,11 +3,23 @@ calc_fastq-stats
 
 `calc_fastq-stats.pl` is a script to calculate basic statistics for bases and reads in a FASTQ file.
 
+* [Synopsis](#synopsis)
+* [Description](#description)
+* [Usage](#usage)
+* [Options](#options)
+  * [Mandatory options](#mandatory-options)
+  * [Optional options](#optional-options)
+* [Output](#output)
+* [Run environment](#run-environment)
+* [Dependencies](#dependencies)
+* [Author - contact](#author---contact)
+* [Changelog](#changelog)
+
 ## Synopsis
 
     perl calc_fastq-stats.pl -i reads.fastq
 
-or
+**or**
 
     gzip -dc reads.fastq.gz | perl calc_fastq-stats.pl -i -
 
@@ -64,13 +76,19 @@ Number of bases to sample from the top of the file
 
 Number of reads to sample from the top of the file
 
+- -o, -output
+
+Print stats in addition to *STDOUT* to the specified output file
+
 - -v, -version
 
 Print version number to STDERR
 
 ## Output
 
-- STDOUT
+- *STDOUT*
+
+Calculated stats are printed to *STDOUT*
 
 - (outfile)
 
@@ -97,7 +115,7 @@ Perl module to calculate descriptive statistics for discrete data sets
 
 Perl module to calculate descriptive statistics for weighted variates
 
-## Author/contact
+## Author - contact
 
 Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute of Hygiene, University of Muenster)
 

@@ -14,7 +14,7 @@ C<calc_fastq-stats> - basic statistics for bases and reads in a FASTQ file
 
 C<perl calc_fastq-stats.pl -i reads.fastq>
 
-or
+B<or>
 
 C<gzip -dc reads.fastq.gz | perl calc_fastq-stats.pl -i ->
 
@@ -73,6 +73,10 @@ Number of bases to sample from the top of the file
 
 Number of reads to sample from the top of the file
 
+=item B<-o>=I<str>, B<-output>=I<str>
+
+Print stats in addition to C<STDOUT> to the specified output file
+
 =item B<-v>, B<-version>
 
 Print version number to STDERR
@@ -83,7 +87,9 @@ Print version number to STDERR
 
 =over 20
 
-=item F<STDOUT>
+=item C<STDOUT>
+
+Calculated stats are printed to STDOUT
 
 =item F<(outfile)>
 
