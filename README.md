@@ -15,17 +15,17 @@ A collection of scripts intended for bacterial genomics (some might also be usef
 
 (If a tool is not here yet it will be uploaded soon or write me a quick [mail](#license).)
 
-* Basic stats for bases and reads in FASTQ files: `calc_fastq-stats`
-* Concatenate multi-sequence (RichSeq or fasta) files to a single artificial file: `cat_seq`
+* Basic stats for bases and reads in FASTQ files: [`calc_fastq-stats`](/calc_fastq-stats)
+* Concatenate multi-sequence (RichSeq or fasta) files to a single artificial file: [`cat_seq`](/cat_seq)
 * COG classification of proteins: `cdd2cog`
-* Extraction of protein/nucleotide sequences from CDSs: `cds_extractor`
-* MLST assignment and allele extraction for *E. coli* (Achtman scheme): `ecoli_mlst`
+* Extraction of protein/nucleotide sequences from CDSs: [`cds_extractor`](/cds_extractor)
+* MLST assignment and allele extraction for *E. coli* (Achtman scheme): [`ecoli_mlst`](/ecoli_mlst)
 * Count all annotated primary features from RichSeq (e.g. embl or genbank) files: `get_genome_features`
-* Batch downloading of sequences from NCBI's FTP server: `ncbi_ftp_download` and `ncbi_e-utilities`
-* Protein search with *blastp* plus concise hit summary and optional alignment: `prot_finder`
-* Regions of difference (ROD) detection: `rod_finder`
-* NGS paired-end library insert size estimation from BAM/SAM: `sam_insert-size`
-* And an assortment of smaller scripts for tasks like: sequence/alignment format converters (`seq_format-converter`), dnadiff, GC% calculation etc.
+* Batch downloading of sequences from NCBI's FTP server: [`ncbi_ftp_download`](/ncbi_ftp_download) and `ncbi_e-utilities`
+* Protein search with *blastp* plus concise hit summary and optional alignment: [`prot_finder`](/prot_finder)
+* Regions of difference (ROD) detection: [`rod_finder`](/rod_finder)
+* NGS paired-end library insert size estimation from BAM/SAM: [`sam_insert-size`](/sam_insert-size)
+* And an assortment of smaller scripts for tasks like: sequence/alignment format converters ([`seq_format-converter`](/seq_format-converter)), dnadiff, GC% calculation etc.
 
 Anyways you get the picture ...
 
