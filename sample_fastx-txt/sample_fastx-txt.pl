@@ -223,7 +223,7 @@ my $Next_Fasta_ID; # for multi-line FASTA input files to store next entry header
 # 1. fill reservoir
 while (<$Input_Fh>) {
     if (/^\s*$/) { # skip empty lines in input
-        warn "\n### FASTQ file includes empty lines, which is unusual. Sampling FASTQ sequence entries might fail so check the file afterwards if the script didn't quit with a fatal error. However, consider running the input FASTQ file through 'fix_fastx.pl'!\n\n" if ($File_Type =~ /fastq/i);
+        warn "\n### FASTQ file includes empty lines, which is unusual. Sampling FASTQ reads might fail so check the output file afterwards if the script didn't quit with a fatal error. However, consider running the input FASTQ file through 'fix_fastx.pl'!\n\n" if ($File_Type =~ /fastq/i);
         next;
     }
     chomp;
@@ -260,7 +260,7 @@ die "\n### Fatal error:\nInsufficient records in input for sample size '$Sample_
 srand($Seed) if ($Seed); # force seed value
 while (<$Input_Fh>) {
     if (/^\s*$/) {
-        warn "\n### FASTQ file includes empty lines, which is unusual. Sampling FASTQ sequence entries might fail so check the file afterwards if the script didn't quit with a fatal error. However, consider running the input FASTQ file through 'fix_fastx.pl'!\n\n" if ($File_Type =~ /fastq/i);
+        warn "\n### FASTQ file includes empty lines, which is unusual. Sampling FASTQ reads might fail so check the output file afterwards if the script didn't quit with a fatal error. However, consider running the input FASTQ file through 'fix_fastx.pl'!\n\n" if ($File_Type =~ /fastq/i);
         next;
     }
     my $rand_num = int(rand($.)); # choose an integer between 0 and eof-1; inclusive because array zero-based
@@ -288,6 +288,7 @@ while (<$Input_Fh>) {
         }
     }
 }
+close $Input_Fh;
 
 
 
@@ -316,9 +317,9 @@ exit;
 # Subroutines #
 ###############
 
-### Sample entries from FASTA/Q file
+### Get sequence entries/reads from FASTA/Q file
 sub get_fastx_entry {
-    my ($line) = @_;
+    my $line = shift;
 
     # possible multi-line seq in FASTA
     if ($File_Type =~ /fasta/i) {
@@ -346,7 +347,7 @@ sub get_fastx_entry {
         my $seq_id = $line;
         die "\n### Fatal error:\nThis read doesn't have a sequence identifier/read name according to FASTQ specs, it should begin with a '\@':\n$seq_id\n" if ($seq_id !~ /^@.+/);
         push(@fastq_read, $seq_id);
-        $seq_id =~ s/^@(.+)/$1/; # remove '@' to make comparable to $qual_id
+        $seq_id =~ s/^@//; # remove '@' to make comparable to $qual_id
 
         # sequence, line 2
         chomp (my $seq = <$Input_Fh>);
@@ -358,7 +359,7 @@ sub get_fastx_entry {
         chomp (my $qual_id = <$Input_Fh>);
         die "\n### Fatal error:\nThe optional sequence identifier/read name for the quality line of read '$seq_id' is not according to FASTQ specs, it should begin with a '+':\n$qual_id\n" if ($qual_id !~ /^\+/);
         push(@fastq_read, $qual_id);
-        $qual_id =~ s/^\+(.*)/$1/; # if optional ID is present check if equal to $seq_id in line 1
+        $qual_id =~ s/^\+//; # if optional ID is present check if equal to $seq_id in line 1
         die "\n### Fatal error:\nThe sequence identifier/read name of read '$seq_id' doesn't fit to the optional ID in the quality line:\n$qual_id\n" if ($qual_id && $qual_id ne $seq_id);
 
         # quality, line 4

@@ -93,7 +93,7 @@ the [*seqtk toolkit*](https://github.com/lh3/seqtk>).
 
 - -f, -file_type
 
-    Set the file type manually; either 'fasta', 'fastq', or 'text'
+    Set the file type manually [fasta|fastq|text]
 
 - -s, -seed
 
