@@ -59,9 +59,9 @@ and highest 10% of insert sizes gives the advantage of robustness
 distributions.
 
 Alternative tools, which are a lot faster, are
-L<'CollectInsertSizeMetrics'|https://broadinstitute.github.io/picard/command-line-overview.html#CollectInsertSizeMetrics>
+L<C<CollectInsertSizeMetrics>|https://broadinstitute.github.io/picard/command-line-overview.html#CollectInsertSizeMetrics>
 from L<Picard Tools|https://broadinstitute.github.io/picard/> and
-L<'sam-stats'|https://code.google.com/p/ea-utils/wiki/SamStats> from
+L<C<sam-stats>|https://code.google.com/p/ea-utils/wiki/SamStats> from
 L<ea-utils|https://code.google.com/p/ea-utils/>.
 
 =head1 OPTIONS
@@ -72,8 +72,8 @@ L<ea-utils|https://code.google.com/p/ea-utils/>.
 
 =item B<-i>=I<str>, B<-input>=I<str>
 
-Input SAM file or piped STDIN (-) from a BAM file e.g. with
-L<'samtools view'|http://www.htslib.org/doc/samtools-1.1.html> from
+Input SAM file or piped C<STDIN> (-) from a BAM file e.g. with
+L<C<samtools view>|http://www.htslib.org/doc/samtools-1.1.html> from
 L<Samtools|http://www.htslib.org/>
 
 =item B<-a>, B<-align>
@@ -166,19 +166,19 @@ Calculated stats are printed to C<STDOUT>
 
 All optional output files are stored in this results folder
 
-=item (F<ins_frequency.txt>)
+=item (F<./results/ins_frequency.txt>)
 
 Frequencies of insert size 'raw data', tab-delimited
 
-=item (F<ins_histo.pdf>)
+=item (F<./results/ins_histo.pdf>)
 
 Distribution histogram for the insert size 'raw data'
 
-=item (F<read_frequency.txt>)
+=item (F<./results/read_frequency.txt>)
 
 Frequencies of read lengths, tab-delimited
 
-=item (F<read_histo.pdf>)
+=item (F<./results/read_histo.pdf>)
 
 Distribution histogram for the read lengths. Not informative if
 there's no variation in the read lengths.
@@ -282,13 +282,13 @@ my ($Opt_Version, $Opt_Help);
 GetOptions ('input=s' => \$Input_Sam,
             'align' => \$Opt_Align,
             'percentile' => \$Opt_Percentile,
-            'max_ins_cutoff:i' => \$Max_Ins_Cutoff,
-            'min_ins_cutoff:i' => \$Min_Ins_Cutoff,
-            'num_read:i' => \$Num_Read,
+            'max_ins_cutoff=i' => \$Max_Ins_Cutoff,
+            'min_ins_cutoff=i' => \$Min_Ins_Cutoff,
+            'num_read=i' => \$Num_Read,
             'frequencies' => \$Opt_Freq,
             'distro' => \$Opt_Histo,
-            'xlim_ins:i' => \$Ins_Xlim,
-            'xlim_read:i' => \$Read_Xlim,
+            'xlim_ins=i' => \$Ins_Xlim,
+            'xlim_read=i' => \$Read_Xlim,
             'version' => \$Opt_Version,
             'help|?' => \$Opt_Help);
 

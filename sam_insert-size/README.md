@@ -63,9 +63,9 @@ and highest 10% of insert sizes gives the advantage of robustness
 (insensitivity to outliers) and higher efficiency in heavy-tailed
 distributions.
 
-Alternative tools, which are a lot faster, are ['CollectInsertSizeMetrics'](https://broadinstitute.github.io/picard/command-line-overview.html#CollectInsertSizeMetrics)
+Alternative tools, which are a lot faster, are [`CollectInsertSizeMetrics`](https://broadinstitute.github.io/picard/command-line-overview.html#CollectInsertSizeMetrics)
 from [Picard Tools](https://broadinstitute.github.io/picard/) and
-['sam-stats'](https://code.google.com/p/ea-utils/wiki/SamStats) from
+[`sam-stats`](https://code.google.com/p/ea-utils/wiki/SamStats) from
 [ea-utils](https://code.google.com/p/ea-utils/).
 
 ## Usage
@@ -78,100 +78,81 @@ from [Picard Tools](https://broadinstitute.github.io/picard/) and
 
 - -i, -input
 
-Input SAM file or piped STDIN (-) from a BAM file e.g. with ['samtools view'](http://www.htslib.org/doc/samtools-1.1.html) from [Samtools](http://www.htslib.org/)
+    Input SAM file or piped *STDIN* (-) from a BAM file e.g. with [`samtools view`](http://www.htslib.org/doc/samtools-1.1.html) from [Samtools](http://www.htslib.org/)
 
 - -a, -align
 
-**Default method:** Align method to calculate insert size statistics, includes only reads which are mapped in a proper/concordant pair (as determined by the mapper). Excludes option **-p**.
+    **Default method:** Align method to calculate insert size statistics, includes only reads which are mapped in a proper/concordant pair (as determined by the mapper). Excludes option **-p**.
 
 **or**
 
 - -p, -percentile
 
-Percentile method to calculate insert size statistics, includes only read pairs with an insert size within the 10th and the 90th percentile range of all mapped read pairs. However, the frequency distribution as well as the histogram will be plotted with the 'raw' insert size data before percentile filtering. Excludes option **-a**.
+    Percentile method to calculate insert size statistics, includes only read pairs with an insert size within the 10th and the 90th percentile range of all mapped read pairs. However, the frequency distribution as well as the histogram will be plotted with the 'raw' insert size data before percentile filtering. Excludes option **-a**.
 
 ### Optional options
 
 - -h, -help
 
-Help (perldoc POD)
+    Help (perldoc POD)
 
 - -d, -distro
 
-Create distribution histograms for the insert sizes and read lengths
-with [R](http://www.r-project.org/). The calculated median and mean
-(that are printed to *STDOUT*) are plotted as vertical lines into the
-histograms. Use it to control the correctness of the statistical
-calculations.
+    Create distribution histograms for the insert sizes and read lengths with [R](http://www.r-project.org/). The calculated median and mean (that are printed to *STDOUT*) are plotted as vertical lines into the histograms. Use it to control the correctness of the statistical calculations.
 
 - -f, -frequencies
 
-Print the frequencies of the insert sizes and read lengths to
-tab-delimited files 'ins_frequency.txt' and 'read_frequency.txt',
-respectively.
+    Print the frequencies of the insert sizes and read lengths to tab-delimited files 'ins_frequency.txt' and 'read_frequency.txt', respectively.
 
 - -max, -max_ins_cutoff
 
-Set a maximal insert size cutoff, all insert sizes above this cutoff
-will be discarded (doesn't affect read length). With **-min** and
-**-max** you can basically run both methods, by first running the
-script with **-p** and then using the 10th and 90th percentile of the
-'raw data' as **-min** and **-max** for option **-a**.
+    Set a maximal insert size cutoff, all insert sizes above this cutoff will be discarded (doesn't affect read length). With **-min** and **-max** you can basically run both methods, by first running the script with **-p** and then using the 10th and 90th percentile of the 'raw data' as **-min** and **-max** for option **-a**.
 
 - -min, -min_ins_cutoff
 
-Set a minimal insert size cutoff [default = 1]
+    Set a minimal insert size cutoff [default = 1]
 
 - -n, -num_read
 
-Number of reads to sample for the calculations from the start of the
-SAM/BAM file. Significant statistics can usually be calculated from a
-fraction of the total SAM/BAM alignment file.
+    Number of reads to sample for the calculations from the start of the SAM/BAM file. Significant statistics can usually be calculated from a fraction of the total SAM/BAM alignment file.
 
 - -xlim_i, -xlim_ins
 
-Set an upper limit for the x-axis of the **'R'** **insert size**
-histogram, overriding automatic truncation of the histogram tail.
-The default cutoff is one and a half times the third quartile Q3
-(75th percentile) value. The minimal cutoff is set to the lowest
-insert size automatically. Forces option **-d**.
+    Set an upper limit for the x-axis of the **'R' insert size** histogram, overriding automatic truncation of the histogram tail. The default cutoff is one and a half times the third quartile Q3 (75th percentile) value. The minimal cutoff is set to the lowest insert size automatically. Forces option **-d**.
 
 - -xlim_r, -xlim_read
 
-Set an upper limit for the x-axis of the optional **'R'** **read
-length** histogram. Default value is as in **-xlim_i**. Forces option
-**-d**.
+    Set an upper limit for the x-axis of the optional **'R' read length** histogram. Default value is as in **-xlim_i**. Forces option **-d**.
 
 - -v, -version
 
-Print version number to *STDERR*
+    Print version number to *STDERR*
 
 ## Output
 
 - *STDOUT*
 
-Calculated stats are printed to *STDOUT*
+    Calculated stats are printed to *STDOUT*
 
 - ./results
 
-All **optional** output files are stored in this results folder
+    All **optional** output files are stored in this results folder
 
-- (ins_frequency.txt)
+- (./results/ins_frequency.txt)
 
-Frequencies of insert size 'raw data', tab-delimited
+    Frequencies of insert size 'raw data', tab-delimited
 
-- (ins_histo.pdf)
+- (./results/ins_histo.pdf)
 
-Distribution histogram for the insert size 'raw data'
+    Distribution histogram for the insert size 'raw data'
 
-- (read_frequency.txt)
+- (./results/read_frequency.txt)
 
-Frequencies of read lengths, tab-delimited
+    Frequencies of read lengths, tab-delimited
 
-- (read_histo.pdf)
+- (./results/read_histo.pdf)
 
-Distribution histogram for the read lengths. Not informative if
-there's no variation in the read lengths.
+    Distribution histogram for the read lengths. Not informative if there's no variation in the read lengths.
 
 ## Run environment
 
@@ -181,12 +162,11 @@ The Perl script runs under Windows and UNIX flavors.
 
 - `Statistics::Descriptive`
 
-Perl module to calculate descriptive statistics, if not installed
-already get it from [CPAN](http://www.cpan.org/)
+    Perl module to calculate descriptive statistics, if not installed already get it from [CPAN](http://www.cpan.org/)
 
 - Statistical computing language [R](http://www.r-project.org/)
 
-`Rscript` is needed to plot the histograms with option **-d**
+    `Rscript` is needed to plot the histograms with option **-d**
 
 ## Author - contact
 
@@ -196,8 +176,7 @@ Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute 
 
 References/thanks go to:
 
-- Tobias Rausch's online courses/workshops (EMBL Heidelberg) on the
-introduction to SAM files and flags (http://www.embl.de/~rausch/)
+- Tobias Rausch's online courses/workshops (EMBL Heidelberg) on the introduction to SAM files and flags (http://www.embl.de/~rausch/)
 
 - The CBS NGS Analysis course for the percentile filtering idea (http://www.cbs.dtu.dk/courses/27626/programme.php)
 
