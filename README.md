@@ -22,6 +22,7 @@ A collection of scripts intended for bacterial genomics (some might also be usef
 * MLST assignment and allele extraction for *E. coli* (Achtman scheme): [`ecoli_mlst`](/ecoli_mlst)
 * Count all annotated primary features from RichSeq (e.g. embl or genbank) files: `get_genome_features`
 * Batch downloading of sequences from NCBI's FTP server: [`ncbi_ftp_download`](/ncbi_ftp_download) and `ncbi_e-utilities`
+* Create an ortholog/paralog annotation comparison matrix from [*Proteinortho5*](http://www.bioinf.uni-leipzig.de/Software/proteinortho/) output: [`po2anno`](/po2anno)
 * Protein search with *blastp* plus concise hit summary and optional alignment: [`prot_finder`](/prot_finder)
 * Regions of difference (ROD) detection: [`rod_finder`](/rod_finder)
 * NGS paired-end library insert size estimation from BAM/SAM: [`sam_insert-size`](/sam_insert-size)
@@ -42,6 +43,10 @@ The scripts are only tested under UNIX, some won't run in a Windows environment 
 To download the repository, use either the 'Download zip' button on the right hand side or clone the repository with `git`:
 
     git clone https://github.com/aleimba/bac-genomics-scripts.git
+
+If there is an update to this GitHub repository (see above [commits](https://github.com/aleimba/bac-genomics-scripts/commits/master) and [releases](https://github.com/aleimba/bac-genomics-scripts/releases)), you can refresh your **local** repository by using the following command **inside** the local folder:
+
+    git pull
 
 To install the scripts, copy them to your '*/bin*' folder and make them executable
 
