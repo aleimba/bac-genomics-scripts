@@ -117,7 +117,7 @@ after the query OGs, sorted numerically via OG number.
 
 - *STDOUT*
 
-    The resulting ACM is printed to *STDOUT*. Redirect or pipe into another tool as needed (e.g. cut, grep, head, or tail).
+    The resulting ACM is printed to *STDOUT*. Redirect or pipe into another tool as needed (e.g. `cut`, `grep`, `head`, or `tail`).
 
 ## Run environment
 
@@ -129,4 +129,8 @@ Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute 
 
 ## Changelog
 
+* v0.2 (15.01.2015)
+    * give number of query-specific OGs and total query singletons/ORFans in final stat output
+    * changed final stat output to an easier readable format
+    * fixed bug: %Query_ID_Seen included also non-query IDs, which luckily had no consequences
 * v0.1 (18.12.2014)

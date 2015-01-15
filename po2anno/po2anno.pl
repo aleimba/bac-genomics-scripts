@@ -108,7 +108,7 @@ Print version number to C<STDERR>
 =item C<STDOUT>
 
 The resulting ACM is printed to C<STDOUT>. Redirect or pipe into
-another tool as needed (e.g. cut, grep, head, or tail).
+another tool as needed (e.g. C<cut>, C<grep>, C<head>, or C<tail>).
 
 =back
 
@@ -142,6 +142,7 @@ another tool as needed (e.g. cut, grep, head, or tail).
 
 =head1 VERSION
 
+ 0.2                                               update: 15-01-2015
  0.1                                                       18-12-2014
 
 =head1 AUTHOR
@@ -182,7 +183,7 @@ my $Genome_Dir; # directory with genome multi-fastas (PO input)
 my $Query; # query genome (first column in output)
 my $Opt_Length; # include CDS nucleotide lengths in output
 my $Opt_All_OGs; # print also all non-query OGs to output
-my $VERSION = 0.1;
+my $VERSION = 0.2;
 my ($Opt_Version, $Opt_Help);
 GetOptions ('input=s' => \$Input_File,
             'genome_dir=s' => \$Genome_Dir,
@@ -275,7 +276,7 @@ my %Annotation; # two-dimensional hash to store the annotation of the genome fil
 my %Anno_Features; # two-dimensional hash to store which annotation features are present overall in each individual genome multi-FASTA (optional are 'gene/g=', 'product/p=' and 'EC_number/ec=' tags)
 foreach my $genome (@Genome_Files) {
     my $genome_file_path = "./$Genome_Dir/$genome";
-    check_file_exist($genome_file_path);
+    check_file_exist($genome_file_path); # subroutine
     open (my $genome_fh, "<", "$genome_file_path");
 
     # parse anno in current genome file
@@ -326,7 +327,7 @@ foreach my $genome (@Genome_Files) {
 
 ### Check if CDS counts in multi-FASTA genome files and PO matrix are equal and print header of output
 print STDERR "Comparing annotation CDS counts to orthologous group CDS counts and printing header for output matrix ...\n";
-my $query_cds_count; # store number of query CDS for stat report at end
+my $Query_CDS_Count; # store number of query CDS for stat report at end
 print "# OG"; # first column of header
 foreach my $genome (@Genome_Files) {
     my $ortho_cds_count = map ($Ortho_Groups{$_}->{$genome} ? @{ $Ortho_Groups{$_}->{$genome} } : (), keys %Ortho_Groups); # de-reference anonymous array in two-dimensional hash
@@ -338,7 +339,7 @@ foreach my $genome (@Genome_Files) {
     #}
 
     my $anno_cds_count = grep ($Annotation{$_}->{'genome'} eq $genome, keys %Annotation);
-    $query_cds_count = $anno_cds_count if ($Query eq $genome);
+    $Query_CDS_Count = $anno_cds_count if ($Query eq $genome);
     die "\n### Fatal error:\nThere are more CDSs in file '$genome' than for this genome in the Proteinortho matrix '$Input_File', but counts have to be equal. Please run Proteinortho5 with option '-singles' to include also genes without orthologs, so-called singletons/ORFans (recommended is also option '-selfblast' to enhance paralog detection).\n" if ($ortho_cds_count < $anno_cds_count);
     die "\n### Fatal error:\nThere are less CDSs in file '$genome' than for this genome in the Proteinortho matrix '$Input_File', but counts have to be equal. Please check if the files are correct.\n" if ($ortho_cds_count > $anno_cds_count);
 
@@ -347,7 +348,7 @@ foreach my $genome (@Genome_Files) {
     print "\tlength [bp]" if ($Opt_Length);
     print "\tgene" if ($Anno_Features{$genome}->{'gene'});
     print "\tec" if ($Anno_Features{$genome}->{'ec'});
-    print "\tproduct" if ($Anno_Features{$genome}->{'product'});
+    print "\tproduct" if ($Anno_Features{$genome}->{'product'}); # very unlikely that there's a whole genome without product annotation ...
 }
 print "\n";
 
@@ -355,13 +356,15 @@ print "\n";
 
 ### Print annotation comparison matrix
 print STDERR "Printing output annotation comparison matrix for query OGs ...\n";
-my %Query_ID_Seen; # query IDs already processed for output (because of paralogous OGs)
-my %Query_OGs; # OGs with Query CDSs
+my %Query_ID_Seen; # query IDs already processed for output (because of paralogous CDSs in the same OGs)
+my %Query_OGs; # OGs containing query CDSs, to skip for non-query OGs (option '-a') below
+my $Query_Specific_OGs = 0; # count number of OGs including only query CDSs (not including CDSs of the other genomes)
+my $Query_Singletons = 0; # count query singletons/ORFans (different to '$Query_Singleton_OGs' because of paralogous CDSs)
 foreach my $id (sort { $a cmp $b } grep ($Annotation{$_}->{'genome'} eq $Query, keys %Annotation)) { # get IDs only for the query genome, sorted
     next if ($Query_ID_Seen{$id});
 
     # get OG for current query $id (I'm sure this can also be resolved by a fancy map/grep construction, but I didn't get it to work)
-    my $id_og;
+    my $id_og; # OG containing the current query ID
     foreach my $og (keys %Ortho_Groups) {
         foreach (@{ $Ortho_Groups{$og}->{$Query} }) {
             if ($_ eq $id) {
@@ -390,9 +393,14 @@ if ($Opt_All_OGs) {
 
 
 ### Print some final stats
-print STDERR "\nFinished creating Proteinortho annotation comparison matrix for '", scalar @Genome_Files, "' total genomes with '$Query' as query genome.\n";
-print STDERR "Some final stats:\n\t'", scalar keys %Annotation, "' total CDSs are in this Proteinortho matrix with '$query_cds_count' query CDSs.\n";
-print STDERR "\t'", scalar keys %Query_OGs, "' OGs of a total of '", scalar keys %Ortho_Groups, "' OGs include query CDSs.\n";
+print STDERR "\nFinished creating Proteinortho annotation comparison matrix with query genome '$Query':\n";
+print STDERR "Total genomes: ", scalar @Genome_Files, "\n";
+print STDERR "Total CDSs: ", scalar keys %Annotation, "\n";
+print STDERR "Total query CDSs: $Query_CDS_Count\n";
+print STDERR "Total OGs: ", scalar keys %Ortho_Groups, "\n";
+print STDERR "OGs including query CDSs: ", scalar keys %Query_OGs, "\n";
+print STDERR "Query-specific OGs (not including CDSs of the other genomes): $Query_Specific_OGs\n";
+print STDERR "Total query singletons/ORFans: $Query_Singletons\n";
 
 
 exit;
@@ -413,15 +421,19 @@ sub check_file_exist {
 
 ### Subroutine to print resulting annotation comparison matrix to STDOUT
 sub print_matrix {
-    my ($og, $query_id_seen) = @_; # $query_id_seen hash-ref to %Query_ID_Seen
+    my ($og, $query_id_seen) = @_; # $query_id_seen hash-ref to %Query_ID_Seen ($query_id_seen not given/defined if called above for non-query OGs, option '-a')
 
     # get max count of paralogs/co-orthologs over all genomes in current OG for row printing below
     my $max_paralog_count = 0;
     foreach my $genome (keys %{$Ortho_Groups{$og}}) {
         my $paralog_count = 0;
         foreach (@{ $Ortho_Groups{$og}->{$genome} }) { # only needed for genomes in the CURRENT $og <=> ALL genomes needed below
-            $query_id_seen->{$_} = 1 if ($query_id_seen); # store query IDs that have been processed
+            $query_id_seen->{$_} = 1 if ($query_id_seen && $genome eq $Query); # store query IDs that have been processed
             $paralog_count++;
+        }
+        if ($genome eq $Query && keys %{$Ortho_Groups{$og}} == 1) { # query-specific OGs (not including CDSs of the other genomes)
+            $Query_Specific_OGs++;
+            $Query_Singletons += $paralog_count;
         }
         $max_paralog_count = $paralog_count if ($paralog_count > $max_paralog_count);
     }
