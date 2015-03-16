@@ -42,9 +42,9 @@ folder, overall assignment statistics are printed to *STDOUT*.
 
 Several files are needed from NCBI's FTP server to run the RPS-BLAST+ and `cdd2cog.pl`:
 
-1. **CDD**
+1. **CDD** (ftp://ftp.ncbi.nlm.nih.gov/pub/mmdb/cdd/)
 
-    More information about the files in the [CDD FTP archive](ftp://ftp.ncbi.nlm.nih.gov/pub/mmdb/cdd/) can be found in the respective 'README' file.
+    More information about the files in the CDD FTP archive can be found in the respective 'README' file.
 
   1. 'cddid.tbl.gz'
 
@@ -62,9 +62,9 @@ Several files are needed from NCBI's FTP server to run the RPS-BLAST+ and `cdd2c
 
     Preformatted RPS-BLAST+ database of the CDD COG distribution for Intel CPUs and Unix/Windows architectures.
 
-2. **COG**
+2. **COG** (ftp://ftp.ncbi.nih.gov/pub/COG/COG/)
 
-    Read 'readme' for more information about the respective files in the [COG FTP archive](ftp://ftp.ncbi.nih.gov/pub/COG/COG/).
+    Read 'readme' for more information about the respective files in the COG FTP archive.
 
   1. 'fun.txt'
 
