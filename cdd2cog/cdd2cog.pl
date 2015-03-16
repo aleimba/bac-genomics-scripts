@@ -40,7 +40,7 @@ and C<cdd2cog.pl>:
 
 =item 1.) L<CDD|ftp://ftp.ncbi.nlm.nih.gov/pub/mmdb/cdd/>
 
-More information about the files in the FTP-CDD archive can be found
+More information about the files in the CDD FTP archive can be found
 in the respective F<README> file.
 
 =item 1.1.) F<cddid.tbl.gz>
@@ -65,7 +65,8 @@ Intel CPUs and Unix/Windows architectures.
 
 =item 2.) L<COG|ftp://ftp.ncbi.nih.gov/pub/COG/COG/>
 
-Read F<readme> for more information about the respective files.
+Read F<readme> for more information about the respective files in
+the COG FTP archive.
 
 =item 2.1.) F<fun.txt>
 

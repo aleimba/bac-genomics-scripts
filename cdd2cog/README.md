@@ -14,6 +14,7 @@ cdd2cog
 * [Output](#output)
 * [Run environment](#run-environment)
 * [Author - contact](#author---contact)
+* [Acknowledgements](#acknowledgements)
 * [Changelog](#changelog)
 
 ## Synopsis
@@ -41,11 +42,11 @@ folder, overall assignment statistics are printed to *STDOUT*.
 
 Several files are needed from NCBI's FTP server to run the RPS-BLAST+ and `cdd2cog.pl`:
 
-1. [CDD](ftp://ftp.ncbi.nlm.nih.gov/pub/mmdb/cdd/)
+1. **CDD**
 
-    More information about the files in the FTP-CDD archive can be found in the respective 'README' file.
+    More information about the files in the [CDD FTP archive](ftp://ftp.ncbi.nlm.nih.gov/pub/mmdb/cdd/) can be found in the respective 'README' file.
 
-  1. cddid.tbl.gz
+  1. 'cddid.tbl.gz'
 
     The file needs to be unpacked:
 
@@ -53,7 +54,7 @@ Several files are needed from NCBI's FTP server to run the RPS-BLAST+ and `cdd2c
 
     Contains summary information about the CD models in a tab-delimited format. The columns are: PSSM-Id, CD accession (e.g. COG#), CD short name, CD description, and PSSM (position-specific scoring matrices) length.
 
-  2. ./little_endian/Cog_LE.tar.gz
+  2. './little_endian/Cog_LE.tar.gz'
 
     Unpack and untar via:
 
@@ -61,15 +62,15 @@ Several files are needed from NCBI's FTP server to run the RPS-BLAST+ and `cdd2c
 
     Preformatted RPS-BLAST+ database of the CDD COG distribution for Intel CPUs and Unix/Windows architectures.
 
-2. [COG](ftp://ftp.ncbi.nih.gov/pub/COG/COG/)
+2. **COG**
 
-    Read 'readme' for more information about the respective files.
+    Read 'readme' for more information about the respective files in the [COG FTP archive](ftp://ftp.ncbi.nih.gov/pub/COG/COG/).
 
-  1. fun.txt
+  1. 'fun.txt'
 
     One-letter functional classification used in the COG database.
 
-  2. whog
+  2. 'whog'
 
     Name, description, and corresponding functional classification of each COG.
 
@@ -134,7 +135,7 @@ Several files are needed from NCBI's FTP server to run the RPS-BLAST+ and `cdd2c
 
 - protein-id_cog.txt
 
-    Slimmed down `rps-blast_cog.txt` only including query id (first BLAST report column), COGs, and functional categories
+    Slimmed down 'rps-blast_cog.txt' only including query id (first BLAST report column), COGs, and functional categories
 
 - cog_stats.txt
 
@@ -148,13 +149,13 @@ Several files are needed from NCBI's FTP server to run the RPS-BLAST+ and `cdd2c
 
 The Perl script runs under UNIX flavors.
 
-## Acknowledgements
-
-I got the idea for using NCBI's CDD PSSMs for COG assignment from JGI's [IMG/ER annotation system](http://img.jgi.doe.gov/), which employes the same technique.
-
 ## Author - contact
 
 Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute of Hygiene, University of Muenster)
+
+## Acknowledgements
+
+I got the idea for using NCBI's CDD PSSMs for COG assignment from JGI's [IMG/ER annotation system](http://img.jgi.doe.gov/), which employes the same technique.
 
 ## Changelog
 
