@@ -17,7 +17,7 @@ A collection of scripts intended for bacterial genomics (some might also be usef
 
 * Basic stats for bases and reads in FASTQ files: [`calc_fastq-stats`](/calc_fastq-stats)
 * Concatenate multi-sequence (RichSeq or fasta) files to a single artificial file: [`cat_seq`](/cat_seq)
-* COG classification of proteins: `cdd2cog`
+* COG classification of proteins: [`cdd2cog`](/cdd2cog)
 * Extraction of protein/nucleotide sequences from CDSs: [`cds_extractor`](/cds_extractor)
 * MLST assignment and allele extraction for *E. coli* (Achtman scheme): [`ecoli_mlst`](/ecoli_mlst)
 * Count all annotated primary features from RichSeq (e.g. embl or genbank) files: `get_genome_features`
