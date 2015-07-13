@@ -10,13 +10,13 @@ my $usage = << "USAGE";
   #                                                                     #
   # Unpacks and concatenates all draft and complete genomes (in genbank #
   # and fasta format) downloaded from NCBI's FTP server                 #
-  # (ftp://ftp.ncbi.nih.gov/). The script traverses the downloaded NCBI #
-  # FTP folder structure and thus has to be called from the top level   #
-  # (containing the folder './ftp.ncbi.nih.gov').                       #
+  # (ftp://ftp.ncbi.nlm.nih.gov/). The script traverses the downloaded  #
+  # NCBI FTP folder structure and thus has to be called from the top    #
+  # level (containing the folder './ftp.ncbi.nlm.nih.gov').             #
   # Therefore, use the bash-shell wrapper script 'ncbi_ftp_download.sh',#
   # which employs 'wget' to download the genomes and mirrors the NCBI   #
-  # FTP server folder structure locally (with 'ftp.ncbi.nih.gov' being  #
-  # the top folder). Afterwards, 'ncbi_ftp_download.sh' runs            #
+  # FTP server folder structure locally (with 'ftp.ncbi.nlm.nih.gov'    #
+  # being the top folder). Afterwards, 'ncbi_ftp_download.sh' runs      #
   # 'ncbi_ftp_concat_unpack.pl' with both 'genbank' and 'refseq'        #
   # options, as well as option 'y' to overwrite the old result folders  #
   # (see below). Both scripts have to be in the same directory (or in   #
@@ -42,7 +42,7 @@ my $usage = << "USAGE";
   # corresponding fasta file are found, error file 'seq_errors.txt' will#
   # contain warnings.                                                   #
   #                                                                     #
-  # version 0.2, update: 21.02.2013                    Andreas Leimbach #
+  # version 0.2.1, update: 13.07.2015                  Andreas Leimbach #
   # 15.09.2012                                    aleimba[at]gmx[dot]de #
   #######################################################################
 
@@ -68,14 +68,14 @@ my $dir_complete; # for complete genomes
 my $dir_draft; # for draft genomes
 if ($db =~ /genbank/i) {
     $db = 'genbank';
-    $dir_complete = './ftp.ncbi.nih.gov/genbank/genomes/Bacteria';
-    $dir_draft = './ftp.ncbi.nih.gov/genbank/genomes/Bacteria_DRAFT';
+    $dir_complete = './ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria';
+    $dir_draft = './ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria_DRAFT';
     ask_exit($db, $ask); # subroutine to ask if the current result folder should be deleted and created new, or exit the script
     rm_dir($db); # subroutine to remove the result directory and all its contents prior filling it with new files (in case files have changed)
 } elsif ($db =~ /refseq/i) {
     $db = 'refseq';
-    $dir_complete = './ftp.ncbi.nih.gov/genomes/Bacteria';
-    $dir_draft = './ftp.ncbi.nih.gov/genomes/Bacteria_DRAFT';
+    $dir_complete = './ftp.ncbi.nlm.nih.gov/genomes/Bacteria';
+    $dir_draft = './ftp.ncbi.nlm.nih.gov/genomes/Bacteria_DRAFT';
     ask_exit($db, $ask);
     rm_dir($db);
 } else {

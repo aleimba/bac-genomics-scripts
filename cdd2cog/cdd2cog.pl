@@ -63,7 +63,7 @@ C<tar xvfz Cog_LE.tar.gz>
 Preformatted RPS-BLAST+ database of the CDD COG distribution for
 Intel CPUs and Unix/Windows architectures.
 
-=item 2.) L<COG|ftp://ftp.ncbi.nih.gov/pub/COG/COG/>
+=item 2.) L<COG|ftp://ftp.ncbi.nlm.nih.gov/pub/COG/COG/>
 
 Read F<readme> for more information about the respective files in
 the COG FTP archive.

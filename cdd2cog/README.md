@@ -62,7 +62,7 @@ Several files are needed from NCBI's FTP server to run the RPS-BLAST+ and `cdd2c
 
     Preformatted RPS-BLAST+ database of the CDD COG distribution for Intel CPUs and Unix/Windows architectures.
 
-2. **COG** (ftp://ftp.ncbi.nih.gov/pub/COG/COG/)
+2. **COG** (ftp://ftp.ncbi.nlm.nih.gov/pub/COG/COG/)
 
     Read 'readme' for more information about the respective files in the COG FTP archive.
 

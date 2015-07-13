@@ -13,9 +13,9 @@ These scripts are intended to download all bacterial genomes for a particular ge
 
 `ncbi_ftp_download.sh` is a bash shell wrapper script that employs UNIX's `wget` to download microbial genomes in genbank (\*.gbk) and fasta (\*.fna) format from the GenBank and RefSeq databases (NCBI Reference Sequence Database, http://www.ncbi.nlm.nih.gov/refseq/) on NCBI's FTP server, which can be accessed anonymously. As first argument it takes the bacterial genus or species name you want to download (it uses that name with a glob inside the script, e.g. Escherichia_coli will be used as Escherichia_coli\*), see examples below in [usage](#usage). Have a look on the NCBI FTP server to get the correct name (either with your browser or e.g. with FileZilla, http://filezilla-project.org/). If you want to download genomes for several distinct species just run the script with different arguments repeatedly.
 
-The `wget` parameters are specified to keep the FTP server folder structure and mirror it locally downstream from the current working directory (folder 'ftp.ncbi.nih.gov' will be the top folder of the new folder structure). If you update an already existing folder structure, `wget` will only download and replace files if they are in a newer version on NCBI's FTP server. **But** be aware that NCBI shuffles files around (including new ones, deleting old ones etc.), thus it might be useful to remove 'ftp.ncbi.nih.gov' and download everything new.
+The `wget` parameters are specified to keep the FTP server folder structure and mirror it locally downstream from the current working directory (folder 'ftp.ncbi.nlm.nih.gov' will be the top folder of the new folder structure). If you update an already existing folder structure, `wget` will only download and replace files if they are in a newer version on NCBI's FTP server. **But** be aware that NCBI shuffles files around (including new ones, deleting old ones etc.), thus it might be useful to remove 'ftp.ncbi.nlm.nih.gov' and download everything new.
 
-After the download with `wget`, `ncbi_ftp_download.sh` will run the Perl script `ncbi_ftp_concat_unpack.pl`. This script unpacks (draft genomes are stored as tarballs, \*.tgz) and concatenates all complete and draft genomes, which are present in the folder 'ftp.ncbi.nih.gov' in the current working directory. The script traverses the downloaded NCBI ftp-folder structure and thus has to be called from the top level (containing the folder 'ftp.ncbi.nih.gov'). `ncbi_ftp_download.sh` runs `ncbi_ftp_concat_unpack.pl` with both **genbank** and **refseq** options, as well as option **y** to overwrite the old result folders (see below [options](#options)). Both scripts have to be in the same directory (or in the path) to run `ncbi_ftp_download.sh`.
+After the download with `wget`, `ncbi_ftp_download.sh` will run the Perl script `ncbi_ftp_concat_unpack.pl`. This script unpacks (draft genomes are stored as tarballs, \*.tgz) and concatenates all complete and draft genomes, which are present in the folder 'ftp.ncbi.nlm.nih.gov' in the current working directory. The script traverses the downloaded NCBI ftp-folder structure and thus has to be called from the top level (containing the folder 'ftp.ncbi.nlm.nih.gov'). `ncbi_ftp_download.sh` runs `ncbi_ftp_concat_unpack.pl` with both **genbank** and **refseq** options, as well as option **y** to overwrite the old result folders (see below [options](#options)). Both scripts have to be in the same directory (or in the path) to run `ncbi_ftp_download.sh`.
 
 For **complete** genomes **plasmids** are concatenated to the **chromosomes** to create multi-genbank/-fasta files (script `split_multi-seq_file.pl` can be used to split the multi-sequence file to single-sequence files).
 
@@ -23,7 +23,7 @@ In **draft** genomes, **scaffold** and/or **contig** files, designated by 'draft
 
 As a suggestion, pick the genomes you're looking for **first** out of './refseq' and the rest out of './genbank'. RefSeq genomes have a higher annotation quality, while GenBank includes more genomes.
 
-Depending on the amount of data to download, the whole process can take quite a while. Also have a mind for space requirements, e.g. all *E. coli*/*Shigella* genomes (March 2014) have a final total space requirement of ~58 GB ('ftp.ncbi.nih.gov' = ~18 GB; ./genbank = ~25 GB; ./refseq = ~16 GB)!
+Depending on the amount of data to download, the whole process can take quite a while. Also have a mind for space requirements, e.g. all *E. coli*/*Shigella* genomes (March 2014) have a final total space requirement of ~58 GB ('ftp.ncbi.nlm.nih.gov' = ~18 GB; ./genbank = ~25 GB; ./refseq = ~16 GB)!
 
 If you're new to the NCBI FTP site you should read an excellent overview for microbial RefSeq genomes on NCBI's FTP site on Torsten Seemann's blog: http://thegenomefactory.blogspot.de/2012/07/navigating-microbial-genomes-on-ncbi.html.
 
@@ -37,19 +37,19 @@ You can also access an introductory talk for the microbial NCBI FTP resources at
 
 Download RefSeq complete genomes (in fasta and genbank format):
 
-    wget -cNrv -t 45 -A *.gbk,*.fna "ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Genus_species*" -P .
+    wget -cNrv -t 45 -A *.gbk,*.fna "ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Genus_species*" -P .
 
 Download RefSeq draft genomes as tarballs:
 
-    wget -cNrv -t 45 -A *.gbk.tgz,*.fna.tgz "ftp://ftp.ncbi.nih.gov/genomes/Bacteria_DRAFT/Genus_species*" -P .
+    wget -cNrv -t 45 -A *.gbk.tgz,*.fna.tgz "ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria_DRAFT/Genus_species*" -P .
 
 The same procedure has to be followed for GenBank files, here complete genomes:
 
-    wget -cNrv -t 45 -A *.gbk,*.fna "ftp://ftp.ncbi.nih.gov/genbank/genomes/Bacteria/Genus_species*" -P .
+    wget -cNrv -t 45 -A *.gbk,*.fna "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria/Genus_species*" -P .
 
 And finally download GenBank draft genomes:
 
-    wget -cNrv -t 45 -A *.gbk.tgz,*.fna.tgz "ftp://ftp.ncbi.nih.gov/genbank/genomes/Bacteria_DRAFT/Genus_species*" -P .
+    wget -cNrv -t 45 -A *.gbk.tgz,*.fna.tgz "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria_DRAFT/Genus_species*" -P .
 
 #### 1.2.) `ncbi_ftp_concat_unpack.pl`
 
@@ -76,11 +76,11 @@ Download all *Paenibacillus* genomes:
 
 * genbank (as first argument)
 
-Copy GenBank genomes (from './ftp.ncbi.nih.gov/genbank/genomes/Bacteria\*') as (multi-)sequence files in the result folder './genbank'.
+Copy GenBank genomes (from './ftp.ncbi.nlm.nih.gov/genbank/genomes/Bacteria\*') as (multi-)sequence files in the result folder './genbank'.
 
 * refseq (as first argument)
 
-Copy RefSeq genomes (from './ftp.ncbi.nih.gov/genomes/Bacteria\*') as (multi-)sequence files in the result folder './refseq'.
+Copy RefSeq genomes (from './ftp.ncbi.nlm.nih.gov/genomes/Bacteria\*') as (multi-)sequence files in the result folder './refseq'.
 
 * y (as second argument)
 
@@ -90,7 +90,7 @@ Will delete previous result folders and create new ones (otherwise, the script w
 
 ### `ncbi_ftp_download.sh`
 
-* './ftp.ncbi.nih.gov/'
+* './ftp.ncbi.nlm.nih.gov/'
 
 Mirrors NCBI's FTP server structure and downloads the wanted bacterial genome files in this folder with subfolders
 
@@ -124,6 +124,8 @@ Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute 
 
 ### *ncbi_ftp_concat_unpack.pl*
 
+* v0.2.1 (13.07.2015)
+    - Adapted all scripts to the new NCBI FTP server address: 'ftp://ftp.ncbi.nlm.nih.gov/'
 * v0.2 (21.02.2013)
     - 'seq_errors.txt' error file if sequence size discrepancies between genbank and corresponding fasta file found
     - die with error if 'genbank|refseq' not given as first argument
