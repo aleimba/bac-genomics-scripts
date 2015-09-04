@@ -3,33 +3,36 @@
 use warnings;
 use strict;
 use Bio::SeqIO; # bioperl module to handle sequence input/output
-use Bio::SeqFeatureI;  # bioperl module to handle features in a sequence
+use Bio::SeqFeatureI; # bioperl module to handle features in a sequence
 
 my $usage = "\n".
-   "\t#######################################################\n".
-   "\t# $0 file-extension               #\n". #$0 = program name
-   "\t#                                                     #\n".
-   "\t# Extracts all primary features from all genome files #\n".
-   "\t# ((multi)-embl or -genbank, and drafts) with the     #\n".
-   "\t# given extension in the current directory and counts #\n".
-   "\t# these. Results are written to *_features.txt.       #\n".
-   "\t# CAREFUL: Don't put drafts in the same file, if the  #\n".
-   "\t# accession-numbers are the same (except for the last #\n".
-   "\t# four digits). Otherwise, features will be added for #\n".
-   "\t# both draft WGS wrongly to only one name (and the    #\n".
-   "\t# other name omitted)!                                #\n".
-   "\t# The perl script uses bioperl (www.bioperl.org).     #\n".
-   "\t#                                                     #\n".
-   "\t# version 0.2 update: 19.09.2012     Andreas Leimbach #\n".
-   "\t# 25.11.2011                    aleimba[at]gmx[dot]de #\n".
-   "\t#######################################################\n\n";
+   "\t##################################################################\n".
+   "\t# $0 file-extension [p]                      #\n". #$0 = program name
+   "\t#                                                                #\n".
+   "\t# Extracts all primary features from all genome files ((multi)-  #\n".
+   "\t# embl or -genbank, and drafts) with the given extension in the  #\n".
+   "\t# current directory and counts these. Use option 'p' to have     #\n".
+   "\t# separate entries for complete plasmids in draft genomes.       #\n".
+   "\t# Results are written to tab-separated file '*_features.txt'.    #\n".
+   "\t# CAREFUL: Don't put drafts in the same file, if the accession-  #\n".
+   "\t# numbers have the same first characters (except for the last    #\n".
+   "\t# four digits). Otherwise, features will be added for both draft #\n".
+   "\t# WGS wrongly to only one name (and the other draft omitted)!    #\n".
+   "\t# The perl script uses BioPerl (www.bioperl.org).                #\n".
+   "\t#                                                                #\n".
+   "\t# version 0.3, update: 05.11.2012               Andreas Leimbach #\n".
+   "\t# 25.11.2011                               aleimba[at]gmx[dot]de #\n".
+   "\t##################################################################\n\n";
 
 
 ### Print usage if -h|--h|--help is given as argument or file-extension is not given
-my $extension = shift;
+my ($extension, $option) = @ARGV;
 if (!defined $extension) {
     die $usage;
 } elsif ($extension =~ m/-h/) {
+    die $usage;
+}
+if (defined $option && $option ne 'p') {
     die $usage;
 }
 
@@ -44,56 +47,72 @@ my %gc; # store the gc_content for each strain
 my %unresolved_n; # store unresolved bases ('n/N's) for each strain
 my %coding_percentage; # save the coding percentage for each strain
 my $file_count = 0; # drafts have very similar acc#s if the last four digits are removed (see below), but they should be in different files
-opendir(DIR, $dirname) or die "can't opendir $dirname: $!";
+opendir(DIR, $dirname) or die "Can't open directory '$dirname': $!";
 while (defined(my $file = readdir(DIR))) {
     if ($file =~ m/.+\.$extension$/)  {
 	$file_count++;
 	my $seqio_obj = Bio::SeqIO->new(-file => "<$file");
-	my %draft; # count the contigs/scaffolds for each strain
-	my %draft_seq; # store the concatenated seq for all draft contigs/scaffolds for subroutine gc_content for each strain
-	my %coding_bases; # save base count to calculate coding percentage for each strain
+	my %draft; # count the contigs/scaffolds for each draft strain
+	my %draft_seq; # store the concatenated sequences for all contigs/scaffolds of a draft genome
+	my %coding_bases; # base count to calculate coding percentage of each strain
 	while (my $seq_obj = $seqio_obj->next_seq) { # multi-seq files possible (e.g. chromosome plus plasmids, and also drafts with several contigs/scaffolds)
 	    my $acc = $seq_obj->accession_number;
-	    if ($seq_obj->keywords =~ /WGS/) { # look for draft sequences
-		$acc =~ s/^(\S+)(\d{4})$/$1/; # get rid of the last four numbers to include all contigs for drafts (hopefully the contig count doesn't reach the ten thousand mark ...)
-		$acc = $acc.$file_count; # append the file_count to the acc# to make it unique for several draft files!
+	    my $plasmid = 0; # a separate plasmid entry in a multi-fasta file (see option 'p')
+	    my $feat_obj;
+	    if (defined $option) { # some drafts include finished plasmids; if option 'p' is given don't include in the draft but make extra entry as with complete genomes
+		foreach $feat_obj ($seq_obj->get_SeqFeatures) {
+		    if ($feat_obj->primary_tag eq 'source') { # plasmids have a '/plasmid' secondary feature in pimary feature source
+			foreach my $tag ($feat_obj->get_all_tags) {
+			    if ($tag eq 'plasmid') {
+				$plasmid = 1;
+				last; # skip rest if plasmid found
+			    }
+			}		    
+		    }
+		    last; # source is always the first primary feature in sequence file, skip the rest
+		}
+	    }
+	    if ($seq_obj->keywords =~ /WGS/ && $plasmid == 0) { # process draft sequences; skip WGS entry if a plasmid and option 'p' declared
+		$acc =~ s/^(\S+)(\d{4})$/$1/; # get rid of the last four numbers to include all contigs for drafts (hopefully the contig count doesn't reach the ten thousand mark ...); original acc#s are stored below
+		$acc = $acc.$file_count; # append the file_count to the acc# to make it unique for several draft files
  	    	$draft{$acc}++; # count contigs/scaffolds
-		$prim_features{'contigs/scaffolds'} = 1; # include in the header of the result file
+		$prim_features{'contigs/scaffolds'} = 1; # include 'contig/scaffolds' in the header of the result file
 		$strain_features{$acc}{'contigs/scaffolds'} = $draft{$acc};
-		if ($draft{$acc} == 1) { # give a the range of acc#s for drafts
+		if ($draft{$acc} == 1) { # give the range of acc#s for drafts
 		    $strain_features{$acc}{'acc_start'} = $seq_obj->accession_number;
 		} else {
 		    $strain_features{$acc}{'acc_stop'} = $seq_obj->accession_number;
 		}
 	    }
 #	    my $species_obj =  $seq_obj->species; # doesn't work, because '$species_obj->sub_species' gives only 'str.' for MG1655 
-	    $desc{$acc} = $seq_obj->desc; # for drafts only the last sequence object
-	    $desc{$acc} =~ s/(,* complete genome.*|DNA, complete genome.*|chromosome, complete sequence.*|complete genome, strain.*|, complete sequence.*)//; # shorten strain descriptions
-	    if (defined($draft{$acc}) && $draft{$acc} >= 1) { # draft seqs only have the shortened acc now
+	    if (defined($draft{$acc}) && !defined $option && $seq_obj->desc =~ /plasmid/) { # don't use a plasmid description for WGS results
+#		print "Including plasmid '$acc' in draft\n";
+	    } else {
+		$desc{$acc} = $seq_obj->desc; # for drafts only the last sequence object
+		$desc{$acc} =~ s/(,* complete genome.*|DNA, complete genome.*|chromosome, complete sequence.*|complete genome, strain.*|, complete sequence.*| chromosome, complete genome.*)$//; # shorten strain descriptions
+	    }
+	    if (defined($draft{$acc}) && $draft{$acc} >= 1) { # draft seqs only have the shortened acc
 		if ($draft{$acc} == 1) { # the first contig/scaffold of drafts
 		    print "Processing draft genome: ", $desc{$acc}, ", ", $seq_obj->accession_number, "\n"; # print only for the first contig
 		    $length{$acc} = $seq_obj->length;
-		    ($gc{$acc}, $unresolved_n{$acc}) = gc_content($seq_obj->seq); # subroutine to calculate the GC-content and count 'N's in the sequence
 		    $draft_seq{$acc} = $seq_obj->seq; # save the sequence to concatenate to the following contigs/scaffolds
-		    $coding_bases{$acc} = 0; # set to zero for the first contig of the draft
-		} elsif ($draft{$acc} > 1) { # calculations needed for all further contigs/scaffolds
+		    $coding_bases{$acc} = 0;
+		} elsif ($draft{$acc} > 1) { # calculations needed for all further contigs of a draft
 		    $length{$acc} = $seq_obj->length + $length{$acc}; # add all previous lengths to the current
-		    $draft_seq{$acc} = $seq_obj->seq . $draft_seq{$acc}; # concatenate all contig/scaffold sequences for one draft genome
-		    my $prev_n = $unresolved_n{$acc};
-		    ($gc{$acc}, $unresolved_n{$acc}) = gc_content($draft_seq{$acc}); # use the concatenated sequence for subroutine
-		    $unresolved_n{$acc} = $unresolved_n{$acc} + $prev_n;
+		    $draft_seq{$acc} = $seq_obj->seq . $draft_seq{$acc}; # concatenate all contig/scaffold sequences for one 'artificial' draft genome
+		    ($gc{$acc}, $unresolved_n{$acc}) = gc_content($draft_seq{$acc});
 		}
 	    } else {
 		print "Processing complete replicon: ", $desc{$acc}, ", $acc\n";
 		$length{$acc} = $seq_obj->length;
-		($gc{$acc}, $unresolved_n{$acc}) = gc_content($seq_obj->seq);
-		$coding_bases{$acc} = 0; # set to zero for non-draft sequences
+		($gc{$acc}, $unresolved_n{$acc}) = gc_content($seq_obj->seq); # subroutine to calculate the GC-content and count 'N's in the sequence
+		$coding_bases{$acc} = 0;
 	    }
-	    foreach my $feat_obj ($seq_obj->get_SeqFeatures) {
+	    foreach $feat_obj ($seq_obj->get_SeqFeatures) {
 		if ($feat_obj->primary_tag eq 'source') { # exclude source primary tag
 		    next;
 		} elsif ($feat_obj->primary_tag eq 'gene') {
-		    $prim_features{$feat_obj->primary_tag} = 1; # NOT really needed as always excluded below
+#		    $prim_features{$feat_obj->primary_tag} = 1; # NOT really needed as always excluded below
 		    $strain_features{$acc}{$feat_obj->primary_tag}++;
 		    foreach my $tag ($feat_obj->get_all_tags) {
 			if ($tag eq 'pseudo') {
@@ -101,7 +120,7 @@ while (defined(my $file = readdir(DIR))) {
 			}
 		    }
 		} elsif ($feat_obj->primary_tag eq 'CDS') {
-		    $prim_features{$feat_obj->primary_tag} = 1; # NOT really needed as always excluded below
+#		    $prim_features{$feat_obj->primary_tag} = 1; # NOT really needed as always excluded below
 		    $strain_features{$acc}{$feat_obj->primary_tag}++;
 		    my $pseudo = 0; # pseudo switch to exclude pseudo locations from the coding percentage
 		    foreach my $tag ($feat_obj->get_all_tags) {
@@ -128,10 +147,10 @@ closedir DIR;
 
 ### Print header of output with all possible primary features
 my $temp = "temp.txt"; # use a temp file, because can't get rid of the trailing \t's otherwise (see below)
-open(TEMP, ">$temp") or die "Failed to create file \'$temp\': $!\n";
+open(TEMP, ">$temp") or die "Failed to create temp file \'$temp\': $!\n";
 print TEMP "Name (last contig/scaffold for drafts)\tSize\tGC-content\tCoding percentage\tTotal CDS (pseudo)\tTotal genes (pseudo)\trRNA\ttRNA\ttmRNA\tncRNA\tAccession (start..stop for drafts)\tcontigs/scaffolds\tUnresolved bases (Ns)\t"; # specific print order for the most common primary features
 foreach (sort keys %prim_features) { # print the residual primary features
-    if ($_ =~ m/^(CDS|gene|rRNA|tRNA|tmRNA|ncRNA|contigs\/scaffolds)$/) { # exclude the print order ones
+    if ($_ =~ /^(CDS|gene|rRNA|tRNA|tmRNA|ncRNA|contigs\/scaffolds)$/) { # exclude the print order ones
 	next;
     } else {
 	print TEMP "$_\t";
@@ -207,7 +226,7 @@ foreach my $acc (sort keys %strain_features) {
 	print TEMP "?\t";
     }
     foreach (sort keys %prim_features) { # print the residual primary features
-	if ($_ =~ m/^(CDS|gene|rRNA|tRNA|tmRNA|ncRNA|contigs\/scaffolds)$/) { # exclude the above ones
+	if ($_ =~ /^(CDS|gene|rRNA|tRNA|tmRNA|ncRNA|contigs\/scaffolds)$/) { # exclude the above ones
 	    next;
 	} elsif (defined $strain_features{$acc}{$_}) {
 	    print TEMP $strain_features{$acc}{$_}, "\t";
@@ -234,7 +253,7 @@ while (<FILE>) {
     print OUT "$_\n";
 }
 close FILE;
-unlink $temp or warn "Could not delete file \'$temp\': $!";
+unlink $temp or warn "Could not delete temp file \'$temp\': $!";
 close OUT;
 print "\n###Result file \'$extension\_features.txt\' was created!\n\n";
 
