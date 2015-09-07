@@ -19,7 +19,7 @@ po2anno
 
 ## Synopsis
 
-    perl po2anno.pl -i matrix.proteinortho -g genome_fasta_dir/ -l -a > annotation_comparison.tab
+    perl po2anno.pl -i matrix.proteinortho -g genome_fasta_dir/ -l -a > annotation_comparison.tsv
 
 ## Description
 
@@ -77,7 +77,7 @@ after the query OGs, sorted numerically via OG number.
 
 ### po2anno
 
-    perl po2anno.pl -i matrix.[proteinortho|poff] -g genome_fasta_dir/ -q query.[faa|fna] -l -a > annotation_comparison.tab
+    perl po2anno.pl -i matrix.[proteinortho|poff] -g genome_fasta_dir/ -q query.[faa|fna] -l -a > annotation_comparison.tsv
 
 ## Options
 
@@ -129,6 +129,9 @@ Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute 
 
 ## Changelog
 
+* v0.2.1 (07.09.2015)
+    * get rid of underscores in product annotation strings (from [`cds_extractor.pl`](/cds_extractor))
+    * debugged hard-coded relative path for `$genome_file_path`
 * v0.2 (15.01.2015)
     * give number of query-specific OGs and total query singletons/ORFans in final stat output
     * changed final stat output to an easier readable format

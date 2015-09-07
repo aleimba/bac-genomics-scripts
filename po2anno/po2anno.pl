@@ -12,7 +12,7 @@ C<po2anno.pl> - create an annotation comparison matrix from Proteinortho5 output
 
 =head1 SYNOPSIS
 
-C<perl po2anno.pl -i matrix.proteinortho -g genome_fasta_dir/ -l -a E<gt> annotation_comparison.tab>
+C<perl po2anno.pl -i matrix.proteinortho -g genome_fasta_dir/ -l -a E<gt> annotation_comparison.tsv>
 
 =head1 DESCRIPTION
 
@@ -136,13 +136,13 @@ another tool as needed (e.g. C<cut>, C<grep>, C<head>, or C<tail>).
 
 =over
 
-=item C<perl po2anno.pl -i matrix.[proteinortho|poff] -g genome_fasta_dir/ -q query.[faa|fna] -l -a E<gt> annotation_comparison.tab>
+=item C<perl po2anno.pl -i matrix.[proteinortho|poff] -g genome_fasta_dir/ -q query.[faa|fna] -l -a E<gt> annotation_comparison.tsv>
 
 =back
 
 =head1 VERSION
 
- 0.2                                               update: 15-01-2015
+ 0.2.1                                             update: 07-09-2015
  0.1                                                       18-12-2014
 
 =head1 AUTHOR
@@ -183,7 +183,7 @@ my $Genome_Dir; # directory with genome multi-fastas (PO input)
 my $Query; # query genome (first column in output)
 my $Opt_Length; # include CDS nucleotide lengths in output
 my $Opt_All_OGs; # print also all non-query OGs to output
-my $VERSION = 0.2;
+my $VERSION = '0.2.1';
 my ($Opt_Version, $Opt_Help);
 GetOptions ('input=s' => \$Input_File,
             'genome_dir=s' => \$Genome_Dir,
@@ -275,7 +275,7 @@ print STDERR "Parsing annotation from multi-FASTA CDS genome files ...\n";
 my %Annotation; # two-dimensional hash to store the annotation of the genome files
 my %Anno_Features; # two-dimensional hash to store which annotation features are present overall in each individual genome multi-FASTA (optional are 'gene/g=', 'product/p=' and 'EC_number/ec=' tags)
 foreach my $genome (@Genome_Files) {
-    my $genome_file_path = "./$Genome_Dir/$genome";
+    my $genome_file_path = "$Genome_Dir/$genome";
     check_file_exist($genome_file_path); # subroutine
     open (my $genome_fh, "<", "$genome_file_path");
 
@@ -294,12 +294,14 @@ foreach my $genome (@Genome_Files) {
             } elsif (/p=(.*)$/) {
                 warn "\n### Warning:\nNo product annotation (p=) in file '$genome_file_path' on line:\n$anno_line\nProceeding ...\n" if (!$1);
                 $product = $1;
+                $product =~ s/\_/ /g;
             } elsif (/l=(.*)$/) {
                 $length = $1;
                 my ($start, $stop) = split(/\.\./, $length);
                 $length = abs($stop - $start) + 1;
             } elsif (/o=(.*)$/) { # $organism not used
                 $organism = $1;
+                $organism =~ s/\_/ /g;
             } elsif (/ec=(.*)$/) {
                 $ec = $1;
             } else {
@@ -462,7 +464,7 @@ sub print_matrix {
                 if ($Annotation{$Ortho_Groups{$og}->{$genome}->[$i]}->{'product'}) {
                     print $Annotation{$Ortho_Groups{$og}->{$genome}->[$i]}->{'product'}, "\t";
                 } elsif ($Anno_Features{$genome}->{'product'}) {
-                    warn "\n### Warning:\nNo product annotation (p=) in file '$genome' for ID:\n$Ortho_Groups{$og}->{$genome}->[$i]\nProceeding ...\n";
+                    warn "\n### Warning:\nNo product annotation (p=) in file '$genome' for ID:\n$Ortho_Groups{$og}->{$genome}->[$i]\nProceeding ...\n"; # overlaps with 'warn' for missing product annotation in parsing the annotations of the genomes
                     print "\t";
                 }
 
