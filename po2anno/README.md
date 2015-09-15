@@ -71,9 +71,9 @@ after the query OGs, sorted numerically via OG number.
     for i in *.[gbk|embl]; do perl cds_extractor.pl -i $i [-p|-n]; done
     rename 's/_cds_[aa|nuc].fasta/.[faa|fna]/' *_cds_[aa|nuc].fasta
 
-### Proteinortho5
+### Proteinortho5 *blastp*
 
-    proteinortho5.pl -graph [-synteny] -cpus=# -selfblast -singles -identity=50 -cov=50 -blastParameters='-use_sw_tback' *.[faa|fna]
+    proteinortho5.pl -graph [-synteny] -cpus=# -selfblast -singles -identity=50 -cov=50 -blastParameters='-use_sw_tback -seg no' *.[faa|fna]
 
 ### po2anno
 

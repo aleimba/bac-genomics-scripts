@@ -124,7 +124,7 @@ another tool as needed (e.g. C<cut>, C<grep>, C<head>, or C<tail>).
 
 =back
 
-=head2 L<I<Proteinortho5>|http://www.bioinf.uni-leipzig.de/Software/proteinortho/>
+=head2 L<I<Proteinortho5>|http://www.bioinf.uni-leipzig.de/Software/proteinortho/> I<blastp>
 
 =over
 
