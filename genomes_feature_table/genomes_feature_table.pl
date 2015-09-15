@@ -207,7 +207,7 @@ while (my $file = readdir($Dir_Fh)) {
         $File_Count++;
         my $Id; # filename used as unique ID (optionally with appended plasmid name) for hashes; need to declare here for checks after 'while next_seq' loop
 
-        my $seqio_obj = Bio::SeqIO->new(-file => "<$file");
+        my $seqio_obj = Bio::SeqIO->new(-file => "<$Genome_Dir/$file");
         die "\n### Fatal error: File '$file' is not a RichSeq file in EMBL or GENBANK format!\n" if (ref($seqio_obj) !~ /Bio\:\:SeqIO\:\:[genbank|embl]/); # check if correct file format; Bio::SeqIO::genbank or Bio::SeqIO::embl object
 
         my %concat_seq; # store the concatenated sequences for all replicons or contigs/scaffolds of a genome with key '$Id'; only GC-content and unresolved Ns saved in '%Strain_Features', thus extra hash declared here to remove content and save memory for each file
