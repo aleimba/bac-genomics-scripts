@@ -59,7 +59,7 @@ or if 'KEYWORDS' isn't present at all
 
     perl -i -ne 'if(/^ACCESSION/){ print; print "KEYWORDS    WGS.\n";} else{ print;}' file
 
-For files in **EMBL** format if 'KW&nbsp;&nbsp;&nbsp;&nbsp;.' is present
+For files in **EMBL** format if 'KW&nbsp;&nbsp;&nbsp;.' is present
 
     perl -i -pe 's/^KW(\s+)\./KW$1WGS\./' file
 
