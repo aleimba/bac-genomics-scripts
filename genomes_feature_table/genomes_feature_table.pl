@@ -293,7 +293,7 @@ die "\n### Fatal error: No EMBL or GENBANK format files found!\n" if (!$File_Cou
 ### Get all annotated primary features present in all files
 my %Primary_Features;
 foreach my $id (keys %Strain_Features) {
-    foreach (keys $Strain_Features{$id}) { # de-references hash of hash
+    foreach (keys %{$Strain_Features{$id}}) { # de-references hash of hash
         $Primary_Features{$_} = 1;
     }
 }
