@@ -128,7 +128,7 @@ another tool as needed (e.g. C<cut>, C<grep>, C<head>, or C<tail>).
 
 =over
 
-=item C<proteinortho5.pl -graph [-synteny] -cpus=# -selfblast -singles -identity=50 -cov=50 -blastParameters='-use_sw_tback' *.[faa|fna]>
+=item C<proteinortho5.pl -graph [-synteny] -cpus=# -selfblast -singles -identity=50 -cov=50 -blastParameters='-use_sw_tback -seg no' *.[faa|fna]>
 
 =back
 
