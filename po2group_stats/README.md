@@ -86,7 +86,7 @@ it is outside of venn diagram logics.
 Here are venn diagrams illustrating the logic categories (see folder ['pics'](./pics)):
 
 <p align="center">
-  <img alt="venn diagram logics" src="https://github.com/aleimba/bac-genomics-scripts/raw/master/pics/venn_diagram_logics.png">
+  <img alt="venn diagram logics" src="https://github.com/aleimba/bac-genomics-scripts/raw/master/po2group_stats/pics/venn_diagram_logics.png">
 </p>
 
 There are two optional categories (which are only considered for the
