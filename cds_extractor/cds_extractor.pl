@@ -8,31 +8,31 @@
 
 =head1 NAME
 
-cds_extractor.pl - extract protein or DNA sequences from CDS features
+C<cds_extractor.pl> - extract protein or DNA sequences from CDS features
 
 =head1 SYNOPSIS
 
-C<perl cds_extractor.pl -i seq_file.embl -p>
+C<perl cds_extractor.pl -i seq_file.[embl|gbk] -p>
 
 =head1 DESCRIPTION
 
 Extracts protein or DNA sequences of CDS features from a
-(multi)-RichSeq file (e.g. embl, genbank) and writes them to a
-multi-fasta file. The fasta headers for each CDS include either the
-locus tag, if that's not available, protein id, gene, or an internal
+(multi)-RichSeq file (e.g. EMBL or GENBANK format) and writes them to a
+multi-FASTA file. The FASTA headers for each CDS include either the
+locus tag, if that's not available, protein ID, gene, or an internal
 CDS counter as identifier (in this order). The organism info
 includes also possible plasmid names. Pseudogenes (tagged by
-B<'/pseudo'>) are not included (except in the CDS counter).
+B</pseudo>) are not included (except in the CDS counter).
 
-In addition to the identifier, fasta headers include gene (B<g=>),
+In addition to the identifier, FASTA headers include gene (B<g=>),
 product (B<p=>), organism (B<o=>), and EC numbers (B<ec=>), if these
 are present for a CDS. Individual EC numbers are separated by
 B<semicolons>. The location/position (B<l=>start..stop) of a CDS will
-always be included. If gene is used as fasta header identifier
+always be included. If gene is used as FASTA header ID
 'B<g=>gene' will only be included with option B<-f>.
 
 Fuzzy locations in the feature table of a sequence file are not
-taken into consideration for 'B<l=>'. If you set options B<-u>
+taken into consideration for B<l=>. If you set options B<-u>
 and/or B<-d> and the feature location overlaps a B<circular>
 replicon boundary, positions are marked with '<' or '>' in the
 direction of the exceeded boundary. Features with overlapping
@@ -41,9 +41,9 @@ are B<not> included in the output! A CDS feature is on the lagging
 strand if start > stop in the location. In the special case of
 overlapping circular sequence boundaries this is reversed.
 
-Of course, the 'B<l=>' positions are separate for each sequence in a
+Of course, the B<l=> positions are separate for each sequence in a
 multi-sequence file. Thus, if you want continuous positions for the
-CDSs run these files first through C<cat_seq.pl>.
+CDSs run these files first through L<C<cat_seq.pl>|/cat_seq>.
 
 Optionally, a file with locus tags can be given to extract only
 these CDS features with option B<-l> (each locus tag in a new line).
@@ -56,12 +56,14 @@ these CDS features with option B<-l> (each locus tag in a new line).
 
 =item B<-i>=I<str>, B<-input>=I<str>
 
-Input RichSeq sequence file including CDS annotation (e.g. embl or
-genbank)
+Input RichSeq sequence file including CDS annotation (e.g. EMBL or
+GENBANK format)
 
 =item B<-p>, B<-protein>
 
 Extract B<protein> sequence for each CDS feature, excludes option B<-n>
+
+B<or>
 
 =item B<-n>, B<-nucleotide>
 
@@ -98,13 +100,13 @@ List of locus tags to extract only those (each locus tag on a new line)
 
 =item B<-f>, B<-full_header>
 
-If gene is used as identifier include additionally 'B<g=>gene' in
-fasta headers, so downstream analyses can recognize the gene tag
-(e.g. I<prot_finder.pl>).
+If gene is used as ID include additionally 'B<g=>gene' in FASTA
+headers, so downstream analyses can recognize the gene tag (e.g.
+L<C<prot_finder.pl>|/prot_finder>).
 
 =item B<-v>, B<-version>
 
-Print version number to STDERR
+Print version number to C<STDERR>
 
 =back
 
@@ -112,23 +114,23 @@ Print version number to STDERR
 
 =over 23
 
-=item F<*_cds_aa.fasta>
+=item F<*.faa>
 
-Multi-fasta file of CDS protein sequences
+Multi-FASTA file of CDS protein sequences
 
 B<or>
 
-=item F<*_cds_nuc.fasta>
+=item F<*.ffn>
 
-Multi-fasta file of CDS DNA sequences
+Multi-FASTA file of CDS DNA sequences
 
 =item (F<no_annotation_err.txt>)
 
-Lists input files missing CDS annotation, script exited with B<fatal error> i.e. no fasta output file
+Lists input files missing CDS annotation, script exited with B<fatal error> i.e. no FASTA output file
 
 =item (F<double_id_err.txt>)
 
-Lists input files with ambiguous fasta identifiers, script exited with B<fatal error> i.e. no fasta output file
+Lists input files with ambiguous FASTA IDs, script exited with B<fatal error> i.e. no FASTA output file
 
 =item (F<locus_tag_missing_err.txt>)
 
@@ -137,7 +139,7 @@ Lists CDS features without locus tags
 =item (F<linear_seq_cds_overlap_err.txt>)
 
 Lists CDS features overlapping sequence border of a B<linear>
-molecule, which are not included in the result multi-fasta file
+molecule, which are not included in the result multi-FASTA file
 
 =back
 
@@ -159,13 +161,13 @@ molecule, which are not included in the result multi-fasta file
 
 =item B<BioPerl (L<http://www.bioperl.org>)>
 
-Tested with BioPerl version 1.006901
+Tested with BioPerl version 1.006923
 
 =back
 
 =head1 VERSION
 
- 0.7                                               update: 31-03-2014
+ 0.7.1                                             update: 26-10-2015
  0.1                                                       24-05-2012
 
 =head1 AUTHOR
@@ -213,8 +215,8 @@ my $Upstream = 0; # include given number of flanking nucleotides upstream of eac
 my $Downstream = 0; # include given number of flanking nucleotides downstream of each CDS feature; forces option '-n'
 my $Prefix; # prefix for the internal CDS counter
 my $Locustag_List; # list of locus_tags to extract only those
-my $Opt_Full_Header; # include a full fasta header for downstream 'prot_finder.pl' analysis (needed to identify /gene feature tag if used as identifier)
-my $VERSION = 0.7;
+my $Opt_Full_Header; # include a full FASTA header for downstream 'prot_finder.pl' analysis (needed to identify /gene feature tag if used as identifier)
+my $VERSION = '0.7.1';
 my ($Opt_Version, $Opt_Help);
 GetOptions ('input=s' => \$Seq_File,
             'protein' => \$Opt_Protein,
@@ -265,11 +267,11 @@ my $Ori_Filename = $Seq_File; # store original filename to give error statements
 $Seq_File =~ s/(.+)\.\w+$/$1/; # strip filename extension
 my $Out_Fh; # filehandle for output file
 if ($Opt_Protein) {
-    $Seq_File = $Seq_File.'_cds_aa.fasta';
+    $Seq_File = $Seq_File.'.faa';
     print "Output: $Seq_File\n";
     open ($Out_Fh, ">", "$Seq_File");
 } elsif ($Opt_Nucleotide) {
-    $Seq_File = $Seq_File.'_cds_nuc.fasta';
+    $Seq_File = $Seq_File.'.ffn';
     print "Output: $Seq_File\n";
     open ($Out_Fh, ">", "$Seq_File");
 }
@@ -290,7 +292,7 @@ if ($Locustag_List) {
 
 
 
-### Write output fasta with respective header lines and either protein seq from /translation feature tag or nucleic acid subseq
+### Write output FASTA with respective header lines and either protein seq from /translation feature tag or nucleic acid subseq
 my $Anno_Present = 0; # switches to true if CDS primary features present
 my $Organism; # store /organism tag value to include in each header, include plasmid name
 my $Cds_Count = sprintf("%04d", 0); # internal CDS counter, counts also 'pseudo' CDSs
@@ -348,9 +350,9 @@ while (my $seq_object = $seqio_object->next_seq) { # a Bio::Seq object
                             linear_overlap($locus_tag); # subroutine to write overlap CDSs to '$Linear_Overlap_Err'
                             next; # jump to the next feature object
                         }
-                        print_fasta_ID($feat_object, $locus_tag); # subroutine to print the identifier (here /locus_tag), /gene (g=) and /product (p=) (both if present) to the fasta header
-                        print_location($start, $stop, $strand, $seq_stop, $location_stop); # subroutine to print feature location/position (l=) to fasta header
-                        print_org_ec($feat_object); # subroutine to print /organism (o=) and /EC_numbers (ec=) (both if present) to fasta header
+                        print_fasta_ID($feat_object, $locus_tag); # subroutine to print the identifier (here /locus_tag), /gene (g=) and /product (p=) (both if present) to the FASTA header
+                        print_location($start, $stop, $strand, $seq_stop, $location_stop); # subroutine to print feature location/position (l=) to FASTA header
+                        print_org_ec($feat_object); # subroutine to print /organism (o=) and /EC_numbers (ec=) (both if present) to FASTA header
                         print_seq($feat_object, $start, $stop, $strand, $seq_stop, $seq_object); # subroutine to print the protein or nucleic sequence
                     }
                     next; # jump to the next feature object
@@ -458,7 +460,7 @@ exit;
 # Subroutines #
 ###############
 
-### Control if an identifier for the fasta header is ambiguous in the $Seq_File and die (they should be unique/unambiguous)
+### Control if an identifier for the FASTA header is ambiguous in the $Seq_File and die (they should be unique/unambiguous)
 sub control_double {
     my ($tag, $type) = @_;
     if ($Double_Id{$tag}) {
@@ -566,7 +568,7 @@ sub locus_tag_missing {
 
 
 
-### Print identifier, /gene (g=) and /product (p=) (both if existent) of a CDS to fasta header
+### Print identifier, /gene (g=) and /product (p=) (both if existent) of a CDS to FASTA header
 sub print_fasta_ID {
     my ($feat_object, $tag) = @_;
     my $gene = feature_value_eval($feat_object, 'gene'); # subroutine
@@ -583,7 +585,7 @@ sub print_fasta_ID {
 
 
 
-### Print position/location (l=) of a CDS to fasta header
+### Print position/location (l=) of a CDS to FASTA header
 sub print_location {
     my ($start, $stop, $strand, $seq_stop, $location_stop) = @_;
     $stop = $location_stop if ($location_stop); # see sub 'get_location'
@@ -604,7 +606,7 @@ sub print_location {
 
 
 
-### Print organism (o=) and EC numbers (ec=) (both if existent) of a CDS to fasta header
+### Print organism (o=) and EC numbers (ec=) (both if existent) of a CDS to FASTA header
 sub print_org_ec {
     my $feat_object = shift;
     print $Out_Fh " o=$Organism" if ($Organism);
