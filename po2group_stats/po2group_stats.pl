@@ -327,7 +327,7 @@ C<venn>. Tested with B<gplots> version 2.17.0.
 
 =head1 VERSION
 
- 0.1                                                       23-10-2015
+ 0.1.1                                                     30-10-2015
 
 =head1 AUTHOR
 
@@ -376,7 +376,7 @@ my $Strict_Core; # report also strict core genome, i.e. OGs present in ALL genom
 my $Opt_Singletons; # report also singletons for each genome
 my $Opt_Unspecific; # report also group-unspecific OGs ('exclusion < OG_group_genome_count < inclusion' for any group)
 my $Opt_Genomes_Overall; # report overall stats also for genomes without singletons
-my $VERSION = 0.1;
+my $VERSION = '0.1.1';
 my ($Opt_Version, $Opt_Help);
 GetOptions ('input=s' => \$PO_Matrix_File,
             'dir_genome=s' => \$Genome_Dir,
@@ -638,24 +638,21 @@ foreach my $og (sort { $a <=> $b } keys %Ortho_Groups) {
     }
 
     # count and save number of genomes in the current $og with their corresponding group affiliation
-    foreach my $genome (@Genome_Files) {
-        if ($Ortho_Groups{$og}->{$genome}) { # $genome present in the current $og
-            foreach my $group (@Group_Names) {
-                if (grep {$_ eq $genome} @{ $Genome_Groups{$group}->{'genomes'} }) { # $genome present in the current $group
-                    push(@{ $present_og_genomes{$group} }, $genome); # push into anonymous array in hash
-                    last; # jump out of group-loop if group found for current genome
-                }
-            }
+    foreach my $group (@Group_Names) { # keep initial group order in groups file (for representative annotation)
+        foreach my $genome (@{ $Genome_Groups{$group}->{'genomes'} }) { # keep initial genome order for each group in groups file (for representative annotation)
+            if ($Ortho_Groups{$og}->{$genome}) { # $genome present in the current $og
+                push(@{ $present_og_genomes{$group} }, $genome); # push into anonymous array in hash; keeps initial genome order in groups
 
-            # 'singleton/ORFan' category OG if only present in ONE genome (with option '-s')
-            if ($Opt_Singletons && keys %{$Ortho_Groups{$og}} == 1) {
-                $Count_Group_OG{$genome}->{'OG_count'}++; # category = $genome
-                $Count_Group_OG{$genome}->{'CDS_count'} += @{ $Ortho_Groups{$og}->{$genome} }; # don't need sub 'count_category_CDS' because only one genome
-                if (!$Count_Group_OG{$genome}->{'fh'}) {
-                    my $file_no_extension = $genome =~ s/\.\w+$//r; # remove file extensions from @Genome_Files to have nicer output files; non-destructive modifier causes the result of the substitution to be returned instead of modifying $_ (see http://perldoc.perl.org/perlrequick.html#Search-and-replace)
-                    open_result_file("$Result_Dir/$file_no_extension\_singletons.tsv", $genome); # subroutine
+                # 'singleton/ORFan' category OG if only present in ONE genome (with option '-s')
+                if ($Opt_Singletons && keys %{$Ortho_Groups{$og}} == 1) {
+                    $Count_Group_OG{$genome}->{'OG_count'}++; # category = $genome
+                    $Count_Group_OG{$genome}->{'CDS_count'} += @{ $Ortho_Groups{$og}->{$genome} }; # don't need sub 'count_category_CDS' because only one genome
+                    if (!$Count_Group_OG{$genome}->{'fh'}) {
+                        my $file_no_extension = $genome =~ s/\.\w+$//r; # remove file extensions from @Genome_Files to have nicer output files; non-destructive modifier causes the result of the substitution to be returned instead of modifying $_ (see http://perldoc.perl.org/perlrequick.html#Search-and-replace)
+                        open_result_file("$Result_Dir/$file_no_extension\_singletons.tsv", $genome); # subroutine
+                    }
+                    print_og_results($og, $genome, $Count_Group_OG{$genome}->{'fh'}); # subroutine
                 }
-                print_og_results($og, $genome, $Count_Group_OG{$genome}->{'fh'}); # subroutine
             }
         }
     }

@@ -286,4 +286,6 @@ Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute 
 
 ## Changelog
 
+* v0.1.1 (30.10.2015)
+    * fixed bug for representative annotation in output files, the representative genome was not chosen according to genome order in the groups file
 * v0.1 (23.10.2015)
