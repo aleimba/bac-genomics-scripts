@@ -189,7 +189,7 @@ And then feed the locus tag list to
 
     Tab-delimited file with group affiliation for the genomes with **minimal two** and **maximal four** groups (easiest to create in a spreadsheet software and save in tab-separated format). **All** genomes from the PO matrix need to be included and group names are not allowed to contain whitespace characters. Example format with two genomes in group A, three genomes in group B and D, and one genome in group C:
 
-    group\_A&emsp;group\_B(&emsp;group\_C&emsp;group\_D)<br>
+    group\_A&emsp;group\_B&emsp;group\_C&emsp;group\_D<br>
     genome1.faa&emsp;genome2.faa&emsp;genome3.faa&emsp;genome4.faa<br>
     genome5.faa&emsp;genome6.faa&emsp;&emsp;genome7.faa<br>
     &emsp;genome8.faa&emsp;&emsp;genome9.faa
@@ -286,6 +286,9 @@ Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute 
 
 ## Changelog
 
+* v0.1.2 (19.11.2015)
+    * added `pod2usage`-die for Getopts::Long call
+    * minor POD/README change
 * v0.1.1 (30.10.2015)
     * fixed bug for representative annotation in output files, the representative genome was not chosen according to genome order in the groups file
 * v0.1 (23.10.2015)

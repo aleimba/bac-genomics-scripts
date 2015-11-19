@@ -177,7 +177,7 @@ not allowed to contain whitespace characters. Example format with
 two genomes in group A, three genomes in group B and D, and one
 genome in group C:
 
-group_A\tgroup_B(\tgroup_C\tgroup_D)
+group_A\tgroup_B\tgroup_C\tgroup_D
 genome1.faa\tgenome2.faa\tgenome3.faa\tgenome4.faa
 genome5.faa\tgenome6.faa\t\tgenome7.faa
 \tgenome8.faa\t\tgenome9.faa
@@ -327,7 +327,8 @@ C<venn>. Tested with B<gplots> version 2.17.0.
 
 =head1 VERSION
 
- 0.1.1                                                     30-10-2015
+ 0.1.2                                             update: 19-11-2015
+ 0.1                                                       23-10-2015
 
 =head1 AUTHOR
 
@@ -376,7 +377,7 @@ my $Strict_Core; # report also strict core genome, i.e. OGs present in ALL genom
 my $Opt_Singletons; # report also singletons for each genome
 my $Opt_Unspecific; # report also group-unspecific OGs ('exclusion < OG_group_genome_count < inclusion' for any group)
 my $Opt_Genomes_Overall; # report overall stats also for genomes without singletons
-my $VERSION = '0.1.1';
+my $VERSION = '0.1.2';
 my ($Opt_Version, $Opt_Help);
 GetOptions ('input=s' => \$PO_Matrix_File,
             'dir_genome=s' => \$Genome_Dir,
@@ -391,7 +392,8 @@ GetOptions ('input=s' => \$PO_Matrix_File,
             'unspecific' => \$Opt_Unspecific,
             'all_genomes_overall' => \$Opt_Genomes_Overall,
             'version' => \$Opt_Version,
-            'help|?' => \$Opt_Help);
+            'help|?' => \$Opt_Help)
+            or pod2usage(-verbose => 1, -exitval => 2);
 
 
 
