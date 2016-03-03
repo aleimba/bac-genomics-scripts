@@ -1,6 +1,8 @@
 ncbi_ftp_download
 =================
 
+**This pipeline is NOT working at the moment, as NCBI reorganized the structure of their [FTP server for genomes](https://www.ncbi.nlm.nih.gov/genome/doc/ftpfaq/). As an alternative way to fetch bacterial genomes from NCBI I recommend [`Bio-RetrieveAssemblies`](https://github.com/andrewjpage/Bio-RetrieveAssemblies) from @andrewjpage from the Wellcome Trust Sanger Institute.**
+
 Scripts to batch download all bacterial genomes of a genus/species from NCBI's FTP site (RefSeq and GenBank) for easy access.
 
 ## Synopsis
