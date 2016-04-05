@@ -187,7 +187,9 @@ subject sequences)
 
 =item (F<./results_i#_cq#/queries_no_blastp-hits.txt>)
 
-Lists all query sequence IDs without significant subject hits
+Lists all query sequence IDs without significant subject hits; with
+option B<-b> includes also queries with significant hits but
+I<without> a best blast hit for a subject
 
 =item (F<./results_i#_cq#/clustal_omega.log>)
 
@@ -282,7 +284,7 @@ Tested with B<Clustal Omega> version 1.2.1
 
 =head1 VERSION
 
- 0.7                                               update: 23-11-2015
+ 0.7.1                                             update: 05-04-2016
  0.1                                                       03-09-2012
 
 =head1 AUTHOR
@@ -335,7 +337,7 @@ my $Cov_Subject_Cutoff = 0; # subject/hit coverage cutoff
 my $Opt_Align_Clustal; # optionally, align the result sequences with Clustal Omega
 my $Clustal_Path; # optionally, give path to the Clustal Omega binary
 my $Clustal_Threads; # optionally, give number of threads Clustal Omega will use
-my $VERSION = 0.7;
+my $VERSION = '0.7.1';
 my ($Opt_Version, $Opt_Help);
 GetOptions ('report=s' => \$Blastp_Report_File,
             'subject=s' => \$Subject_File,
@@ -409,10 +411,9 @@ if (-e $Result_Dir && !$Opt_Force_Result_Dir) {
 print STDERR "Parsing BLASTP report '$Blastp_Report_File' and looking for significant hits according to cutoffs ...\n"; # run status of script
 print "# subject_organism\tsubject_ID\tsubject_gene\tsubject_protein_desc\tquery_ID\tquery_desc\tquery_coverage [%]\tquery_identities [%]\tsubject/hit_coverage [%]\te-value of best HSP\tbit-score of best HSP\n"; # header for output table with significant BLASTP hits
 
-my %Query_Acc; # hash to check if query accessions/IDs are unique (which they have to be because of %Blast_Hits below)
+my %Query_Acc; # hash to check if query accessions/IDs are unique (which they have to be because of %Blast_Hits below) and to store all query_acc for '@Queries_No_Blasthit' below
 my %Blast_Hits; # hash of array to store significant BLASTP hits for sequence retrieval afterwards; query_acc as key and subject ID hits as anonymous array
 my %Best_Subject_Hit; # for option '-b'; hash of hash to store subject/query info/stats for only the best hit for each subject sequence ID (key)
-my @Queries_No_Blasthit; # stores queries without a BLASTP hit
 
 my $Blast_Report = new Bio::SearchIO(-file => "<$Blastp_Report_File", -format => 'blast'); # Bio::SearchIO object
 while (my $result = $Blast_Report->next_result) { # Bio::Search::Result::GenericResult object; several query sequences possible ($result = entire analysis for a single query seq)
@@ -464,12 +465,6 @@ while (my $result = $Blast_Report->next_result) { # Bio::Search::Result::Generic
 
     # only if significant hit for current query; needed after 'next_hit'-while to collect all (subject) hits
     $Blast_Hits{$query_acc} = \@subject_ids if ($hit_present && !$Opt_Best_Hit); # hash of array; the same hit/subject ID can be a hit for different queries (without option '-b'), thus subject IDs are not unique and hash of (anonymous) array data structure is suitable; done in the same way for option '-b' during print out below (not here to check all queries)
-
-    push(@Queries_No_Blasthit, $query_acc) if (!$hit_present);
-}
-if (keys %Query_Acc == @Queries_No_Blasthit) {
-    rmdir $Result_Dir;
-    die "\nNo significant BLASTP hits could be found, exiting!\n";
 }
 
 
@@ -502,6 +497,12 @@ if ($Opt_Best_Hit) {
     }
 }
 
+my @Queries_No_Blasthit = grep (!$Blast_Hits{$_}, sort{lc $a cmp lc $b} keys %Query_Acc); # get all 'query_acc' without a significant and (for '-b') best blast hit (can use '$hit_present' above only without '-b', but to make consistent use '%Blast_Hits' with and without '-b')
+# With '-b' have to use the approach here in case a query protein has a significant hit but not the best hit in any subject, because then wouldn't be in the results (a significant query hit might also be overwritten by a higher identity subsequent hit to another query, thus $hit_present doesn't work with '-b')
+if (keys %Query_Acc == @Queries_No_Blasthit) {
+    rmdir $Result_Dir;
+    die "\nNo significant BLASTP hits could be found, exiting!\n";
+}
 
 
 ### Create index for multi-FASTA subject protein file for faster sequence retrieval; indeces have to be unique (which works fine for locus tags, the most probable subject IDs with cds_extractor.pl)

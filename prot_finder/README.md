@@ -307,7 +307,7 @@ For optional error files from [`cds_extractor.pl`](/cds_extractor) see its docum
 
 - (./results_i#_cq#/queries_no_blastp-hits.txt)
 
-    Lists all query sequence IDs without significant subject hits
+    Lists all query sequence IDs without significant subject hits; with option **-b** includes also queries with significant hits but *without* a best blast hit for a subject
 
 - (./results_i#_cq#/clustal_omega.log)
 
@@ -384,6 +384,8 @@ Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute 
 
 ### prot_finder changelog
 
+* v0.7.1 (05.04.2016)
+    * bug fix: significant but non-best blast hits with option **-b** now listed in *queries_no_blastp-hits.txt*
 * v0.7 (23.11.2015)
     * changed script name from `blast_prot_finder.pl` to `prot_finder.pl`
     * fixed bug introduced in v0.6 with a `seek`, because option **-query** didn't pull query sequences anymore
