@@ -29,7 +29,9 @@ C<prot_finder.pl> output can be given directly via C<STDIN> or as a
 file. By default a tab-delimited binary presence/absence matrix for
 query hits per subject organism will be printed to C<STDOUT>. Use
 option B<-t> to count all query hits per subject organism, not just
-the binary presence/absence.
+the binary presence/absence. You can transpose the presence/absence
+binary matrix with the script C<transpose_matrix.pl> (see its help
+with B<-h>).
 
 The resulting matrix can be used to associate the presence/absence
 data with a phylogenetic tree, e.g. use the Interactive Tree Of Life

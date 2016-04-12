@@ -3,11 +3,12 @@ prot_finder
 
 `prot_finder.pl` is a script to search for query protein homologs in annotated bacterial genomes with **BLASTP**. A companion bash shell script pipeline is available, `prot_finder_pipe.sh`.
 
-Included is also the script `prot_binary_matrix.pl` to create a presence/absence matrix (e.g. for [**iTOL**](http://itol.embl.de/)) from the `prot_finder.pl` output.
+Included are also the scripts `prot_binary_matrix.pl` to create a presence/absence matrix (e.g. for [**iTOL**](http://itol.embl.de/)) from the `prot_finder.pl` output and `transpose_matrix.pl` to transpose a delimited TEXT matrix (e.g. the presence/absence matrix).
 
 * [Synopsis](#synopsis)
   * [prot_finder synopsis](#prot_finder-synopsis)
   * [prot_binary_matrix synopsis](#prot_binary_matrix-synopsis)
+  * [transpose_matrix synopsis](#transpose_matrix-synopsis)
 * [Description](#description)
 * [Usage](#usage)
   * [prot_finder usage](#prot_finder-usage)
@@ -18,6 +19,7 @@ Included is also the script `prot_binary_matrix.pl` to create a presence/absence
       * [prot_finder](#prot_finder-1)
     * [prot_finder_pipe bash script pipeline](#prot_finder_pipe-bash-script-pipeline)
   * [prot_binary_matrix usage](#prot_binary_matrix-usage)
+  * [transpose_matrix usage](#transpose_matrix-usage)
 * [Options](#options)
   * [prot_finder.pl options](#prot_finderpl-options)
     * [Mandatory prot_finder.pl options](#mandatory-prot_finderpl-options)
@@ -26,17 +28,21 @@ Included is also the script `prot_binary_matrix.pl` to create a presence/absence
     * [Mandatory prot_finder_pipe.sh options](#mandatory-prot_finder_pipesh-options)
     * [Optional prot_finder_pipe.sh options](#optional-prot_finder_pipesh-options)
   * [prot_binary_matrix.pl options](#prot_binary_matrixpl-options)
+  * [transpose_matrix.pl options](#transpose_matrixpl-options)
 * [Output](#output)
   * [cds_extractor.pl output](#cds_extractorpl-output)
   * [prot_finder.pl output](#prot_finderpl-output)
   * [prot_finder_pipe.sh output](#prot_finder_pipesh-output)
   * [prot_binary_matrix.pl output](#prot_binary_matrixpl-output)
+  * [transpose_matrix.pl output](#transpose_matrixpl-output)
 * [Dependencies](#dependencies)
 * [Run environment](#run-environment)
 * [Author - contact](#author---contact)
+* [Acknowledgements](#acknowledgements)
 * [Changelog](#changelog)
   * [prot_finder changelog](#prot_finder-changelog)
   * [prot_binary_matrix changelog](#prot_binary_matrix-changelog)
+  * [transpose_matrix changelog](#transpose_matrix-changelog)
 
 ## Synopsis
 
@@ -56,6 +62,14 @@ Included is also the script `prot_binary_matrix.pl` to create a presence/absence
 
     perl prot_finder.pl -r report.blastp -s subject.faa | perl prot_binary_matrix.pl > binary_matrix.tsv
 
+### transpose_matrix synopsis
+
+    perl transpose_matrix.pl input_matrix.tsv > input_matrix_transposed.tsv
+
+**or**
+
+    perl prot_binary_matrix.pl blast_hits.tsv | perl transpose_matrix.pl > binary_matrix_transposed.tsv
+
 ## Description
 
 The script `prot_finder.pl` is intended to search for homologous proteins in annotated bacterial genomes. For this purpose, a previous [**BLASTP**](http://blast.ncbi.nlm.nih.gov/Blast.cgi), either [legacy or plus](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download), needs to be run with query protein sequences against a **BLASTP** database of subject proteins (e.g. all proteins from several *Escherichia coli* genomes).
@@ -68,7 +82,7 @@ Optionally, [**Clustal Omega**](http://www.clustal.org/omega/) can be called (op
 
 Run the script [`cds_extractor.pl`](/cds_extractor) (with options **-p -f**) and the **BLASTP** manually or use the bash shell wrapper script `prot_finder_pipe.sh` (see below ['prot_finder_pipe bash script pipeline'](#prot_finder_pipe-bash-script-pipeline)) to execute the whole pipeline including `prot_finder.pl` (with optional option **-q**). For additional options of the pipeline shell script see below ['prot_finder_pipe.sh options'](#prot_finder_pipesh-options). Be aware that some options in `prot_finder_pipe.sh` corresponding to options in `prot_finder.pl` have different names (**-c** instead of **-cov_q**, **-k** instead of **-cov_s**, and **-o** instead of **-p**; also **-f** has a different meaning). If [`cds_extractor.pl`](/cds_extractor) is used in the pipeline (option **-f** of the shell script) the working folder has to contain the annotated bacterial genome subject files (in RichSeq format, e.g. EMBL or GENBANK format). Also, the Perl scripts [`cds_extractor.pl`](/cds_extractor) (only for `prot_finder_pipe.sh` option **-f**) and `prot_finder.pl`have to be either contained in the current working directory or installed in the global *PATH*. **BLASTP** (legacy and/or plus) and **Clustal Omega** binaries have to be installed in global *PATH*, or for **Clustal Omega** you can give the path to the binary with option **-o**. In the pipeline **BLASTP** is run with **disabled** query filtering, locally optimal Smith-Waterman alignments, and increasing the number of database sequences to show alignments to 500 for [**BioPerl**](http://www.bioperl.org) parsing (legacy: **-F F -s T -b 500**, plus: **-seg no -use_sw_tback -num_alignments 500**). The pipeline script ends with the *STDERR* message 'Pipeline finished!', if this is not the case have a look at the log files in the result directory for errors.
 
-At last, the resulting tab-separated table with significant **BLASTP** hits (from `prot_finder.pl` or `prot_finder_pipe.sh`) can be given to the script `prot_binary_matrix.pl`, either as *STDIN* or as a file, to create a presence/absence matrix of the results. See below ['prot_binary_matrix.pl options'](#prot_binary_matrixpl-options) for the `prot_binary_matrix.pl` options. By default a tab-delimited binary presence/absence matrix for query hits per subject organism will be printed to *STDOUT*. Use option **-t** to count all query hits per subject organism, not just the binary presence/absence.
+At last, the resulting tab-separated table with significant **BLASTP** hits (from `prot_finder.pl` or `prot_finder_pipe.sh`) can be given to the script `prot_binary_matrix.pl`, either as *STDIN* or as a file, to create a presence/absence matrix of the results. See below ['prot_binary_matrix.pl options'](#prot_binary_matrixpl-options) for the `prot_binary_matrix.pl` options. By default a tab-delimited binary presence/absence matrix for query hits per subject organism will be printed to *STDOUT*. Use option **-t** to count all query hits per subject organism, not just the binary presence/absence. This presence/absence matrix can be given to the script `transpose_matrix.pl`, either as *STDIN* or as a file, to transpose the matrix, i.e. rows will become columns and columns rows. Actually, `transpose_matrix.pl` can be used to transpose any delimited TEXT matrix (see below ['transpose_matrix.pl options'](#transpose_matrixpl-options)).
 
 The presence/absence matri(x|ces) can e.g. be loaded into the Interactive Tree Of Life website ([**iTOL**](http://itol.embl.de/)) to associate the data with a phylogenetic tree. [**iTOL**](http://itol.embl.de/) likes individual comma-separated input files, thus use `prot_binary_matrix.pl` options **-s -c** for this purpose. However, the organism names have to have identical names to the leaves of the phylogenetic tree, thus manual adaptation, e.g. in a spreadsheet software (like [**LibreOffice Calc**](https://www.libreoffice.org/discover/calc/)), might be needed. **Careful**, subject organisms without a significant **BLASTP** hit won't be included in the `prot_finder.pl` result table and hence can't be included by `prot_binary_matrix.pl`. If needed add them manually to the result matri(x|ces).
 
@@ -114,6 +128,18 @@ The presence/absence matri(x|ces) can e.g. be loaded into the Interactive Tree O
     perl prot_binary_matrix.pl -s -d result_dir -t blast_hits.tsv
     perl prot_finder.pl -r report.blastp -s subject.faa | perl prot_binary_matrix.pl -l -c > binary_matrix.csv
     mkdir result_dir && ./prot_finder_pipe.sh -q query.faa -s subject.faa -d result_dir -m | tee result_dir/blast_hits.tsv | perl prot_binary_matrix.pl > binary_matrix.tsv
+
+### transpose_matrix usage
+
+    perl transpose_matrix.pl -d ' ' -e NA input_matrix_space-delimit.txt > input_matrix_space-delimit_transposed.txt
+
+    perl prot_finder.pl -r report.blastp -s subject.faa | perl prot_binary_matrix.pl -l -c | perl transpose_matrix.pl -d , > binary_matrix_transposed.csv
+
+    mkdir result_dir && ./prot_finder_pipe.sh -q query.faa -s subject.faa -d result_dir -m | tee result_dir/blast_hits.tsv | perl prot_binary_matrix.pl | tee result_dir/binary_matrix.tsv | perl transpose_matrix.pl > result_dir/binary_matrix_transposed.tsv
+
+Transpose all matrices in a folder:
+
+    for matrix in *.tsv; do perl transpose_matrix.pl "$matrix" > "${matrix%.*}_transposed.tsv"; done
 
 ## Options
 
@@ -277,6 +303,24 @@ The presence/absence matri(x|ces) can e.g. be loaded into the Interactive Tree O
 
     Print version number to *STDERR*
 
+### `transpose_matrix.pl` options
+
+- **-h**, **-help**
+
+    Help (perldoc POD)
+
+- **-d**=_str_, **-delimiter**=_str_
+
+    Set delimiter of input and output matrix (e.g. comma ',', single space ' ' etc.) [default = tab-delimited/separated]
+
+- **-e**=_str_, **-empty**=_str_
+
+    Fill empty cells of the input matrix with a value in the transposed matrix (e.g. 'NA', '0' etc.)
+
+- **-v**, **-version**
+
+    Print version number to *STDERR*
+
 ## Output
 
 ### `cds_extractor.pl` output
@@ -363,6 +407,12 @@ In addition to the [`cds_extractor.pl` output](#cds_extractorpl-output) and the 
 
     Separate query presence/absence files with option **-s**
 
+### `transpose_matrix.pl` output
+
+- *STDOUT*
+
+    The transposed matrix is printed to *STDOUT*. Redirect or pipe into another tool as needed.
+
 ## Dependencies
 
 - [**BioPerl**](http://www.bioperl.org) (tested version 1.006923)
@@ -379,6 +429,11 @@ The scripts run under UNIX flavors.
 ## Author - contact
 
 Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute of Hygiene, University of Muenster)
+
+## Acknowledgements
+
+The Perl implementation for transposing a matrix on Stack Overflow
+was very useful for `transpose_matrix.pl`: https://stackoverflow.com/questions/1729824/transpose-a-file-in-bash
 
 ## Changelog
 
@@ -451,3 +506,7 @@ Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute 
     * prot_finder output file 'blast_hits.txt' doesn't have to be ordered by query protein accessions/IDs anymore
 * v0.1 (25.10.2012)
     * **original** script name 'blastp_iTOL_binary.pl'
+
+### transpose_matrix changelog
+
+* v0.1 (12.04.2016)

@@ -69,9 +69,11 @@ folder has to contain the annotated bacterial genome subject files
 At last, the resulting tab-separated table can be given to the
 script C<prot_binary_matrix.pl> to create a presence/absence matrix
 of the results. Again see option B<-h> of C<prot_binary_matrix.pl>
-for additional info. The presence/absence matri(x|ces) can e.g. be
-loaded into L<B<iTOL>|http://itol.embl.de/> to associate the data
-with a phylogenetic tree.
+for additional info. The presence/absence matrix can also be
+transposed with script C<transpose_matrix.pl> (see its help with
+B<-h>). The presence/absence matri(x|ces) can e.g. be loaded into
+L<B<iTOL>|http://itol.embl.de/> to associate the data with a
+phylogenetic tree.
 
 =head1 OPTIONS
 
