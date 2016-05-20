@@ -465,7 +465,7 @@ foreach (@Group_Names) {
 
 ### Check $Strict_Core and set genome if not given
 if ($Strict_Core) { # if a genome filename is given with option '-co'
-    die "\n### Fatal error:\nThe given genome '$Strict_Core' with option '-c' is not present in the genomes of the group file '$Groups_File'. The string has to be exactly the same, please check!\n" unless (check_genome_in_groups($Strict_Core)); # subroutine to check if a genome is present in %Genome_Groups
+    die "\n### Fatal error:\nThe given genome '$Strict_Core' with option '-co' is not present in the genomes of the group file '$Groups_File'. The string has to be exactly the same, please check!\n" unless (check_genome_in_groups($Strict_Core)); # subroutine to check if a genome is present in %Genome_Groups
 } elsif (defined $Strict_Core && !$Strict_Core) { # if option '-co' is set without argument
     $Strict_Core = $Genome_Groups{$Group_Names[0]}->{'genomes'}[0];
     print STDERR "Genome for option '-co' was set automatically to the first genome in the first group, '$Strict_Core'!\n";
