@@ -3,12 +3,13 @@ prot_finder
 
 `prot_finder.pl` is a script to search for query protein homologs in annotated bacterial genomes with **BLASTP**. A companion bash shell script pipeline is available, `prot_finder_pipe.sh`.
 
-Included are also the scripts `prot_binary_matrix.pl` to create a presence/absence matrix (e.g. for [**iTOL**](http://itol.embl.de/)) from the `prot_finder.pl` output and `transpose_matrix.pl` to transpose a delimited TEXT matrix (e.g. the presence/absence matrix).
+Included is also the script `prot_binary_matrix.pl` to create a binary presence/absence matrix (e.g. for [**iTOL**](http://itol.embl.de/)) from the `prot_finder.pl` output. Additionally, two downstream scripts are provided to wrangle these binary presence/absence matrix: `transpose_matrix.pl` to transpose a delimited TEXT matrix and `binary_group_stats.pl` to get overall presence/absence statistics for groups of columns in a delimited binary TEXT matrix (in the style of [`po2group_stats.pl`](/po2group_stats)).
 
 * [Synopsis](#synopsis)
   * [prot_finder synopsis](#prot_finder-synopsis)
   * [prot_binary_matrix synopsis](#prot_binary_matrix-synopsis)
   * [transpose_matrix synopsis](#transpose_matrix-synopsis)
+  * [binary_group_stats synopsis](#binary_group_stats-synopsis)
 * [Description](#description)
 * [Usage](#usage)
   * [prot_finder usage](#prot_finder-usage)
@@ -20,6 +21,7 @@ Included are also the scripts `prot_binary_matrix.pl` to create a presence/absen
     * [prot_finder_pipe bash script pipeline](#prot_finder_pipe-bash-script-pipeline)
   * [prot_binary_matrix usage](#prot_binary_matrix-usage)
   * [transpose_matrix usage](#transpose_matrix-usage)
+  * [binary_group_stats usage](#binary_group_stats-usage)
 * [Options](#options)
   * [prot_finder.pl options](#prot_finderpl-options)
     * [Mandatory prot_finder.pl options](#mandatory-prot_finderpl-options)
@@ -29,20 +31,28 @@ Included are also the scripts `prot_binary_matrix.pl` to create a presence/absen
     * [Optional prot_finder_pipe.sh options](#optional-prot_finder_pipesh-options)
   * [prot_binary_matrix.pl options](#prot_binary_matrixpl-options)
   * [transpose_matrix.pl options](#transpose_matrixpl-options)
+  * [binary_group_stats.pl options](#binary_group_statspl-options)
+    * [Mandatory binary_group_stats.pl options](#mandatory-binary_group_statspl-options)
+    * [Optional binary_group_stats.pl options](#optional-binary_group_statspl-options)
 * [Output](#output)
   * [cds_extractor.pl output](#cds_extractorpl-output)
   * [prot_finder.pl output](#prot_finderpl-output)
   * [prot_finder_pipe.sh output](#prot_finder_pipesh-output)
   * [prot_binary_matrix.pl output](#prot_binary_matrixpl-output)
   * [transpose_matrix.pl output](#transpose_matrixpl-output)
+  * [binary_group_stats.pl output](#binary_group_statspl-output)
 * [Dependencies](#dependencies)
+  * [`prot_finder.pl`/`prot_finder_pipe.sh` dependencies](#prot_finderplprot_finder_pipesh-dependencies)
+  * [`binary_group_stats.pl` dependencies](#binary_group_statspl-dependencies)
 * [Run environment](#run-environment)
 * [Author - contact](#author---contact)
+* [Citation, installation, and license](#citation-installation-and-license)
 * [Acknowledgements](#acknowledgements)
 * [Changelog](#changelog)
   * [prot_finder changelog](#prot_finder-changelog)
   * [prot_binary_matrix changelog](#prot_binary_matrix-changelog)
   * [transpose_matrix changelog](#transpose_matrix-changelog)
+  * [binary_group_stats changelog](#binary_group_stats-changelog)
 
 ## Synopsis
 
@@ -70,6 +80,10 @@ Included are also the scripts `prot_binary_matrix.pl` to create a presence/absen
 
     perl prot_binary_matrix.pl blast_hits.tsv | perl transpose_matrix.pl > binary_matrix_transposed.tsv
 
+### binary_group_stats synopsis
+
+    perl binary_group_stats.pl -i binary_matrix.tsv -g group_file.tsv -p > overall_stats.tsv
+
 ## Description
 
 The script `prot_finder.pl` is intended to search for homologous proteins in annotated bacterial genomes. For this purpose, a previous [**BLASTP**](http://blast.ncbi.nlm.nih.gov/Blast.cgi), either [legacy or plus](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download), needs to be run with query protein sequences against a **BLASTP** database of subject proteins (e.g. all proteins from several *Escherichia coli* genomes).
@@ -82,9 +96,17 @@ Optionally, [**Clustal Omega**](http://www.clustal.org/omega/) can be called (op
 
 Run the script [`cds_extractor.pl`](/cds_extractor) (with options **-p -f**) and the **BLASTP** manually or use the bash shell wrapper script `prot_finder_pipe.sh` (see below ['prot_finder_pipe bash script pipeline'](#prot_finder_pipe-bash-script-pipeline)) to execute the whole pipeline including `prot_finder.pl` (with optional option **-q**). For additional options of the pipeline shell script see below ['prot_finder_pipe.sh options'](#prot_finder_pipesh-options). Be aware that some options in `prot_finder_pipe.sh` corresponding to options in `prot_finder.pl` have different names (**-c** instead of **-cov_q**, **-k** instead of **-cov_s**, and **-o** instead of **-p**; also **-f** has a different meaning). If [`cds_extractor.pl`](/cds_extractor) is used in the pipeline (option **-f** of the shell script) the working folder has to contain the annotated bacterial genome subject files (in RichSeq format, e.g. EMBL or GENBANK format). Also, the Perl scripts [`cds_extractor.pl`](/cds_extractor) (only for `prot_finder_pipe.sh` option **-f**) and `prot_finder.pl`have to be either contained in the current working directory or installed in the global *PATH*. **BLASTP** (legacy and/or plus) and **Clustal Omega** binaries have to be installed in global *PATH*, or for **Clustal Omega** you can give the path to the binary with option **-o**. In the pipeline **BLASTP** is run with **disabled** query filtering, locally optimal Smith-Waterman alignments, and increasing the number of database sequences to show alignments to 500 for [**BioPerl**](http://www.bioperl.org) parsing (legacy: **-F F -s T -b 500**, plus: **-seg no -use_sw_tback -num_alignments 500**). The pipeline script ends with the *STDERR* message 'Pipeline finished!', if this is not the case have a look at the log files in the result directory for errors.
 
-At last, the resulting tab-separated table with significant **BLASTP** hits (from `prot_finder.pl` or `prot_finder_pipe.sh`) can be given to the script `prot_binary_matrix.pl`, either as *STDIN* or as a file, to create a presence/absence matrix of the results. See below ['prot_binary_matrix.pl options'](#prot_binary_matrixpl-options) for the `prot_binary_matrix.pl` options. By default a tab-delimited binary presence/absence matrix for query hits per subject organism will be printed to *STDOUT*. Use option **-t** to count all query hits per subject organism, not just the binary presence/absence. This presence/absence matrix can be given to the script `transpose_matrix.pl`, either as *STDIN* or as a file, to transpose the matrix, i.e. rows will become columns and columns rows. Actually, `transpose_matrix.pl` can be used to transpose any delimited TEXT matrix (see below ['transpose_matrix.pl options'](#transpose_matrixpl-options)).
+The resulting tab-separated table with significant **BLASTP** hits (from `prot_finder.pl` or `prot_finder_pipe.sh`) can be given to the script `prot_binary_matrix.pl`, either as *STDIN* or as a file, to create a presence/absence matrix of the results. See below ['prot_binary_matrix.pl options'](#prot_binary_matrixpl-options) for the `prot_binary_matrix.pl` options. By default a tab-delimited binary presence/absence matrix for query hits per subject organism will be printed to *STDOUT*. Use option **-t** to count all query hits per subject organism, not just the binary presence/absence. This presence/absence matrix can be given to the script `transpose_matrix.pl`, either as *STDIN* or as a file, to transpose the matrix, i.e. rows will become columns and columns rows. Actually, `transpose_matrix.pl` can be used to transpose any delimited TEXT matrix (see below ['transpose_matrix.pl options'](#transpose_matrixpl-options)).
 
 The presence/absence matri(x|ces) can e.g. be loaded into the Interactive Tree Of Life website ([**iTOL**](http://itol.embl.de/)) to associate the data with a phylogenetic tree. [**iTOL**](http://itol.embl.de/) likes individual comma-separated input files, thus use `prot_binary_matrix.pl` options **-s -c** for this purpose. However, the organism names have to have identical names to the leaves of the phylogenetic tree, thus manual adaptation, e.g. in a spreadsheet software (like [**LibreOffice Calc**](https://www.libreoffice.org/discover/calc/)), might be needed. **Careful**, subject organisms without a significant **BLASTP** hit won't be included in the `prot_finder.pl` result table and hence can't be included by `prot_binary_matrix.pl`. If needed add them manually to the result matri(x|ces).
+
+At last, script `binary_group_stats.pl` can be used to categorize columns of the binary presence/absence matrix from `prot_binary_matrix.pl` according to group affiliations. `binary_group_stats.pl` is based upon [`po2group_stats.pl`](/po2group_stats), which does the same thing for genomes in an ortholog/paralog output matrix from a [Proteinortho5](http://www.bioinf.uni-leipzig.de/Software/proteinortho/) calculation. Actually, `binary_group_stats.pl` can work with any delimited TEXT **binary** matrix (option **-i**). But, all fields of the binary matrix need to be filled with either a **0** indicating absence or a **1** indicating presence, i.e. all rows need to have the same number of columns. Use option **-d** to set the delimiter of the input matrix, default is set to tab-delimited/separated matrices.
+
+Also, column headers in the first row and row headers in the first column are **mandatory** for the input binary matrix. Only alphanumeric (a-z, A-Z, 0-9), underscore (_), dash (-), and period (.) characters are allowed for the **column headers** and **group names** in the group file (option **-g**) to avoid downstream problems with the operating/file system. As a consequence, also no whitespaces are allowed in these! Additionally, **column headers**, **row headers**, and **group names** need to be **unique**.
+
+The group affiliations of the columns are intended to get overall presence/absence statistics for groups of columns and not simply single columns of the matrix. Percentage inclusion (option **-cut_i**) and exclusion (option **-cut_e**) cutoffs can be set to define how strict the presence/absence of column groups within a row are defined. Of course groups can also hold only single column headers to get single column statistics. Group affiliations are defined in a mandatory **tab-delimited** group input file (option **-g**), including the column headers from the input binary matrix, with **minimal two** and **maximal four** groups.
+
+See the *README.md* of [`po2group_stats.pl`](/po2group_stats) for an explanation of the logic behind the categorization and the resulting group binary matrix and venn diagram of `binary_group_stats.pl` (and of course its [options](#binary_group_statspl-options) and [output](#binary_group_statspl-output)).
 
 ## Usage
 
@@ -113,6 +135,9 @@ The presence/absence matri(x|ces) can e.g. be loaded into the Interactive Tree O
 ##### prot_finder
 
     perl prot_finder.pl -r prot_finder.blastp -s subject.faa -cov_s 80 > blast_hits.tsv
+
+**or**
+
     perl prot_finder.pl -r prot_finder.blastp -s subject.faa -d result_dir -f -q query.faa -i 50 -cov_q 50 -b -a -p ~/bin/clustalo -t 6 > result_dir/blast_hits.tsv
 
 #### prot_finder_pipe bash script pipeline
@@ -126,20 +151,34 @@ The presence/absence matri(x|ces) can e.g. be loaded into the Interactive Tree O
 ### prot_binary_matrix usage
 
     perl prot_binary_matrix.pl -s -d result_dir -t blast_hits.tsv
+
+**or**
+
     perl prot_finder.pl -r report.blastp -s subject.faa | perl prot_binary_matrix.pl -l -c > binary_matrix.csv
+
+**or**
+
     mkdir result_dir && ./prot_finder_pipe.sh -q query.faa -s subject.faa -d result_dir -m | tee result_dir/blast_hits.tsv | perl prot_binary_matrix.pl > binary_matrix.tsv
 
 ### transpose_matrix usage
 
     perl transpose_matrix.pl -d ' ' -e NA input_matrix_space-delimit.txt > input_matrix_space-delimit_transposed.txt
 
+**or**
+
     perl prot_finder.pl -r report.blastp -s subject.faa | perl prot_binary_matrix.pl -l -c | perl transpose_matrix.pl -d , > binary_matrix_transposed.csv
+
+**or**
 
     mkdir result_dir && ./prot_finder_pipe.sh -q query.faa -s subject.faa -d result_dir -m | tee result_dir/blast_hits.tsv | perl prot_binary_matrix.pl | tee result_dir/binary_matrix.tsv | perl transpose_matrix.pl > result_dir/binary_matrix_transposed.tsv
 
 Transpose all matrices in a folder:
 
     for matrix in *.tsv; do perl transpose_matrix.pl "$matrix" > "${matrix%.*}_transposed.tsv"; done
+
+### binary_group_stats usage
+
+    perl binary_group_stats.pl -i binary_matrix_transposed.csv -g group_file.tsv -d , -r result_dir -cut_i 0.7 -cut_e 0.2 -b -p -co -s -u -a > overall_stats.tsv
 
 ## Options
 
@@ -321,6 +360,73 @@ Transpose all matrices in a folder:
 
     Print version number to *STDERR*
 
+### `binary_group_stats.pl` options
+
+#### Mandatory `binary_group_stats.pl` options
+
+- **-i**=*str*, **-input**=*str*
+
+    Input delimited TEXT binary matrix (e.g. *.tsv, *.csv, or *.txt), see option **-d**
+
+- **-g**=*str*, **-groups_file**=*str*
+
+    Tab-delimited file with group affiliation for the columns from the input binary matrix with **minimal two** and **maximal four** groups (easiest to create in a spreadsheet software and save in tab-separated format). **All** column headers from the input binary matrix need to be included. Column headers and group names can only include alphanumeric (a-z, A-Z, 0-9), underscore (_), dash (-), and period (.) characters (no whitespaces allowed either). Example format with two column headers in group A, three in group B and D, and one in group C:
+
+    group\_A&emsp;group\_B&emsp;group\_C&emsp;group\_D<br>
+    column\_header1&emsp;column\_header9&emsp;column\_header3&emsp;column\_header8<br>
+    column\_header7&emsp;column\_header6&emsp;&emsp;column\_header5<br>
+    &emsp;column\_header4&emsp;&emsp;column\_header2
+
+#### Optional `binary_group_stats.pl` options
+
+- **-h**, **-help**
+
+    Help (perldoc POD)
+
+- **-d**=*str*, **-delimiter**=*str*
+
+    Set delimiter of input binary matrix (e.g. comma ',', single space ' ' etc.) [default = tab-delimited/separated]
+
+- **-r**=*str*, **-result\_dir**=*str*
+
+    Path to result folder \[default = inclusion and exclusion percentage cutoff, './results\_i#\_e#'\]
+
+- **-cut\_i**=*float*, **-cut\_inclusion**=*float*
+
+    Percentage inclusion cutoff for column presence counts in a group per row, has to be > 0 and <= 1. Cutoff will be rounded according to the column header number in each group and has to be > the rounded exclusion cutoff in this group. \[default = 0.9\]
+
+- **-cut\_e**=*float*, **-cut\_exclusion**=*float*
+
+    Percentage exclusion cutoff, has to be >= 0 and < 1. Rounded cutoff has to be < rounded inclusion cutoff. \[default = 0.1\]
+
+- **-b**, **-binary\_group\_matrix**
+
+    Print a group binary matrix with the presence/absence column group results according to the cutoffs (excluding 'unspecific' category rows)
+
+- **-p**, **-plot\_venn**
+
+    Plot venn diagram from the group binary matrix (except 'unspecific' and 'underrepresented' categories)  with function `venn` from **R** package **gplots**, requires option **-b**
+
+- **-co**, **-core_strict**
+
+    Include 'strict core' category in output for rows where **all** columns have a '1'
+
+- **-s**, **-singletons**
+
+    Include singleton/column-specific rows for each column header in the output, activates also overall column header presence ('1') counts in final stats matrix for columns with singletons
+
+- **-u**, **-unspecific**
+
+    Include 'unspecific' category in output
+
+- **-a**, **-all\_column\_presence\_overall**
+
+    Report overall presence counts for all column headers (appended to the final stats matrix), also those without singletons; will include all overall column header presence counts without option **-s**
+
+- **-v**, **-version**
+
+    Print version number to *STDERR*
+
 ## Output
 
 ### `cds_extractor.pl` output
@@ -413,7 +519,35 @@ In addition to the [`cds_extractor.pl` output](#cds_extractorpl-output) and the 
 
     The transposed matrix is printed to *STDOUT*. Redirect or pipe into another tool as needed.
 
+### `binary_group_stats.pl` output
+
+- *STDOUT*
+
+    The tab-delimited final stats matrix is printed to *STDOUT*. Redirect or pipe into another tool as needed.
+
+- ./results_i#_e#
+
+    All output files are stored in a results folder
+
+- ./results_i#_e#/[\*_specific|\*_absent|cutoff_core|underrepresented]_rows.txt
+
+    Files including the row headers for rows in non-optional categories
+
+- (./results_i#_e#/[\*_singletons|strict_core|unspecific]_rows.txt)
+
+    Optional category output files with the respective row headers
+
+- (./results_i#_e#/binary_matrix.tsv)
+
+    Tab-delimited binary matrix of group presence/absence results according to cutoffs (excluding 'unspecific' rows)
+
+- (./results_i#_e#/venn_diagram.pdf)
+
+    Venn diagram for non-optional categories (except 'unspecific' and 'underrepresented' categories)
+
 ## Dependencies
+
+### `prot_finder.pl`/`prot_finder_pipe.sh` dependencies
 
 - [**BioPerl**](http://www.bioperl.org) (tested version 1.006923)
 - [`cds_extractor`](/cds_extractor) (tested version 0.7.1)
@@ -422,6 +556,16 @@ In addition to the [`cds_extractor.pl` output](#cds_extractorpl-output) and the 
     - **BLASTP+** (tested version 2.2.28+)
 - [**Clustal Omega**](http://www.clustal.org/omega/) (tested version 1.2.1)
 
+### `binary_group_stats.pl` dependencies
+
+- **Statistical computing language [R](http://www.r-project.org/)**
+
+    `Rscript` is needed to plot the venn diagram with option **-p**, tested with version 3.2.2
+
+- **gplots (https://cran.r-project.org/web/packages/gplots/index.html)**
+
+    Package needed for **R** to plot the venn diagram, includes function `venn`. Tested with **gplots** version 2.17.0.
+
 ## Run environment
 
 The scripts run under UNIX flavors.
@@ -429,6 +573,10 @@ The scripts run under UNIX flavors.
 ## Author - contact
 
 Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute of Hygiene, University of Muenster)
+
+## Citation, installation, and license
+
+For [citation](https://github.com/aleimba/bac-genomics-scripts#citation), [installation](https://github.com/aleimba/bac-genomics-scripts#installation-recommendations), and [license](https://github.com/aleimba/bac-genomics-scripts#license) information please see the main repository [*README.md*](https://github.com/aleimba/bac-genomics-scripts/blob/master/README.md).
 
 ## Acknowledgements
 
@@ -510,3 +658,7 @@ was very useful for `transpose_matrix.pl`: https://stackoverflow.com/questions/1
 ### transpose_matrix changelog
 
 * v0.1 (12.04.2016)
+
+### binary_group_stats changelog
+
+* v0.1 (06.06.2016)

@@ -8,7 +8,8 @@
 
 =head1 NAME
 
-C<prot_finder.pl> - search for query protein homologs in annotated bacterial genomes with BLASTP
+C<prot_finder.pl> - search for query protein homologs in annotated
+bacterial genomes with BLASTP
 
 =head1 SYNOPSIS
 
@@ -68,12 +69,16 @@ folder has to contain the annotated bacterial genome subject files
 
 At last, the resulting tab-separated table can be given to the
 script C<prot_binary_matrix.pl> to create a presence/absence matrix
-of the results. Again see option B<-h> of C<prot_binary_matrix.pl>
-for additional info. The presence/absence matrix can also be
-transposed with script C<transpose_matrix.pl> (see its help with
-B<-h>). The presence/absence matri(x|ces) can e.g. be loaded into
-L<B<iTOL>|http://itol.embl.de/> to associate the data with a
-phylogenetic tree.
+of the query proteins for each genome. Again see option B<-h> of
+C<prot_binary_matrix.pl> for additional info. The presence/absence
+matrix can also be transposed with script C<transpose_matrix.pl>
+(see its help with B<-h>). These presence/absence matri(x|ces) can
+e.g. be loaded into L<B<iTOL>|http://itol.embl.de/> to associate the
+data with a phylogenetic tree. Also, you can use
+C<binary_group_stats.pl> to calculate presence/absence statistics
+for groups of columns and not simply single columns of the matrix.
+C<binary_group_stats.pl> also has a comprehensive manual with its
+option B<-h>.
 
 =head1 OPTIONS
 
@@ -249,6 +254,12 @@ B<or>
 =over
 
 =item C<perl prot_finder.pl -r prot_finder.blastp -s subject.faa -cov_s 80 E<gt> blast_hits.tsv>
+
+=back
+
+B<or>
+
+=over
 
 =item C<perl prot_finder.pl -r prot_finder.blastp -s subject.faa -d result_dir -f -q query.faa -i 50 -cov_q 50 -b -a -p ~/bin/clustalo -t 6 E<gt> result_dir/blast_hits.tsv>
 

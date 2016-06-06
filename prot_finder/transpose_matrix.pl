@@ -27,8 +27,17 @@ become columns and columns rows. Use option B<-d> to set the
 delimiter of the input and output matrix, default is set to
 tab-delimited/separated matrices. Input matrices can be given
 directly via C<STDIN> or as a file. The script is intended for the
-resulting binary matrices of C<prot_binary_matrix.pl>, but can be
-used for any TEXT matrix.
+resulting presence/absence binary matrices of
+C<prot_binary_matrix.pl>, but can be used for any TEXT matrix.
+
+The binary matrix of C<prot_binary_matrix.pl> has the query protein
+IDs as column headers and the subject genomes as row headers. Thus,
+C<transpose_matrix.pl> is very useful to transpose the
+C<prot_binary_matrix.pl> matrix for the usage with
+C<binary_group_stats.pl> to calculate presence/absence statistics
+for groups of columns/genomes (and not simply single columns of the
+matrix). C<binary_group_stats.pl> also has a comprehensive manual
+with its option B<-h>.
 
 Additionally, option B<-e> can be used to fill empty cells of the
 input matrix with a value in the transposed matrix (e.g. 'NA', '0'
@@ -75,9 +84,27 @@ another tool as needed.
 
 =item C<perl transpose_matrix.pl -d ' ' -e NA input_matrix_space-delimit.txt E<gt> input_matrix_space-delimit_transposed.txt>
 
+=back
+
+B<or>
+
+=over
+
 =item C<for matrix in *.tsv; do perl transpose_matrix.pl "$matrix" E<gt> "${matrix%.*}_transposed.tsv"; done>
 
+=back
+
+B<or>
+
+=over
+
 =item C<perl prot_finder.pl -r report.blastp -s subject.faa | perl prot_binary_matrix.pl -l -c | perl transpose_matrix.pl -d , E<gt> binary_matrix_transposed.csv>
+
+=back
+
+B<or>
+
+=over
 
 =item C<mkdir result_dir && ./prot_finder_pipe.sh -q query.faa -s subject.faa -d result_dir -m | tee result_dir/blast_hits.tsv | perl prot_binary_matrix.pl | tee result_dir/binary_matrix.tsv | perl transpose_matrix.pl E<gt> result_dir/binary_matrix_transposed.tsv>
 

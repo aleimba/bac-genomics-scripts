@@ -47,6 +47,12 @@ tab-separated C<prot_finder.pl> result table and hence can't be
 included by C<prot_binary_matrix.pl>. If needed add them manually to
 the result matri(x|ces).
 
+Additionally, you can give the presence/absence binary matrix to
+C<binary_group_stats.pl> to calculate presence/absence statistics
+for groups of columns and not simply single columns of the matrix.
+C<binary_group_stats.pl> also has a comprehensive manual with its
+option B<-h>.
+
 =head1 OPTIONS
 
 =over 20
@@ -120,7 +126,19 @@ Separate query presence/absence files with option B<-s>
 
 =item C<perl prot_binary_matrix.pl -s -d result_dir -t blast_hits.tsv>
 
+=back
+
+B<or>
+
+=over
+
 =item C<perl prot_finder.pl -r report.blastp -s subject.faa | perl prot_binary_matrix.pl -l -c E<gt> binary_matrix.csv>
+
+=back
+
+B<or>
+
+=over
 
 =item C<mkdir result_dir && ./prot_finder_pipe.sh -q query.faa -s subject.faa -d result_dir -m | tee result_dir/blast_hits.tsv | perl prot_binary_matrix.pl E<gt> binary_matrix.tsv>
 
@@ -197,13 +215,13 @@ $Separator = "," if ($Opt_Csv); # optional csv output format
 
 ### Check input
 if (-t STDIN && ! @ARGV) {
-    my $warning = "\n### Fatal error: No STDIN and no input file given as argument, please supply one of them!\n";
+    my $warning = "\n### Fatal error: No STDIN and no input file given as argument, please supply one of them and/or see help with '-h'!\n";
     pod2usage(-verbose => 0, -message => $warning, -exitval => 2);
 } elsif (!-t STDIN && @ARGV) {
-    my $warning = "\n### Fatal error: Both STDIN and an input file given as argument, please supply only either one!\n";
+    my $warning = "\n### Fatal error: Both STDIN and an input file given as argument, please supply only either one and/or see help with '-h'!\n";
     pod2usage(-verbose => 0, -message => $warning, -exitval => 2);
 }
-die "\n### Fatal error: Too many arguments given, only STDIN (optionally as '-') or one input file allowed as argument! Please see the usage with option '-h' if unclear!\n" if (@ARGV > 1);
+die "\n### Fatal error: Too many arguments given, only STDIN or one input file allowed as argument! Please see the usage with option '-h' if unclear!\n" if (@ARGV > 1);
 die "\n### Fatal error: File '$ARGV[0]' does not exist!\n" if (@ARGV && $ARGV[0] ne '-' && !-e $ARGV[0]);
 
 
