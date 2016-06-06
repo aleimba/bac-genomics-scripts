@@ -30,8 +30,17 @@ B<-cut_i>) and exclusion (option B<-cut_e>) cutoffs can be set to
 define how strict the presence/absence of genome groups within an
 orthologous group (OG) are defined. Of course groups can also hold
 only single genomes to get single genome statistics. Group
-affiliations are defined in a mandatory group input file (option
-B<-g>) with minimal two and maximal four groups.
+affiliations are defined in a mandatory B<tab-delimited> group input
+file (option B<-g>) with B<minimal two> and B<maximal four> groups.
+
+Only alphanumeric (a-z, A-Z, 0-9), underscore (_), dash (-), and
+period (.) characters are allowed for the B<group names> in the
+group file to avoid downstream problems with the operating/file
+system. As a consequence, also no whitespaces are allowed in these!
+Additionally, B<group names>, B<genome filenames> (should be
+enforced by the file system), and B<FASTA IDs> considering B<all>
+genome files (mostly locus tags; should be enforced by
+Proteinortho5) need to be B<unique>.
 
 B<Proteinortho5> (PO) has to be run with option B<-singles> to
 include also genes without orthologs, so-called singletons/ORFans,
@@ -43,9 +52,9 @@ paralog detection by PO.
 To explain the logic behind the categorization, the following
 annotation for example groups will be used. A '1' exemplifies a
 group genome count in a respective OG E<gt>= the rounded inclusion
-cutoff, a '0' a genome count E<lt>= the rounded exclusion cutoff.
-The presence and absence of OGs for the group affiliation are
-structured in different categories depending on the number of
+cutoff, a '0' a group genome count E<lt>= the rounded exclusion
+cutoff. The presence and absence of OGs for the group affiliations
+are structured in different categories depending on the number of
 groups. For B<two groups> (e.g. A and B) there are five categories:
 'A specific' (A:B = 1:0), 'B specific' (0:1), 'cutoff core' (1:1),
 'underrepresented' (0:0), and 'unspecific'. Unspecific OGs have a
@@ -70,27 +79,27 @@ absent' (0:1:1:1), 'B absent' (1:0:1:1), 'C absent' (1:1:0:1), 'D
 absent' (1:1:1:0), 'cutoff core' (1:1:1:1), 'underrepresented'
 (0:0:0:0), and 'unspecific'.
 
-The resulting group presence/absence can also be printed to a binary
-matrix (option B<-b>) in the result directory (option B<-r>),
-excluding the 'unspecific' category. Since the categories are the
-logics underlying venn diagrams, you can also plot the results in a
-venn diagram using the binary matrix (option B<-p>). The
-'underrepresented' category is exempt from the venn diagram, because
-it is outside of venn diagram logics.
+The resulting group presence/absence (according to the cutoffs) can
+also be printed to a binary matrix (option B<-b>) in the result
+directory (option B<-r>), excluding the 'unspecific' category. Since
+the categories are the logics underlying venn diagrams, you can also
+plot the results in a venn diagram using the binary matrix (option
+B<-p>). The 'underrepresented' category is exempt from the venn
+diagram, because it is outside of venn diagram logics.
 
 For an illustration of the logics have a look at the example venn
 diagrams F<./pics/venn_diagram_logics.[svg|png]>.
 
 There are two optional categories (which are only considered for the
-final print outs and in the final stats matrix, not for the venn
-diagram and the binary matrix): 'strict core' (option B<-co>) for
-OGs where B<all> genomes have an ortholog, independent of the
-cutoffs. Of course all the 'strict core' OGs are also included in
-the 'cutoff_core' category ('strict core' is identical to 'cutoff
-core' with B<-cut_i> 1 and B<-cut_e> 0). Option B<-s> activates the
-detection of 'singleton/ORFan' OGs present in only B<one> genome.
-Depending on the cutoffs and number of genomes in the groups,
-category 'underrepresented' includes most of these singletons.
+final print outs and in the final stats matrix, not for the binary
+matrix and the venn diagram): 'strict core' (option B<-co>) for OGs
+where B<all> genomes have an ortholog. Of course all the 'strict
+core' OGs are also included in the 'cutoff core' category ('strict
+core' is identical to 'cutoff core' with B<-cut_i> 1 and B<-cut_e>
+0). Option B<-s> activates the detection of 'singleton/ORFan' OGs
+present in only B<one> genome. Depending on the cutoffs and number
+of genomes in the groups, category 'underrepresented' includes most
+of these singletons.
 
 Additionally, annotation is retrieved from multi-FASTA files created
 with L<C<cds_extractor.pl>|/cds_extractor>. See
@@ -102,11 +111,11 @@ in category output files in the result directory.
 Annotations are only pulled from one representative genome for each
 category present in the current OG. With option B<-co> you can set a
 specific genome for the representative annotation for category
-'strict_core'. For all other categories the representative genome is
+'strict core'. For all other categories the representative genome is
 chosen according to the order of the genomes in the group files,
 depending on the presence in each OG. Thus, the best annotated
 genome should be in the first group at the topmost position
-(especially for 'cutoff_core'), as well as the best annotated ones
+(especially for 'cutoff core'), as well as the best annotated ones
 at the top in all other groups.
 
 In the result files, each orthologous group (OG) is listed in a row
@@ -127,7 +136,7 @@ However, since only annotation from one representative annotation is
 used the CDS number will be different to the final stats. The final
 stats include B<all> the CDS in this category in B<all> genomes
 present in the OG in groups E<gt>= the inclusion cutoff (i.e. for
-'strict_core' the CDS for all genomes in this OG are counted). Two
+'strict core' the CDS for all genomes in this OG are counted). Two
 categories are different, for 'unspecific' all unspecific groups are
 included, for 'underrepresented' all groups E<lt>= the exclusion
 cutoffs. This is also the reason, the 'pangenome' CDS count is
@@ -151,6 +160,11 @@ C<grep -v "^#" result_file.tsv | cut -f 2 E<gt> locus_tags.txt>
 And then feed the locus tag list to
 L<C<cds_extractor.pl>|/cds_extractor> with option B<-l>.
 
+As a final note, in the L<F<prot_finder>|/prot_finder> workflow is a
+script, C<binary_group_stats.pl>, based upon C<po2group_stats.pl>,
+which can calculate overall presence/absence statistics for column
+groups in a delimited TEXT binary matrix (as with genomes here).
+
 =head1 OPTIONS
 
 =head2 Mandatory options
@@ -172,10 +186,11 @@ L<C<cds_extractor.pl>|/cds_extractor>
 Tab-delimited file with group affiliation for the genomes with
 B<minimal two> and B<maximal four> groups (easiest to create in a
 spreadsheet software and save in tab-separated format). B<All>
-genomes from the PO matrix need to be included and group names are
-not allowed to contain whitespace characters. Example format with
-two genomes in group A, three genomes in group B and D, and one
-genome in group C:
+genomes from the PO matrix need to be included. Group names can only
+include alphanumeric (a-z, A-Z, 0-9), underscore (_), dash (-), and
+period (.) characters (no whitespaces allowed either). Example
+format with two genomes in group A, three in group B and D, and one
+in group C:
 
 group_A\tgroup_B\tgroup_C\tgroup_D
 genome1.faa\tgenome2.faa\tgenome3.faa\tgenome4.faa
@@ -199,8 +214,8 @@ cutoff, './results_i#_e#']
 
 =item B<-cut_i>=I<float>, B<-cut_inclusion>=I<float>
 
-Percentage inclusion cutoff for genomes in a group, has to be E<gt>
-0 and E<lt>= 1. Cutoff will be rounded according to the genome
+Percentage inclusion cutoff for genomes in a group per OG, has to be
+E<gt> 0 and E<lt>= 1. Cutoff will be rounded according to the genome
 number in each group and has to be E<gt> the rounded exclusion
 cutoff in this group. [default = 0.9]
 
@@ -211,17 +226,18 @@ cutoff has to be E<lt> rounded inclusion cutoff. [default = 0.1]
 
 =item B<-b>, B<-binary_matrix>
 
-Print a binary matrix with the presence/absence group results
+Print a binary matrix with the presence/absence genome group results
 according to the cutoffs (excluding 'unspecific' category OGs)
 
 =item B<-p>, B<-plot_venn>
 
-Plot venn diagram from the binary matrix with function C<venn> from
-B<R> package B<gplots>, requires option B<-b>
+Plot venn diagram from the binary matrix (except 'unspecific' and
+'underrepresented' categories) with function C<venn> from B<R>
+package B<gplots>, requires option B<-b>
 
-=item B<-co>=(I<str>), B<-core>=(I<str>)
+=item B<-co>=(I<str>), B<-core_strict>=(I<str>)
 
-Include 'strict_core' category in output. Optionally, give a genome
+Include 'strict core' category in output. Optionally, give a genome
 name from the PO matrix to use for the representative output
 annotation. [default = topmost genome in first group]
 
@@ -261,7 +277,7 @@ Redirect or pipe into another tool as needed.
 
 All output files are stored in a results folder
 
-=item F<./results_i#_e#/[*_specific|*_absent|unspecific|cutoff_core|underrepresented]_OGs.tsv>
+=item F<./results_i#_e#/[*_specific|*_absent|cutoff_core|underrepresented]_OGs.tsv>
 
 Tab-delimited files with OG annotation from a representative genome
 for non-optional categories
@@ -318,16 +334,16 @@ Venn diagram for non-optional categories (except 'unspecific' and
 C<Rscript> is needed to plot the venn diagram with option B<-p>,
 tested with version 3.2.2
 
-=item B<gplots (L<https://cran.r-project.org/web/packages/gplots/index.html>)>
+=item B<L<gplots|https://cran.r-project.org/web/packages/gplots/index.html>>
 
-Package needed for B<R> to plot the venn diagram, includes function
+Package needed for B<R> to plot the venn diagram with function
 C<venn>. Tested with B<gplots> version 2.17.0.
 
 =back
 
 =head1 VERSION
 
- 0.1.2                                             update: 19-11-2015
+ 0.1.3                                             update: 06-06-2016
  0.1                                                       23-10-2015
 
 =head1 AUTHOR
@@ -371,13 +387,13 @@ my $Groups_File; # tab-separated file with group classification for the genomes
 my $Result_Dir; # path to results folder; default is set below to '"./results_i".$Inclusion_Cutoff."c".$Exclusion_Cutoff'
 my $Inclusion_Cutoff = 0.9; # inclusion percentage cutoff for genome count per OG (floating point number >0 && <=1)
 my $Exclusion_Cutoff = 0.1; # exclusion percentage cutoff (floating point number >=0 && <1)
-my $Opt_Binary; # print binary matrix for the group inclusion/exclusion results
+my $Opt_Binary; # print resulting binary matrix according to the group inclusion/exclusion results
 my $Opt_Venn; # create venn diagram with R package 'gplots' function 'venn'; requires $Opt_Binary
 my $Strict_Core; # report also strict core genome, i.e. OGs present in ALL genomes of PO matrix; either option flag (and use first genome in first group) or give genome file for result annotation print
-my $Opt_Singletons; # report also singletons for each genome
+my $Opt_Singletons; # report also singletons for each genome (outside of the group classifications)
 my $Opt_Unspecific; # report also group-unspecific OGs ('exclusion < OG_group_genome_count < inclusion' for any group)
 my $Opt_Genomes_Overall; # report overall stats also for genomes without singletons
-my $VERSION = '0.1.2';
+my $VERSION = '0.1.3';
 my ($Opt_Version, $Opt_Help);
 GetOptions ('input=s' => \$PO_Matrix_File,
             'dir_genome=s' => \$Genome_Dir,
@@ -387,7 +403,7 @@ GetOptions ('input=s' => \$PO_Matrix_File,
             'cut_exclusion=f' => \$Exclusion_Cutoff,
             'binary_matrix' => \$Opt_Binary,
             'plot_venn' => \$Opt_Venn,
-            'core:s' => \$Strict_Core,
+            'core_strict:s' => \$Strict_Core,
             'singletons' => \$Opt_Singletons,
             'unspecific' => \$Opt_Unspecific,
             'all_genomes_overall' => \$Opt_Genomes_Overall,
@@ -405,10 +421,8 @@ if (!$PO_Matrix_File || !$Genome_Dir || !$Groups_File) {
     my $warning = "\n### Fatal error: Mandatory options '-i', '-d', or '-g' or their arguments are missing!\n";
     pod2usage(-verbose => 1, -message => $warning, -exitval => 2);
 }
-die "\n### Fatal error: Proteinortho matrix file '$PO_Matrix_File' does not exist: $!\n" if (!-e $PO_Matrix_File);
 $Genome_Dir =~ s/\/$//; # get rid of a potential '/' at the end of $Genome_Dir path
 die "\n### Fatal error: Genome directory '$Genome_Dir' does not exist: $!\n" if (!-d $Genome_Dir);
-die "\n### Fatal error: Groups file '$Groups_File' does not exist: $!\n" if (!-e $Groups_File);
 
 if (($Inclusion_Cutoff <= 0 || $Inclusion_Cutoff > 1) || ($Exclusion_Cutoff < 0 || $Exclusion_Cutoff >= 1)) {
     my $warning = "\n### Fatal error:\nInclusion (0 < '-cut_i' <= 1) or exclusion (0 <= '-cut_e' < 1) cutoff(s) not chosen correctly!\n";
@@ -436,8 +450,9 @@ while (<$Groups_File_Fh>) {
 
     # check groups file header and get group names
     if ($. == 1) { # header of groups file (first line)
-        die "\n### Fatal error:\nGroups file '$Groups_File' does not have a correct formatted header line with at least TWO and maximal FOUR tab-separated group name columns (without other whitespaces)!\n" if (!/^\S+\t\S+\t?\S*\t?\S*$/);
+        die "\n### Fatal error:\nGroups file '$Groups_File' does not have a correctly formatted header line with at least TWO and maximal FOUR tab-separated group name columns (without other whitespaces)!\n" if (!/^\S+\t\S+\t?\S*\t?\S*$/);
         foreach my $group_name (split(/\t/)) {
+            check_file_system_conformity($group_name, 'group names'); # subroutine to check string only contains alphanumeric '0-9a-zA-Z', underscore '_', dash '-', and period '.' characters
             die "\n### Fatal error:\nGroup name '$group_name' is not unique in the group file '$Groups_File'! Please choose unique characters/names for the groups in the group file!\n" if (grep {/$group_name/} @Group_Names);
             push (@Group_Names, $group_name); # store groups array
         }
@@ -449,7 +464,7 @@ while (<$Groups_File_Fh>) {
     my $column = -1; # column counter to associate genome filename (column) to correct group in header (@Group_Names array zero-based, thus start with '-1')
     foreach my $genome (split(/\t/)) {
         $column++;
-        next if ($genome =~ /^$/); # skip empty columns in group files, in case the groups have uneven genome numbers
+        next if ($genome =~ /^$/); # skip empty columns in group file, in case the groups have uneven genome numbers
         die "\n### Fatal error:\nGenome '$genome' is not unique in the group file '$Groups_File'! However, the group file needs to contain all of the genomes from the header in the Proteinortho matrix '$PO_Matrix_File' and vice versa. Make sure the strings correspond exactly (also lower/uppercase) to the header of the matrix and the input files in directory '$Genome_Dir'!\n" if (check_genome_in_groups($genome)); # subroutine to check if a genome is present in %Genome_Groups
         push (@{ $Genome_Groups{$Group_Names[$column]}->{'genomes'} }, $genome); # push into anonymous array in hash of hash
     }
@@ -513,7 +528,7 @@ while (<$PO_Matrix_Fh>) {
         die "\n### Fatal error:\nProteinortho input matrix '$PO_Matrix_File' does not have the mandatory header line, which starts with the first three tab-separated mandatory columns:\n# Species\tGenes\tAlg.-Conn.\n" if (!/^# Species\tGenes\tAlg\.-Conn\./);
 
         # get input genomes from PO matrix and check if fit to %Genome_Groups from $Groups_File
-        foreach my $genome (split(/\t/, $_)) {
+        foreach my $genome (split(/\t/)) {
             next if ($genome =~ /# Species|Genes|Alg\.-Conn\./); # non-genome header columns
             die "\n### Fatal error:\nGenome '$genome' present in the header of the Proteinortho input matrix '$PO_Matrix_File' but not in the groups file '$Groups_File'. However, the group file needs to contain all of the genomes from the matrix header and vice versa. Make sure the strings correspond exactly (also lower/uppercase) to the matrix header and the input files in directory '$Genome_Dir'!\n" unless (check_genome_in_groups($genome)); # subroutine to check if a genome is present in %Genome_Groups
             push (@Genome_Files, $genome);
@@ -529,7 +544,8 @@ while (<$PO_Matrix_Fh>) {
     my $column = -1; # column counter to associate column to correct genome file in OG (@Genome_Files array zero-based, thus start with '-1')
     foreach (@og) {
         $column++;
-        next if (/^\*$/); # skip empty columns in PO matrix (indicated by '*'), have to skip after '$column++' otherwise column won't fit
+        die "\n###Fatal error:\nThere's an empty field in the Proteinortho input matrix '$PO_Matrix_File' in row '$.', column '$column+4'. This shouldn't happen, as all the fields of the matrix should either have a FASTA ID from the input genome files or a '*' in case the respective genome doesn't have an ortholog in this orthologous group!\n" if (/^$/);
+        next if (/^\*$/); # skip columns without a FASTA ID (ortholog) in PO matrix (indicated by '*'), have to skip after '$column++' otherwise column won't fit
         $organism_count++;
         my @paralogs = split(',');
         foreach (sort {$a cmp $b} @paralogs) {
@@ -618,7 +634,7 @@ foreach my $genome (@Genome_Files) {
 print STDERR "Calculating stats from the Proteinortho matrix according to the group cutoffs ...\n"; # run status of script
 
 # open result file for binary matrix and print header
-my $Binary_Matrix_File; # filename needed also for R script below
+my $Binary_Matrix_File; # filename needed also for venn diagram R script below
 my $Binary_Matrix_Fh;
 if ($Opt_Binary) {
     $Binary_Matrix_File = "$Result_Dir/binary_matrix.tsv";
@@ -634,9 +650,9 @@ foreach my $og (sort { $a <=> $b } keys %Ortho_Groups) {
     if ($Strict_Core && keys %{$Ortho_Groups{$og}} == @Genome_Files) {
         # always count OGs and CDSs for each category for final stats and plausability checks
         $Count_Group_OG{'strict_core'}->{'OG_count'}++;
-        count_category_CDS(\@Genome_Files, 'strict_core', $og); # subroutine to count all CDS (also paralogs) in the current OG for ALL genomes in the indicated category (strict core catagory includes all genomes, thus @Genome_Files)
+        count_category_CDS(\@Genome_Files, 'strict_core', $og); # subroutine to count all CDS (also paralogs) in the current OG for ALL genomes in the indicated category (strict core category includes all genomes, thus @Genome_Files)
         open_result_file("$Result_Dir/strict_core_OGs.tsv", 'strict_core') if (!$Count_Group_OG{'strict_core'}->{'fh'}); # subroutine to open result file and store fh (if not opened yet)
-        print_og_results($og, $Strict_Core, $Count_Group_OG{'strict_core'}->{'fh'}); # subroutine to print annotation for specified genome to result file (here '$Strict_Core')
+        print_og_results($og, $Strict_Core, $Count_Group_OG{'strict_core'}->{'fh'}); # subroutine to print representative annotation for specified genome to result file (here genome is '$Strict_Core')
     }
 
     # count and save number of genomes in the current $og with their corresponding group affiliation
@@ -647,7 +663,7 @@ foreach my $og (sort { $a <=> $b } keys %Ortho_Groups) {
 
                 # 'singleton/ORFan' category OG if only present in ONE genome (with option '-s')
                 if ($Opt_Singletons && keys %{$Ortho_Groups{$og}} == 1) {
-                    $Count_Group_OG{$genome}->{'OG_count'}++; # category = $genome
+                    $Count_Group_OG{$genome}->{'OG_count'}++; # here: category = $genome
                     $Count_Group_OG{$genome}->{'CDS_count'} += @{ $Ortho_Groups{$og}->{$genome} }; # don't need sub 'count_category_CDS' because only one genome
                     if (!$Count_Group_OG{$genome}->{'fh'}) {
                         my $file_no_extension = $genome =~ s/\.\w+$//r; # remove file extensions from @Genome_Files to have nicer output files; non-destructive modifier causes the result of the substitution to be returned instead of modifying $_ (see http://perldoc.perl.org/perlrequick.html#Search-and-replace)
@@ -759,7 +775,7 @@ foreach my $og (sort { $a <=> $b } keys %Ortho_Groups) {
         print_og_results($og, @{ $present_og_genomes{$OG_included_groups[0]} }[0], $Count_Group_OG{"$OG_included_groups[0]-$OG_included_groups[1]_specific"}->{'fh'}); # subroutine
 
     } else {
-        die "\n### Fatal error:\nNo category logic test fit for OG '$og', which shouldn't happen. Have you smuggled only one or five groups into the groups file '$Groups_File' (which also shouldn't be possible)? The script can handle only two, three, or four groups please edit the input!\n"; # shouldn't happen, since regex in group file parse checks for maximally four tab-separated group names and all category logics should be covered
+        die "\n### Fatal error:\nNo category logic test fits for OG '$og', which shouldn't happen. Have you smuggled only one or five groups into the groups file '$Groups_File' (which also shouldn't be possible)? The script can handle only two, three, or four groups please edit the input!\n"; # shouldn't happen, since regex in group file parse checks for minimally two and maximally four tab-separated group names and all category logics should be covered
     }
 }
 
@@ -773,7 +789,7 @@ map { close $Count_Group_OG{$_}->{'fh'} } keys %Count_Group_OG;
 
 ### Plot the venn diagram with R package 'gplots' function 'venn'
 if ($Opt_Venn) {
-    my $tmp_r_script = "$Result_Dir/tmp_venn.r"; # filename of the R script
+    my $tmp_r_script = "$Result_Dir/tmp_venn.R"; # filename of the R script
     my $venn_diagram_name = "$Result_Dir/venn_diagram.pdf"; # filename of the output PDF histogram
     print STDERR "Drawing venn diagram (option '-p') '$venn_diagram_name' ...\n"; # run status of script
     open (my $r_fh, ">", "$tmp_r_script");
@@ -789,7 +805,7 @@ if ($Opt_Venn) {
     close $r_fh;
 
     # execute tmp R script with 'Rscript'
-    system("Rscript $tmp_r_script") == 0 or die "### Fatal error:\nPlotting the venn diagram didn't work. Either statistical programming language 'R' or the required R package 'gplots' is not installed, not in global \$PATH, or something wrong with the temporary R script '$tmp_r_script', which runs the drawing of the venn diagram. Function 'venn' of the 'gplots' package is required and needs to be installed!\n";
+    system("Rscript $tmp_r_script") == 0 or die "### Fatal error:\nPlotting the venn diagram didn't work. Either statistical programming language 'R' or the required R package 'gplots' is not installed, not in global \$PATH, or something wrong with the binary matrix '$Binary_Matrix_File' or the temporary R script '$tmp_r_script', which runs the drawing of the venn diagram. Function 'venn' of the 'gplots' package is required and needs to be installed!\n";
     unlink $tmp_r_script;
 }
 
@@ -798,7 +814,7 @@ if ($Opt_Venn) {
 ### Count overall category OGs and CDS, and plausibility check for above logics
 my ($Total_Category_CDS, $Total_Category_OGs) = (0, 0);
 foreach my $category (keys %Count_Group_OG) { # can't use a map in case of strict_core, singletons (categories which overlap non-optional categories)
-    next if ($category =~ /strict_core/ || grep {$category eq $_} @Genome_Files); # skip optional 'strict_core' (option '-co') or singletons ('-s') categories
+    next if ($category =~ /strict_core/ || grep {$category eq $_} @Genome_Files); # skip optional 'strict_core' (option '-co') or singleton ('-s') categories
 
     $Total_Category_OGs += $Count_Group_OG{$category}->{'OG_count'};
     $Total_Category_CDS += $Count_Group_OG{$category}->{'CDS_count'};
@@ -811,7 +827,7 @@ die "\n### Fatal error:\nResulting categories don't include all present OGs, thi
 print STDERR "Finished printing output files to result directory '$Result_Dir', printing final stats matrix to STDOUT ...\n"; # run status of script
 print "# category\tOG_count\tCDS_count (all included genomes)\n"; # header for matrix
 print "pangenome\t", scalar keys %Ortho_Groups, "\t", scalar keys %Annotation, "\n";
-print "included in categories\t$Total_Category_OGs\t$Total_Category_CDS\n";
+print "included_in_categories\t$Total_Category_OGs\t$Total_Category_CDS\n";
 foreach my $category (sort {lc($a) cmp lc($b)} keys %Count_Group_OG) {
     print "$category";
     if (grep {$category eq $_} @Genome_Files) { # print overall stats for genomes with singletons (option '-s')
@@ -821,7 +837,7 @@ foreach my $category (sort {lc($a) cmp lc($b)} keys %Count_Group_OG) {
     print "\t$Count_Group_OG{$category}->{'OG_count'}\t$Count_Group_OG{$category}->{'CDS_count'}\n";
 }
 
-# print out overall stats for all genomes (option '-a')
+# print out overall stats for all genomes even without singletons (option '-a')
 if ($Opt_Genomes_Overall) {
     foreach my $genome (sort {lc($a) cmp lc($b)} @Genome_Files) {
         next if (grep {$genome eq $_} keys %Count_Group_OG); # skip genomes with singletons (option '-s'), already printed above
@@ -840,6 +856,15 @@ exit;
 sub check_file_exist {
     my $file = shift;
     die "\n### Fatal error:\nGenome file '$file' is listed in the Proteinortho matrix, but does not exist in directory '$Genome_Dir': $!\n" if (!-e $file);
+    return 1;
+}
+
+
+
+### Subroutine to check if a string adheres to file system conformity, esp. for filenames
+sub check_file_system_conformity {
+    my ($string, $type) = @_;
+    die "\n\n### Fatal error:\nOnly alphanumeric '0-9a-zA-Z', underscore '_', dash '-', and period '.' characters allowed for $type to avoid operating/file system problems. Thus, please adapt '$string' in the group file '$Groups_File' accordingly!\n" if ($string !~ /^[\w_\-\.]+$/);
     return 1;
 }
 

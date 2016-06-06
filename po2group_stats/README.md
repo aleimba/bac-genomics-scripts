@@ -1,7 +1,7 @@
 po2group_stats
 ==============
 
-`po2group_stats.pl` is a script to categorize orthologs from [Proteinortho5](http://www.bioinf.uni-leipzig.de/Software/proteinortho/) output according to genome groups.
+`po2group_stats.pl` is a script to categorize orthologs from [Proteinortho5](http://www.bioinf.uni-leipzig.de/Software/proteinortho/) output according to genome groups. In the [prot_finder](/prot_finder) workflow is a script, `binary_group_stats.pl`, which does the same thing for column groups in a delimited TEXT binary matrix.
 
 * [Synopsis](#synopsis)
 * [Description](#description)
@@ -16,6 +16,7 @@ po2group_stats
 * [Dependencies](#dependencies)
 * [Run environment](#run-environment)
 * [Author - contact](#author---contact)
+* [Citation, installation, and license](#citation-installation-and-license)
 * [Changelog](#changelog)
 
 ## Synopsis
@@ -35,8 +36,17 @@ single genomes (e.g. comparing 'marine', 'earth', 'commensal',
 define how strict the presence/absence of genome groups within an
 orthologous group (OG) are defined. Of course groups can also hold
 only single genomes to get single genome statistics. Group
-affiliations are defined in a mandatory group input file (option
-**-g**) with minimal two and maximal four groups.
+affiliations are defined in a mandatory **tab-delimited** group input
+file (option **-g**) with **minimal two** and **maximal four** groups.
+
+Only alphanumeric (a-z, A-Z, 0-9), underscore (\_), dash (-), and
+period (.) characters are allowed for the **group names** in the
+group file to avoid downstream problems with the operating/file
+system. As a consequence, also no whitespaces are allowed in these!
+Additionally, **group names**, **genome filenames** (should be
+enforced by the file system), and **FASTA IDs** considering **all**
+genome files (mostly locus tags; should be enforced by Proteinortho5)
+need to be **unique**.
 
 **Proteinortho5** (PO) has to be run with option **-singles** to
 include also genes without orthologs, so-called singletons/ORFans,
@@ -48,8 +58,8 @@ paralog detection by PO.
 To explain the logic behind the categorization, the following
 annotation for example groups will be used. A '1' exemplifies a
 group genome count in a respective OG >= the rounded inclusion
-cutoff, a '0' a genome count <= the rounded exclusion cutoff.
-The presence and absence of OGs for the group affiliation are
+cutoff, a '0' a group genome count <= the rounded exclusion cutoff.
+The presence and absence of OGs for the group affiliations are
 structured in different categories depending on the number of
 groups. For **two groups** (e.g. A and B) there are five categories:
 'A specific' (A:B = 1:0), 'B specific' (0:1), 'cutoff core' (1:1),
@@ -75,13 +85,13 @@ absent' (0:1:1:1), 'B absent' (1:0:1:1), 'C absent' (1:1:0:1), 'D
 absent' (1:1:1:0), 'cutoff core' (1:1:1:1), 'underrepresented'
 (0:0:0:0), and 'unspecific'.
 
-The resulting group presence/absence can also be printed to a binary
-matrix (option **-b**) in the result directory (option **-r**),
-excluding the 'unspecific' category. Since the categories are the
-logics underlying venn diagrams, you can also plot the results in a
-venn diagram using the binary matrix (option **-p**). The
-'underrepresented' category is exempt from the venn diagram, because
-it is outside of venn diagram logics.
+The resulting group presence/absence (according to the cutoffs) can
+also be printed to a binary matrix (option **-b**) in the result
+directory (option **-r**), excluding the 'unspecific' category. Since
+the categories are the logics underlying venn diagrams, you can also
+plot the results in a venn diagram using the binary matrix (option
+**-p**). The 'underrepresented' category is exempt from the venn
+diagram, because it is outside of venn diagram logics.
 
 Here are venn diagrams illustrating the logic categories (see folder ['pics'](./pics)):
 
@@ -90,8 +100,8 @@ Here are venn diagrams illustrating the logic categories (see folder ['pics'](./
 </p>
 
 There are two optional categories (which are only considered for the
-final print outs and in the final stats matrix, not for the venn
-diagram and the binary matrix): 'strict core' (option **-co**) for
+final print outs and in the final stats matrix, not for the binary
+matrix and the venn diagram): 'strict core' (option **-co**) for
 OGs where **all** genomes have an ortholog, independent of the
 cutoffs. Of course all the 'strict core' OGs are also included in
 the 'cutoff\_core' category ('strict core' is identical to 'cutoff
@@ -110,11 +120,11 @@ in category output files in the result directory.
 Annotations are only pulled from one representative genome for each
 category present in the current OG. With option **-co** you can set a
 specific genome for the representative annotation for category
-'strict\_core'. For all other categories the representative genome is
+'strict core'. For all other categories the representative genome is
 chosen according to the order of the genomes in the group files,
 depending on the presence in each OG. Thus, the best annotated
 genome should be in the first group at the topmost position
-(especially for 'cutoff\_core'), as well as the best annotated ones
+(especially for 'cutoff core'), as well as the best annotated ones
 at the top in all other groups.
 
 In the result files, each orthologous group (OG) is listed in a row
@@ -135,7 +145,7 @@ However, since only annotation from one representative annotation is
 used the CDS number will be different to the final stats. The final
 stats include **all** the CDS in this category in **all** genomes
 present in the OG in groups >= the inclusion cutoff (i.e. for
-'strict\_core' the CDS for all genomes in this OG are counted). Two
+'strict core' the CDS for all genomes in this OG are counted). Two
 categories are different, for 'unspecific' all unspecific groups are
 included, for 'underrepresented' all groups <= the exclusion
 cutoffs. This is also the reason, the 'pangenome' CDS count is
@@ -158,6 +168,11 @@ with Unix command-line tools:
 
 And then feed the locus tag list to
 [`cds_extractor.pl`](/cds_extractor) with option **-l**.
+
+As a final note, in the [prot_finder](/prot_finder) workflow is a
+script, `binary_group_stats.pl`, based upon `po2group_stats.pl`,
+which can calculate overall presence/absence statistics for column
+groups in a delimited TEXT binary matrix (as with genomes here).
 
 ## Usage
 
@@ -187,7 +202,7 @@ And then feed the locus tag list to
 
 - **-g**=_str_, **-groups\_file**=_str_
 
-    Tab-delimited file with group affiliation for the genomes with **minimal two** and **maximal four** groups (easiest to create in a spreadsheet software and save in tab-separated format). **All** genomes from the PO matrix need to be included and group names are not allowed to contain whitespace characters. Example format with two genomes in group A, three genomes in group B and D, and one genome in group C:
+    Tab-delimited file with group affiliation for the genomes with **minimal two** and **maximal four** groups (easiest to create in a spreadsheet software and save in tab-separated format). **All** genomes from the PO matrix need to be included. Group names can only include alphanumeric (a-z, A-Z, 0-9), underscore (\_), dash (-), and period (.) characters (no whitespaces allowed either). Example format with two genomes in group A, three genomes in group B and D, and one genome in group C:
 
     group\_A&emsp;group\_B&emsp;group\_C&emsp;group\_D<br>
     genome1.faa&emsp;genome2.faa&emsp;genome3.faa&emsp;genome4.faa<br>
@@ -206,7 +221,7 @@ And then feed the locus tag list to
 
 - **-cut\_i**=_float_, **-cut\_inclusion**=_float_
 
-    Percentage inclusion cutoff for genomes in a group, has to be > 0 and <= 1. Cutoff will be rounded according to the genome number in each group and has to be > the rounded exclusion cutoff in this group. \[default = 0.9\]
+    Percentage inclusion cutoff for genomes in a group per OG, has to be > 0 and <= 1. Cutoff will be rounded according to the genome number in each group and has to be > the rounded exclusion cutoff in this group. \[default = 0.9\]
 
 - **-cut\_e**=_float_, **-cut\_exclusion**=_float_
 
@@ -214,15 +229,15 @@ And then feed the locus tag list to
 
 - **-b**, **-binary\_matrix**
 
-    Print a binary matrix with the presence/absence group results according to the cutoffs (excluding 'unspecific' category OGs)
+    Print a binary matrix with the presence/absence genome group results according to the cutoffs (excluding 'unspecific' category OGs)
 
 - **-p**, **-plot\_venn**
 
-    Plot venn diagram from the binary matrix with function `venn` from **R** package **gplots**, requires option **-b**
+    Plot venn diagram from the binary matrix (except 'unspecific' and 'underrepresented' categories) with function `venn` from **R** package **gplots**, requires option **-b**
 
-- **-co**=(_str_), **-core**=(_str_)
+- **-co**=(_str_), **-core_strict**=(_str_)
 
-    Include 'strict\_core' category in output. Optionally, give a genome name from the PO matrix to use for the representative output annotation. \[default = topmost genome in first group\]
+    Include 'strict core' category in output. Optionally, give a genome name from the PO matrix to use for the representative output annotation. \[default = topmost genome in first group\]
 
 - **-s**, **-singletons**
 
@@ -250,7 +265,7 @@ And then feed the locus tag list to
 
     All output files are stored in a results folder
 
-- ./results_i#_e#/[\*_specific|\*_absent|unspecific|cutoff_core|underrepresented]_OGs.tsv
+- ./results_i#_e#/[\*_specific|\*_absent|cutoff_core|underrepresented]_OGs.tsv
 
     Tab-delimited files with OG annotation from a representative genome for non-optional categories
 
@@ -274,7 +289,7 @@ And then feed the locus tag list to
 
 - **gplots (https://cran.r-project.org/web/packages/gplots/index.html)**
 
-    Package needed for **R** to plot the venn diagram, includes function `venn`. Tested with **gplots** version 2.17.0.
+    Package needed for **R** to plot the venn diagram with function `venn`. Tested with **gplots** version 2.17.0.
 
 ## Run environment
 
@@ -284,8 +299,15 @@ The Perl script runs under UNIX and Windows flavors.
 
 Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute of Hygiene, University of Muenster)
 
+## Citation, installation, and license
+
+For [citation](https://github.com/aleimba/bac-genomics-scripts#citation), [installation](https://github.com/aleimba/bac-genomics-scripts#installation-recommendations), and [license](https://github.com/aleimba/bac-genomics-scripts#license) information please see the repository main [*README.md*](https://github.com/aleimba/bac-genomics-scripts/blob/master/README.md).
+
 ## Changelog
 
+* v0.1.3 (06.06.2016)
+    * included check for file system conformity for group names
+    * some minor syntax changes and additions to error messages, basically adapting to [`binary_group_stats.pl`](/prot_finder)
 * v0.1.2 (19.11.2015)
     * added `pod2usage`-die for Getopts::Long call
     * minor POD/README change
