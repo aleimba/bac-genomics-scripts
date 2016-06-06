@@ -14,6 +14,7 @@ sam_insert-size
 * [Dependencies](#dependencies)
 * [Author - contact](#author---contact)
 * [Acknowledgements](#acknowledgements)
+* [Citation, installation, and license](#citation-installation-and-license)
 * [Changelog](#changelog)
 
 ## Synopsis
@@ -179,6 +180,10 @@ References/thanks go to:
 - Tobias Rausch's online courses/workshops (EMBL Heidelberg) on the introduction to SAM files and flags (http://www.embl.de/~rausch/)
 
 - The CBS NGS Analysis course for the percentile filtering idea (http://www.cbs.dtu.dk/courses/27626/programme.php)
+
+## Citation, installation, and license
+
+For [citation](https://github.com/aleimba/bac-genomics-scripts#citation), [installation](https://github.com/aleimba/bac-genomics-scripts#installation-recommendations), and [license](https://github.com/aleimba/bac-genomics-scripts#license) information please see the repository main [*README.md*](https://github.com/aleimba/bac-genomics-scripts/blob/master/README.md).
 
 ## Changelog
 

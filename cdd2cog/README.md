@@ -15,6 +15,7 @@ cdd2cog
 * [Run environment](#run-environment)
 * [Author - contact](#author---contact)
 * [Acknowledgements](#acknowledgements)
+* [Citation, installation, and license](#citation-installation-and-license)
 * [Changelog](#changelog)
 
 ## Synopsis
@@ -156,6 +157,10 @@ Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute 
 ## Acknowledgements
 
 I got the idea for using NCBI's CDD PSSMs for COG assignment from JGI's [IMG/ER annotation system](http://img.jgi.doe.gov/), which employes the same technique.
+
+## Citation, installation, and license
+
+For [citation](https://github.com/aleimba/bac-genomics-scripts#citation), [installation](https://github.com/aleimba/bac-genomics-scripts#installation-recommendations), and [license](https://github.com/aleimba/bac-genomics-scripts#license) information please see the repository main [*README.md*](https://github.com/aleimba/bac-genomics-scripts/blob/master/README.md).
 
 ## Changelog
 

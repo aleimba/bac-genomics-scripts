@@ -113,7 +113,11 @@ The Perl script runs under Windows and UNIX flavors, the bash-shell script of co
 
 Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute of Hygiene, University of Muenster)
 
-David Studholme (original code; D[dot]J[dot]Studholme[at]exeter[dot]ac[dot]uk; University of Exeter) 
+David Studholme (original code; D[dot]J[dot]Studholme[at]exeter[dot]ac[dot]uk; University of Exeter)
+
+## Citation, installation, and license
+
+For [citation](https://github.com/aleimba/bac-genomics-scripts#citation), [installation](https://github.com/aleimba/bac-genomics-scripts#installation-recommendations), and [license](https://github.com/aleimba/bac-genomics-scripts#license) information please see the repository main [*README.md*](https://github.com/aleimba/bac-genomics-scripts/blob/master/README.md).
 
 ## Changelog
 

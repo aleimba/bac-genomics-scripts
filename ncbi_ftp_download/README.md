@@ -122,6 +122,10 @@ Both the Perl script and the bash-shell script run only under UNIX flavors.
 
 Andreas Leimbach (aleimba[at]gmx[dot]de; Microbial Genome Plasticity, Institute of Hygiene, University of Muenster)
 
+## Citation, installation, and license
+
+For [citation](https://github.com/aleimba/bac-genomics-scripts#citation), [installation](https://github.com/aleimba/bac-genomics-scripts#installation-recommendations), and [license](https://github.com/aleimba/bac-genomics-scripts#license) information please see the repository main [*README.md*](https://github.com/aleimba/bac-genomics-scripts/blob/master/README.md).
+
 ## Changelog
 
 ### *ncbi_ftp_concat_unpack.pl*

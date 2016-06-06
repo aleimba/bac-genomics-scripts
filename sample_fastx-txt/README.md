@@ -16,6 +16,7 @@ sample_fastx-txt
 * [Run environment](#run-environment)
 * [Author - contact](#author---contact)
 * [Acknowledgements](#acknowledgements)
+* [Citation, installation, and license](#citation-installation-and-license)
 * [Changelog](#changelog)
 
 ## Synopsis
@@ -128,6 +129,10 @@ the Janelia meeting on [*High Throughput Sequencing for Neuroscience*](http://cr
 which he posted in his blog
 [*Cryptogenomicon*](http://cryptogenomicon.wordpress.com/). The [*Wikipedia article*](https://en.wikipedia.org/wiki/Reservoir_sampling) and the
 [*PerlMonks*](http://www.perlmonks.org/index.pl?node_id=177092) implementation helped a lot, as well.
+
+## Citation, installation, and license
+
+For [citation](https://github.com/aleimba/bac-genomics-scripts#citation), [installation](https://github.com/aleimba/bac-genomics-scripts#installation-recommendations), and [license](https://github.com/aleimba/bac-genomics-scripts#license) information please see the repository main [*README.md*](https://github.com/aleimba/bac-genomics-scripts/blob/master/README.md).
 
 ## Changelog
 
