@@ -23,8 +23,8 @@ A collection of scripts intended for bacterial genomics (some might also be usef
 * Batch downloading of sequences from NCBI's FTP server: [`ncbi_ftp_download`](/ncbi_ftp_download) and `ncbi_e-utilities`
 * Order sequence entries in FASTA/FASTQ files according to an ID list: [`order_fastx`](/order_fastx)
 * Create an ortholog/paralog annotation comparison matrix from [*Proteinortho5*](http://www.bioinf.uni-leipzig.de/Software/proteinortho/) output: [`po2anno`](/po2anno)
-* Calculate stats and plot venn diagrams for genome groups according to orthologs/paralogs from [*Proteinortho5*](http://www.bioinf.uni-leipzig.de/Software/proteinortho/) output: [`po2group_stats`](/po2group_stats)
-* Strain panel query protein search with **BLASTP** plus concise hit summary, optional alignment, and presence/absence matrix: [`prot_finder`](/prot_finder)
+* Calculate stats and plot venn diagrams for genome groups according to orthologs/paralogs from [*Proteinortho5*](http://www.bioinf.uni-leipzig.de/Software/proteinortho/) output, i.e. overall presence/absence statistics for groups of genomes and not simply single genomes: [`po2group_stats`](/po2group_stats)
+* Strain panel query protein search with **BLASTP** plus concise hit summary, optional alignment, and presence/absence matrix. Also included, scripts to transpose the matrix and calculate overall presence/absence statistics for groups of columns in the matrix: [`prot_finder`](/prot_finder)
 * Rename FASTA ID lines and optionally numerate them: [`rename_fasta_id`](/rename_fasta_id)
 * Regions of difference (ROD) detection in genomes with **BLASTN**: [`rod_finder`](/rod_finder)
 * NGS paired-end library insert size estimation from BAM/SAM: [`sam_insert-size`](/sam_insert-size)
