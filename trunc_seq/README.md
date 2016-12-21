@@ -39,9 +39,9 @@ Alternatively, a file of filenames (fof) with respective coordinates
 and sequence files in the following **tab-separated** format can be
 given to the script (the header is optional):
 
-    #start&emsp;stop&emsp;seq-file
-    300&emsp;9000&emsp;(path/to/)seq-file
-    50&emsp;1300&emsp;(path/to/)seq-file2
+\#start&emsp;stop&emsp;seq-file<br>
+300&emsp;9000&emsp;(path/to/)seq-file<br>
+50&emsp;1300&emsp;(path/to/)seq-file2<br>
 
 With a fof the resulting truncated sequence files are printed into a
 results directory. Use option **-r** to specify a different results
