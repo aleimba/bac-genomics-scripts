@@ -94,7 +94,7 @@ At last, some of the scripts don't like Windows formatted line breaks, you might
     $ dos2unix input
 
 ## Citation
-For now cite the current release (***bovine_ecoli_mastitis***) hosted on [Zenodo](https://zenodo.org/):
+For now cite the latest major release (tag: [***bovine_ecoli_mastitis***](https://github.com/aleimba/bac-genomics-scripts/releases)) hosted on [Zenodo](https://zenodo.org/):
 
 **Leimbach A**. 2016. bac-genomics-scripts: Bovine *E. coli* mastitis comparative genomics edition. Zenodo. <http://dx.doi.org/10.5281/zenodo.215824>.
 
