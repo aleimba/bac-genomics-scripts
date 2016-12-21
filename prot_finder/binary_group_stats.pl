@@ -8,8 +8,8 @@
 
 =head1 NAME
 
-C<binary_group_stats.pl> - categorize binary matrix columns
-according to column groups
+C<binary_group_stats.pl> - categorize binary matrix rows according to
+column groups
 
 =head1 SYNOPSIS
 
@@ -18,12 +18,12 @@ C<perl binary_group_stats.pl -i binary_matrix.tsv -g group_file.tsv
 
 =head1 DESCRIPTION
 
-Categorize columns of a delimited TEXT input B<binary> matrix (option
-B<-i>) according to group affiliations. All fields of the binary
+Categorize rows of a delimited TEXT input B<binary> matrix (option
+B<-i>) according to column group affiliations. All fields of the binary
 matrix need to be filled with either a B<0> indicating absence or a
-B<1> indicating presence, i.e. all rows need to have the same number
-of columns. Use option B<-d> to set the delimiter of the input
-matrix, default is set to tab-delimited/separated matrices.
+B<1> indicating presence, i.e. all rows need to have the same number of
+columns. Use option B<-d> to set the delimiter of the input matrix,
+default is set to tab-delimited/separated matrices.
 
 The group affiliations of the columns are intended to get overall
 presence/absence statistics for groups of columns and not simply
