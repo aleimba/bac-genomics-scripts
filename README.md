@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.215824.svg)](http://dx.doi.org/10.5281/zenodo.215824)
+
 bac-genomics-scripts
 ====================
 
@@ -92,8 +94,11 @@ At last, some of the scripts don't like Windows formatted line breaks, you might
     $ dos2unix input
 
 ## Citation
+For now cite the current release (***bovine_ecoli_mastitis***) hosted on [Zenodo](https://zenodo.org/):
 
-For now you can cite this repository by using this URL (https://github.com/aleimba/bac-genomics-scripts). Also, all scripts have a version number (see option **-v**), which might be included in a materials and methods section.
+**Leimbach A**. 2016. bac-genomics-scripts: Bovine *E. coli* mastitis comparative genomics edition. Zenodo. <http://dx.doi.org/10.5281/zenodo.215824>.
+
+Also, all scripts have a version number (see option **-v**), which might be included in a materials and methods section.
 
 ## License
 
