@@ -24,8 +24,8 @@ E<gt> seq_file_cat_revcom.embl>
 This script reverse complements (multi-)sequence files. The
 features/annotations in RichSeq files (e.g. EMBL or GENBANK format)
 will also be adapted accordingly. Use option B<-o> to specify a
-different output sequence format. Input files can be be given directly
-via C<STDIN> or as a file. If C<STDIN> is used, the input sequence file
+different output sequence format. Input files can be given directly via
+C<STDIN> or as a file. If C<STDIN> is used, the input sequence file
 format has to be given with option B<-i>. Be careful to set the correct
 input format.
 
