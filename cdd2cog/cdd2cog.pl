@@ -179,7 +179,8 @@ qstart qend sstart send evalue bitscore qcovs'>
 
 =head1 VERSION
 
- 0.1                                                 01-08-2013
+ 0.2                                               update: 2017-02-16
+ 0.1                                                       2013-08-01
 
 =head1 AUTHOR
 
@@ -298,7 +299,7 @@ while (<$Rps_Report_Fh>) {
     }
     $Skip = $line[0];
 
-    my $pssm_id = $1 if $line[1] =~ /^gnl\|CDD\|(\d+)/; # get PSSM-Id from the subject hit
+    my $pssm_id = $1 if $line[1] =~ /^CDD\:(\d+)/; # get PSSM-Id from the subject hit
     my $cog = $CDDid{$pssm_id}; # get the COG# according to the PSSM-Id as listed in 'cddid.tbl'
     $Cog_Stats{$cog}++; # increment hit-number for specific COG
 

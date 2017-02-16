@@ -23,6 +23,7 @@ cdd2cog
     perl cdd2cog.pl -r rps-blast.out -c cddid.tbl -f fun.txt -w whog
 
 ## Description
+For troubleshooting and a working example please see issue [#1](https://github.com/aleimba/bac-genomics-scripts/issues/1).
 
 The script assigns COG ([cluster of orthologous
 groups](http://www.ncbi.nlm.nih.gov/COG/)) categories to proteins.
@@ -77,7 +78,7 @@ Several files are needed from NCBI's FTP server to run the RPS-BLAST+ and `cdd2c
 
 ## Usage
 
-### RPS-BLAST
+### RPS-BLAST+
 
     rpsblast -query protein.fasta -db Cog -out rps-blast.out -evalue 1e-2 -outfmt 6
     rpsblast -query protein.fasta -db Cog -out rps-blast.out -evalue 1e-2 -outfmt '7 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qcovs'
@@ -164,4 +165,6 @@ For [citation](https://github.com/aleimba/bac-genomics-scripts#citation), [insta
 
 ## Changelog
 
-* v0.1 (01.08.2013)
+* v0.2 (2017-02-16)
+    * Adapted to new NCBI FASTA header format for CDD RPS-BLAST+ output
+* v0.1 (2013-08-01)
