@@ -299,7 +299,7 @@ while (<$Rps_Report_Fh>) {
     }
     $Skip = $line[0];
 
-    my $pssm_id = $1 if $line[1] =~ /^CDD\:(\d+)/; # get PSSM-Id from the subject hit
+    my $pssm_id = $1 if $line[1] =~ /^gnl\|CDD\|(\d+)/; # get PSSM-Id from the subject hit
     my $cog = $CDDid{$pssm_id}; # get the COG# according to the PSSM-Id as listed in 'cddid.tbl'
     $Cog_Stats{$cog}++; # increment hit-number for specific COG
 
@@ -388,7 +388,7 @@ sub parse_cdd_cog {
     while (<$fun_fh>) {
         chomp;
         $_ =~ s/^\s*|\s+$//g; # get rid of all leading and trailing whitespaces
-        if (/^\[(\w)\]\s*(.+)$/) {
+        if (/^(\w)\s*(.+)$/) {
             $Fun{$1} = {'desc' => $2, 'count' => 0}; # anonymous hash in hash
             # $1 = single-letter functional category, $2 = description of functional category
             # count used to find functional categories not present in the query proteins for final overall assignment statistics
@@ -400,13 +400,15 @@ sub parse_cdd_cog {
     open (my $whog_fh, "<", "$Whog_File");
     print "Parsing COGs '$Whog_File' file ...\n"; # status message
     while (<$whog_fh>) {
+        if (/^#/) { # skip header line
+            next;
+        }
         chomp;
         $_ =~ s/^\s*|\s+$//g; # get rid of all leading and trailing whitespaces
-        if (/^\[(\w+)\]\s*(COG\d{4})\s+(.+)$/) {
-            $Whog{$2} = {'function' => $1, 'desc' => $3}; # anonymous hash in hash
-            # $1 = single-letter functional categories, maximal five per COG (only COG5032 with five)
-            # $2 = COG#, $3 = COG protein description
-        }
+         my @line = split(/\t/, $_); # split tab-separated cognames
+            $Whog{$line[0]} = {'function' => $line[1], 'desc' => $line[2]}; # anonymous hash in hash
+            # $2 = single-letter functional categories, maximal five per COG (only COG5032 with five)
+            # $1 = COG#, $3 = COG protein description
     }
     close $whog_fh;
 
