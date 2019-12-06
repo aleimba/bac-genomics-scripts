@@ -223,6 +223,7 @@ use Pod::Usage;
 
 ### Get the options with Getopt::Long
 my $Rps_Report; # path to the rps-blast report/output
+my $output_file; # file to write rps-blast report
 my $CDDid_File; # path to the CDD 'cddid.tbl' file
 my $Fun_File; # path to the COG 'fun' file
 my $Whog_File; # path to the COG 'whog' file
@@ -230,6 +231,7 @@ my $Opt_All_Hits; # give all blast hits for a query, not just the best (lowest e
 my $VERSION = 0.1;
 my ($Opt_Version, $Opt_Help);
 GetOptions ('rps_report=s' => \$Rps_Report,
+            'output_file=s' => \$output_file,
             'cddid=s' => \$CDDid_File,
             'fun=s' => \$Fun_File,
             'whog=s' => \$Whog_File,
@@ -277,6 +279,8 @@ my %Cog_Stats; # store the total number of query protein hits for each COG, writ
 my $Blast_Out = 'rps-blast_cog.txt'; # output file for COG assignments appended to RPS-BLAST results
 open (my $Blast_Out_Fh, ">", "$Out_Dir"."$Blast_Out");
 print $Blast_Out_Fh "query id\tsubject id\t% identity\talignment length\tmismatches\tgap opens\tq. start\tq. end\ts. start\ts. end\tevalue\tbit score\tCOG#\tfunctional categories\t\t\t\t\tCOG protein description\n"; # header for $Blast_Out
+open(my $output_file_Fh, ">", $output_file) if(defined $output_file);
+print $output_file_Fh "query id\tsubject id\t% identity\talignment length\tmismatches\tgap opens\tq. start\tq. end\ts. start\ts. end\tevalue\tbit score\tCOG#\tfunctional categories\t\t\t\t\tCOG protein description\n" if(defined $output_file); # header for $output_file
 
 my $Locus_Cog = "protein-id_cog.txt"; # slimmed down $Blast_Out only including locus_tags, COGs, and functional categories
 open (my $Locus_Cog_Fh, ">", "$Out_Dir"."$Locus_Cog");
@@ -314,10 +318,12 @@ while (<$Rps_Report_Fh>) {
     print $Locus_Cog_Fh "$line[0]\t$cog\t$functions\n"; # locus_tag\tCOG\tfunctional categories
     $functions .= "\t" x (5 - @functions); # add additional tabs for COGs with fewer than five functions (which is the maximum number)
     print $Blast_Out_Fh "$_\t$cog\t$functions\t$Whog{$cog}->{'desc'}\n"; # $_ = RPS-BLAST line
+    print $output_file_Fh "$_\t$cog\t$functions\t$Whog{$cog}->{'desc'}\n"  if(defined $output_file); # $_ = RPS-BLAST line
 }
 
 close $Rps_Report_Fh;
 close $Blast_Out_Fh;
+close $output_file_Fh if(defined $output_file);
 close $Locus_Cog_Fh;
 
 
